@@ -6,7 +6,7 @@ netweaver:
     192.168.201.112: hacert02
     192.168.201.115: sapha1as
     192.168.201.116: sapha1er
-  sapcd_media: your_nfs_share_SWPM_folder
+  swpm_media: your_nfs_share_SWPM_folder
   sapmnt_inst_media: your_nfs_share_SID_folder
 
   nodes:

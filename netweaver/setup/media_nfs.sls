@@ -3,10 +3,10 @@
 nfs-client:
   pkg.installed
 
-mount_sapcd:
+mount_swpm:
   mount.mounted:
-    - name: /sapcd
-    - device: {{ netweaver.sapcd_media }}
+    - name: /swpm
+    - device: {{ netweaver.swpm_media }}
     - fstype: nfs
     - mkmnt: True
     - persist: True
