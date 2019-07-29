@@ -1,0 +1,5 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml "netweaver/defaults.yaml" as defaults %}
+{% set netweaver = salt['pillar.get']('netweaver', default=defaults.netweaver, merge=True) %}
