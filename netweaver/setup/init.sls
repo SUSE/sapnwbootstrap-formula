@@ -4,3 +4,4 @@ include:
   - netweaver.setup.media_nfs
   - netweaver.setup.sap_nfs
   - netweaver.setup.mount
+  - netweaver.setup.packages

@@ -2,11 +2,13 @@
 {% set host = grains['host'] %}
 
 {% for node in netweaver.nodes if host == node.host %}
+{% set instance = '{:0>2}'.format(node.instance) %}
+
 {% if node.sap_instance.lower() == 'ascs' %}
 
 mount_ascs_{{ netweaver.sid }}:
   mount.mounted:
-    - name: /usr/sap/{{ netweaver.sid.upper() }}/ASCS00
+    - name: /usr/sap/{{ netweaver.sid.upper() }}/ASCS{{ instance }}
     - device: {{ node.shared_disk_dev }}2
     - fstype: xfs
     - mkmnt: True
@@ -18,7 +20,7 @@ mount_ascs_{{ netweaver.sid }}:
 
 mount_ers_{{ netweaver.sid }}:
   mount.mounted:
-    - name: /usr/sap/{{ netweaver.sid.upper() }}/ERS10
+    - name: /usr/sap/{{ netweaver.sid.upper() }}/ERS{{ instance }}
     - device: {{ node.shared_disk_dev }}3
     - fstype: xfs
     - mkmnt: True
