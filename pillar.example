@@ -1,7 +1,4 @@
 netweaver:
-  version: 7.5
-  sid: HA1
-  master_password: SuSE1234
   virtual_addresses:
     192.168.201.111: hacert01
     192.168.201.112: hacert02
@@ -14,12 +11,14 @@ netweaver:
 
   nodes:
     - host: hacert01
+      sid: HA1
       instance: 00
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
 
     - host: hacert02
+      sid: HA1
       instance: 10
       shared_disk_dev: /dev/sbd
       sap_instance: ers
