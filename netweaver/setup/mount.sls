@@ -3,10 +3,11 @@
 
 {% for node in netweaver.nodes if host == node.host %}
 {% set instance = '{:0>2}'.format(node.instance) %}
+{% set instance_name =  node.sid~'_'~instance %}
 
 {% if node.sap_instance.lower() == 'ascs' %}
 
-mount_ascs_{{ node.sid }}:
+mount_ascs_{{ instance_name }}:
   mount.mounted:
     - name: /usr/sap/{{ node.sid.upper() }}/ASCS{{ instance }}
     - device: {{ node.shared_disk_dev }}2
@@ -18,7 +19,7 @@ mount_ascs_{{ node.sid }}:
 
 {% elif node.sap_instance.lower() == 'ers' %}
 
-mount_ers_{{ node.sid }}:
+mount_ers_{{ instance_name }}:
   mount.mounted:
     - name: /usr/sap/{{ node.sid.upper() }}/ERS{{ instance }}
     - device: {{ node.shared_disk_dev }}3

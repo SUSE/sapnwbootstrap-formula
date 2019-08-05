@@ -11,14 +11,22 @@ netweaver:
 
   nodes:
     - host: hacert01
+      virtual_host: sapha1as
       sid: HA1
       instance: 00
+      root_user: root
+      root_password: linux
+      master_password: your_password
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
 
     - host: hacert02
+      virtual_host: sapha1er
       sid: HA1
       instance: 10
+      root_user: root
+      root_password: linux
+      master_password: your_password
       shared_disk_dev: /dev/sbd
       sap_instance: ers
