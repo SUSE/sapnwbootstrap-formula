@@ -3,26 +3,8 @@
 
 {% for node in netweaver.nodes if node.host == host and node.sap_instance == 'ascs' %}
 
-{% set virtual_ip = salt.hosts.get_ip(node.virtual_host) %}
 {% set instance = '{:0>2}'.format(node.instance) %}
 {% set instance_name =  node.sid~'_'~instance %}
-
-{#
-# This block is not supported in SUSE distros yet
-enable_virtual_address_{{ instance_name }}:
-  network.managed:
-    - name: {{ node.virtual_host_interface|default('eth1') }}
-    - enabled: True
-    - type: eth
-    - proto: static
-    - ipaddr: {{ virtual_ip }}
-    - netmask: 255.255.255.0
-#}
-
-enable_virtual_address_{{ instance_name }}:
-  cmd.run:
-    - name: ip address add {{ virtual_ip }}/24 dev {{ node.virtual_host_interface|default('eth1') }}
-    - unless: ip a | grep {{ virtual_ip }}/24
 
 create_ascs_inifile_{{ instance_name }}:
   file.managed:
@@ -46,10 +28,10 @@ netweaver_install_{{ instance_name }}:
     - root_password: {{ node.root_password }}
     - config_file: /tmp/ascs.inifile.params
     - virtual_host: {{ node.virtual_host }}
+    - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
     - product_id: NW_ABAP_ASCS:NW750.HDB.ABAPHA
     - require:
       - create_ascs_inifile_{{ instance_name }}
-      - enable_virtual_address_{{ instance_name }}
 
 remove_ascs_inifile_{{ instance_name }}:
   file.absent:
