@@ -1,4 +1,6 @@
 -------------------------------------------------------------------
-Tue Jul 30 06:45:23 UTC 2019 - Xabier Arbulu Insausti <xarbulu@suse.com>
+Wed Aug  7 12:47:07 UTC 2019 - Xabier Arbulu Insausti <xarbulu@suse.com>
 
-- First package version 
+- Create first package version 0.1.0
+  * Setup the required infrastructure to install NW 
+  * Install ASCS SAP instance
