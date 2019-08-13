@@ -6,36 +6,54 @@
 {% if node.init_shared_disk is defined and node.init_shared_disk == True %}
 
 label_partition:
-  cmd.run:
-    - name: /usr/sbin/parted -s {{ node.shared_disk_dev }} mklabel gpt
+  module.run:
+    - name: partition.mklabel
+    - device: {{ node.shared_disk_dev }}
+    - label_type: gpt
 
 sbd_partition:
-  cmd.run:
-    - name: /usr/sbin/parted -s {{ node.shared_disk_dev }} mkpart primary 1049k 8388k
+  module.run:
+    - name: partition.mkpart
+    - device: {{ node.shared_disk_dev }}
+    - part_type: primary
+    - start: 1049k
+    - end: 8388k
     - require:
       - label_partition
 
 first_partition:
-  cmd.run:
-    - name: /usr/sbin/parted -s {{ node.shared_disk_dev }} mkpart primary 8389k 10.7G
+  module.run:
+    - name: partition.mkpart
+    - device: {{ node.shared_disk_dev }}
+    - part_type: primary
+    - start: 8389k
+    - end: 10.7G
     - require:
       - label_partition
 
 second_partition:
-  cmd.run:
-    - name: /usr/sbin/parted -s {{ node.shared_disk_dev }} mkpart primary 10.7G 21.5G
+  module.run:
+    - name: partition.mkpart
+    - device: {{ node.shared_disk_dev }}
+    - part_type: primary
+    - start: 10.7G
+    - end: 21.5G
     - require:
       - label_partition
 
 format_first_partition:
-  cmd.run:
-    - name: /sbin/mkfs.xfs {{ node.shared_disk_dev }}2
+  module.run:
+    - name: partition.mkfs
+    - device: {{ node.shared_disk_dev }}2
+    - fs_type: xfs
     - require:
       - first_partition
 
 format_second_partition:
-  cmd.run:
-    - name: /sbin/mkfs.xfs {{ node.shared_disk_dev }}3
+  module.run:
+    - name: partition.mkfs
+    - device: {{ node.shared_disk_dev }}3
+    - fs_type: xfs
     - require:
       - second_partition
 
