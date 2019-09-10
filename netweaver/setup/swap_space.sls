@@ -3,7 +3,7 @@
 
 {% if netweaver.create_swap|default(true) %}
 {% set swap_dir = netweaver.swap_config.directory|default('/var/lib/swap', true) %}
-{% set swap_file =  swap_dir~'/swapfile' %}
+{% set swap_file = swap_dir~'/swapfile' %}
 {% set swap_size = netweaver.swap_config.size|default(128, true) %}
 
 create_swap_dir_{{ host }}:

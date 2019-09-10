@@ -9,10 +9,9 @@ netweaver:
   sapmnt_inst_media: your_nfs_share_SID_folder
   swpm_folder: your_swpm_folder_relative_to_swpm_media
   sapexe_folder: your_sapexe_sar_folder_relative_to_swpm_media
-  create_swap: True
   swap_config:
       directory: /var/lib/swap
-      size: 128
+      size: 128  # Swap size in MB
       
   nodes:
     - host: hacert01
