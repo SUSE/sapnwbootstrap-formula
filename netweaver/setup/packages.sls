@@ -6,7 +6,8 @@
 {% endif %}
 
 {% if pattern_available == 0 %}
-{% set repo = salt['pkg.info_available']('patterns-sap-nw')['patterns-sap-nw']['repository'] %}
+# refresh is disabled to avoid errors during the call
+{% set repo = salt['pkg.info_available']('patterns-sap-nw', refresh=False)['patterns-sap-nw']['repository'] %}
 install_patterns_sap_netweaver:
   pkg.installed:
     - name: patterns-sap-nw

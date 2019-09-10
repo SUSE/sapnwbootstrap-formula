@@ -33,8 +33,9 @@ clean_nfs_sapmnt_{{ instance_name }}:
     - name: /sapmnt/{{ node.sid.upper() }}
 
 clean_nfs_usr_{{ instance_name }}:
-  file.absent:
-    - name: /usr/sap/{{ node.sid.upper() }}/SYS/*
+  file.directory:
+    - name: /usr/sap/{{ node.sid.upper() }}/SYS
+    - clean: True
 
 {% endif %}
 

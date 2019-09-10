@@ -4,6 +4,7 @@ netweaver:
     192.168.201.112: hacert02
     192.168.201.115: sapha1as
     192.168.201.116: sapha1er
+  # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. True by default
   clean_nfs: true
   swpm_media: your_nfs_share_with_swpm_and_sapexe_folders
   sapmnt_inst_media: your_nfs_share_SID_folder
