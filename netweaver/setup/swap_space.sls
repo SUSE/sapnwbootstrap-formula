@@ -2,9 +2,17 @@
 {% set host = grains['host'] %}
 
 {% if netweaver.create_swap|default(true) %}
+# Set default values incase when no swap configuration is provided
+{% if netweaver.swap_config is not defined %}
+{% set swap_dir = '/var/lib/swap' %}
+{% set swap_size = 2048 %}
+# Case when partial or all of swap configuration is provided
+{% else %}
 {% set swap_dir = netweaver.swap_config.directory|default('/var/lib/swap', true) %}
+{% set swap_size = netweaver.swap_config.size|default(2048, true) %}
+{% endif %}
+
 {% set swap_file = swap_dir~'/swapfile' %}
-{% set swap_size = netweaver.swap_config.size|default(128, true) %}
 
 create_swap_dir_{{ host }}:
   file.directory:

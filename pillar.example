@@ -9,10 +9,13 @@ netweaver:
   sapmnt_inst_media: your_nfs_share_SID_folder
   swpm_folder: your_swpm_folder_relative_to_swpm_media
   sapexe_folder: your_sapexe_sar_folder_relative_to_swpm_media
+  # optional: If this entry exists, create SWAP space with below config
   swap_config:
+      # optional: Path containing the swapfile (/var/lib/swap/ by default)
       directory: /var/lib/swap
-      size: 128  # Swap size in MB
-      
+      # optional: Swap size in MB (2048 by default)
+      size: 2048
+
   nodes:
     - host: hacert01
       virtual_host: sapha1as
