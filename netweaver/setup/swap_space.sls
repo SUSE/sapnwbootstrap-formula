@@ -3,13 +3,13 @@
 
 {% if netweaver.create_swap|default(true) %}
 # Set default values incase when no swap configuration is provided
-{% if netweaver.swap_config is not defined %}
+{% if netweaver.create_swap is not defined %}
 {% set swap_dir = '/var/lib/swap' %}
 {% set swap_size = 2048 %}
 # Case when partial or all of swap configuration is provided
 {% else %}
-{% set swap_dir = netweaver.swap_config.directory|default('/var/lib/swap', true) %}
-{% set swap_size = netweaver.swap_config.size|default(2048, true) %}
+{% set swap_dir = netweaver.create_swap.directory|default('/var/lib/swap', true) %}
+{% set swap_size = netweaver.create_swap.size|default(2048, true) %}
 {% endif %}
 
 {% set swap_file = swap_dir~'/swapfile' %}
