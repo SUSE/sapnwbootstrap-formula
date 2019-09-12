@@ -1,2 +1,7 @@
 netweaver:
-  version: 7.5
+  # Set this entry to false to disable creating swap
+  create_swap:
+      # Path containing the swapfile
+      directory: /var/lib/swap
+      # Swap size in MB
+      size: 2048

@@ -1,17 +1,10 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 {% set host = grains['host'] %}
 
-{% if netweaver.create_swap|default(true) %}
-# Set default values incase when no swap configuration is provided
-{% if netweaver.create_swap is not defined %}
-{% set swap_dir = '/var/lib/swap' %}
-{% set swap_size = 2048 %}
-# Case when partial or all of swap configuration is provided
-{% else %}
-{% set swap_dir = netweaver.create_swap.directory|default('/var/lib/swap', true) %}
-{% set swap_size = netweaver.create_swap.size|default(2048, true) %}
-{% endif %}
+{% if netweaver.create_swap is defined and netweaver.create_swap %}
 
+{% set swap_dir = netweaver.create_swap.directory %}
+{% set swap_size = netweaver.create_swap.size %}
 {% set swap_file = swap_dir~'/swapfile' %}
 
 create_swap_dir_{{ host }}:
