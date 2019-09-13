@@ -2,14 +2,21 @@ netweaver:
   virtual_addresses:
     192.168.201.111: hacert01
     192.168.201.112: hacert02
+    192.168.201.113: hacert03
     192.168.201.115: sapha1as
     192.168.201.116: sapha1er
+    192.168.201.117: sapha1pas
   # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. True by default
   clean_nfs: true
   swpm_media: your_nfs_share_with_swpm_and_sapexe_folders
   sapmnt_inst_media: your_nfs_share_SID_folder
   swpm_folder: your_swpm_folder_relative_to_swpm_media
   sapexe_folder: your_sapexe_sar_folder_relative_to_swpm_media
+
+  hana:
+    sid: PRD
+    inst: 00
+    password: hana_password
 
   nodes:
     - host: hacert01
@@ -32,3 +39,13 @@ netweaver:
       master_password: your_password
       shared_disk_dev: /dev/sbd
       sap_instance: ers
+
+    - host: hacert03
+      virtual_host: sapha1pas
+      ascs_virtual_host: sapha1as
+      sid: HA1
+      instance: 01
+      root_user: root
+      root_password: linux
+      master_password: your_password
+      sap_instance: pas
