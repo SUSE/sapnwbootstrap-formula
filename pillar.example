@@ -12,11 +12,27 @@ netweaver:
   sapmnt_inst_media: your_nfs_share_SID_folder
   swpm_folder: your_swpm_folder_relative_to_swpm_media
   sapexe_folder: your_sapexe_sar_folder_relative_to_swpm_media
+  # Folder where the installation files are stored. /tmp/unattended by default. Set None to use
+  # SAP default folders (it will only work with ASCS and ERS)
+  installation_folder: /tmp/unattended
+  # DB/PAS/AAS instances require additional DVD folders like NW Export or HDB Client folder
+  additional_dvd:
+    - required_dvd1_folder
+    - required_dvd2_folder
 
+  # Information about the already deployed HANA Database
+  # This entry is mandatory if DB/PAS/AAS are to be installed
   hana:
+    host: 192.168.100.15
     sid: PRD
-    inst: 00
+    instance: 00
     password: hana_password
+
+  # Information about the Schema created during DB installation and used by PAS/AAS
+  # If this dictionary is not set default values will be used
+  schema:
+    name: schema_name # SAPABAP1 by default
+    password: your_password
 
   nodes:
     - host: hacert01
@@ -43,6 +59,15 @@ netweaver:
     - host: hacert03
       virtual_host: sapha1pas
       ascs_virtual_host: sapha1as
+      sid: HA1
+      instance: 01
+      root_user: root
+      root_password: linux
+      master_password: your_password
+      sap_instance: pas
+
+    - host: hacert04
+      virtual_host: sapha1aas
       sid: HA1
       instance: 01
       root_user: root

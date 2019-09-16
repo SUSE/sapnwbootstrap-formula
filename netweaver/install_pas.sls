@@ -17,11 +17,11 @@ create_pas_inifile_{{ instance_name }}:
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
         download_basket: /swpm/{{ netweaver.sapexe_folder }}
-        schema_name: SAPABAP1
-        schema_password: {{ node.schema_password|default(node.master_password) }}
+        schema_name: {{ netweaver.schema_password|default('SAPABAP1') }}
+        schema_password: {{ netweaver.schema_password }}
         ascs_virtual_hostname: {{ node.ascs_virtual_host }}
         hana_password: {{ netweaver.hana.password }}
-        hana_inst: {{ netweaver.hana.inst}}
+        hana_inst: {{ netweaver.hana.instance }}
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
@@ -35,6 +35,8 @@ netweaver_install_{{ instance_name }}:
     - virtual_host: {{ node.virtual_host }}
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
     - product_id: NW_ABAP_CI:NW750.HDB.ABAPHA
+    - cwd: {{ netweaver.installation_folder }}
+    - additional_dvds: {{ netweaver.additional_dvds }}
     - require:
       - create_pas_inifile_{{ instance_name }}
     - retry:
