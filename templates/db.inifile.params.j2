@@ -17,7 +17,11 @@
 # HDB_Schema_Check_Dialogs.dropSchema = false
 
 # The name of the database schema.
+{% if schema_name == 'SAPABAP1' %}
 # HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
+{% else %}
+HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
+{% endif %}
 
 # The password of the database schema.
 HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}

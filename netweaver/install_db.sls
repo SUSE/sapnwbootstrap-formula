@@ -17,8 +17,8 @@ create_db_inifile_{{ instance_name }}:
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
         download_basket: /swpm/{{ netweaver.sapexe_folder }}
-        schema_name: {{ netweaver.schema_password|default('SAPABAP1') }}
-        schema_password: {{ netweaver.schema_password }}
+        schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
+        schema_password: {{ netweaver.schema.password }}
         hana_host: {{ netweaver.hana.host }}
         hana_sid: {{ netweaver.hana.sid }}
         hana_password: {{ netweaver.hana.password }}
@@ -34,10 +34,11 @@ wait_for_hana_{{ instance_name }}:
     - interval: 30
 
 netweaver_install_{{ instance_name }}:
-  netweaver.installed:
-    - name: {{ node.sid.lower() }}
-    - inst: {{ instance }}
-    - password: {{ node.master_password }}
+  netweaver.db_installed:
+    - name: {{ netweaver.hana.host }}
+    - port: 3{{ netweaver.hana.instance }}13
+    - schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
+    - schema_password: {{ netweaver.schema.password }}
     - software_path: /swpm/{{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
@@ -51,8 +52,8 @@ netweaver_install_{{ instance_name }}:
       - create_db_inifile_{{ instance_name }}
       - wait_for_hana_{{ instance_name }}
     - retry:
-        attempts: {{ node.attempts|default(30) }}
-        interval: 120
+        attempts: {{ node.attempts|default(5) }}
+        interval: 60
 
 remove_db_inifile_{{ instance_name }}:
   file.absent:
