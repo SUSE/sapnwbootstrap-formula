@@ -31,7 +31,7 @@ netweaver:
   # Information about the Schema created during DB installation and used by PAS/AAS
   # If this dictionary is not set default values will be used
   schema:
-    name: schema_name # SAPABAP1 by default
+    name: schema_name # SAPABAP1 by default. NOT IMPLEMENTED yet, SAPABAP1 used always
     password: your_password
 
   nodes:

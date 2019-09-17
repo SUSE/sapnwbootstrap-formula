@@ -24,6 +24,15 @@ create_db_inifile_{{ instance_name }}:
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ netweaver.hana.instance }}
 
+wait_for_hana_{{ instance_name }}:
+  hana.available:
+    - name: {{ netweaver.hana.host }}
+    - port: 3{{ netweaver.hana.instance }}13
+    - user: SYSTEM
+    - password: {{ netweaver.hana.password }}
+    - timeout: 5000
+    - interval: 30
+
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}
@@ -40,6 +49,7 @@ netweaver_install_{{ instance_name }}:
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:
       - create_db_inifile_{{ instance_name }}
+      - wait_for_hana_{{ instance_name }}
     - retry:
         attempts: {{ node.attempts|default(30) }}
         interval: 120
