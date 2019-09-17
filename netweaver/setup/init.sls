@@ -5,3 +5,4 @@ include:
   - netweaver.setup.sap_nfs
   - netweaver.setup.mount
   - netweaver.setup.packages
+  - netweaver.setup.swap_space
