@@ -105,7 +105,7 @@ NW_HDB_getDBInfo.dbhost = {{ hana_host }}
 NW_HDB_getDBInfo.dbsid = {{ hana_sid.upper() }}
 
 # The instance number of the SAP HANA database server
-NW_HDB_getDBInfo.instanceNumber = {{ hana_inst }}
+NW_HDB_getDBInfo.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
 
 # Password of user 'SYSTEM' within the 'SystemDB' tenant in an SAP HANA MultiDB server
 NW_HDB_getDBInfo.systemDbPassword = {{ hana_password }}
