@@ -17,7 +17,7 @@
 # HDB_Schema_Check_Dialogs.dropSchema = false
 
 # The name of the database schema.
-# HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
+HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
 
 # The password of the database schema.
 HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
@@ -38,7 +38,7 @@ HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
 # MessageServer.configureAclInfo = false
 
 # The  instance number of the application server. Leave empty for default.
-NW_AS.instanceNumber = {{ instance }}
+NW_AS.instanceNumber = {{ '{:0>2}'.format(instance) }}
 
 # Skip unpacking any archive, for example SAPEXE.SAR. Do not set it to 'true' if the database client archives or the SAP kernel must be unpacked, for example if you want to add an application server on a another operating system.
 # NW_AS.skipUnpacking = false
@@ -130,7 +130,7 @@ nwUsers.sidAdmUID =
 # storageBasedCopy.abapSchemaPassword =
 
 # Instance number of the SAP HANA Database server
-storageBasedCopy.hdb.instanceNumber = {{ hana_inst }}
+storageBasedCopy.hdb.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
 
 # Password of user 'SYSTEM' inside the SAP HANA Database Server
 storageBasedCopy.hdb.systemPassword = {{ hana_password }}

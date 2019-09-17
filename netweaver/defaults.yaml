@@ -1,4 +1,5 @@
 netweaver:
+  clean_nfs: True
   installation_folder: /tmp/unattended
   additional_dvds: []
   # Set this entry to false to disable creating swap

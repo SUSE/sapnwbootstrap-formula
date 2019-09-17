@@ -4,6 +4,7 @@
 {% for node in netweaver.nodes if node.host == host and node.sap_instance == 'pas' %}
 
 {% set instance = '{:0>2}'.format(node.instance) %}
+{% set hana_instance = '{:0>2}'.format(netweaver.hana.instance) %}
 {% set instance_name =  node.sid~'_'~instance %}
 
 create_pas_inifile_{{ instance_name }}:
@@ -17,11 +18,20 @@ create_pas_inifile_{{ instance_name }}:
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
         download_basket: /swpm/{{ netweaver.sapexe_folder }}
-        schema_name: {{ netweaver.schema_password|default('SAPABAP1') }}
-        schema_password: {{ netweaver.schema_password }}
+        schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
+        schema_password: {{ netweaver.schema.password }}
         ascs_virtual_hostname: {{ node.ascs_virtual_host }}
         hana_password: {{ netweaver.hana.password }}
-        hana_inst: {{ netweaver.hana.instance }}
+        hana_inst: {{ hana_instance }}
+
+wait_for_db_{{ instance_name }}:
+  hana.available:
+    - name: {{ netweaver.hana.host }}
+    - port: 3{{ hana_instance }}15
+    - user: {{ netweaver.schema.name|default('SAPABAP1') }}
+    - password: {{ netweaver.schema.password }}
+    - timeout: 5000
+    - interval: 30
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
@@ -39,9 +49,10 @@ netweaver_install_{{ instance_name }}:
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:
       - create_pas_inifile_{{ instance_name }}
+      - wait_for_db_{{ instance_name }}
     - retry:
-        attempts: {{ node.attempts|default(30) }}
-        interval: 120
+        attempts: {{ node.attempts|default(10) }}
+        interval: 600
 
 remove_pas_inifile_{{ instance_name }}:
   file.absent:

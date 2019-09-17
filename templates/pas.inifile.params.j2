@@ -17,7 +17,7 @@
 # HDB_Schema_Check_Dialogs.dropSchema = false
 
 # The name of the database schema.
-# HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
+HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
 
 # The password of the database schema.
 HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
@@ -53,7 +53,7 @@ HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
 NW_CI_Instance.ascsVirtualHostname = {{ ascs_virtual_hostname }}
 
 # Instance number of the primary application server instance. Leave empty for default.
-NW_CI_Instance.ciInstanceNumber = {{ instance }}
+NW_CI_Instance.ciInstanceNumber = {{ '{:0>2}'.format(instance) }}
 
 # The ABAP message server port. Leave empty for default.
 NW_CI_Instance.ciMSPort =
@@ -197,7 +197,7 @@ nwUsers.sidAdmUID =
 # storageBasedCopy.abapSchemaPassword =
 
 # Instance number of the SAP HANA Database server
-storageBasedCopy.hdb.instanceNumber = {{ hana_inst }}
+storageBasedCopy.hdb.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
 
 # Password of user 'SYSTEM' inside the SAP HANA Database Server
 storageBasedCopy.hdb.systemPassword = {{ hana_password }}

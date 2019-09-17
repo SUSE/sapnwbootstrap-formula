@@ -6,8 +6,9 @@ netweaver:
     192.168.201.115: sapha1as
     192.168.201.116: sapha1er
     192.168.201.117: sapha1pas
-  # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. True by default
-  clean_nfs: true
+  # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
+  # True by default
+  clean_nfs: True
   swpm_media: your_nfs_share_with_swpm_and_sapexe_folders
   sapmnt_inst_media: your_nfs_share_SID_folder
   swpm_folder: your_swpm_folder_relative_to_swpm_media
@@ -31,7 +32,7 @@ netweaver:
   # Information about the Schema created during DB installation and used by PAS/AAS
   # If this dictionary is not set default values will be used
   schema:
-    name: schema_name # SAPABAP1 by default. NOT IMPLEMENTED yet, SAPABAP1 used always
+    name: schema_name
     password: your_password
 
   nodes:
