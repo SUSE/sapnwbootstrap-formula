@@ -2,6 +2,7 @@ netweaver:
   clean_nfs: True
   installation_folder: /tmp/unattended
   additional_dvds: []
+  ha_enabled: True
   # Set this entry to false to disable creating swap
   create_swap:
       # Path containing the swapfile

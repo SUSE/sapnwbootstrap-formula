@@ -20,6 +20,8 @@ netweaver:
   additional_dvd:
     - required_dvd1_folder
     - required_dvd2_folder
+  # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
+  ha_enabled: True
 
   # Information about the already deployed HANA Database
   # This entry is mandatory if DB/PAS/AAS are to be installed
@@ -74,4 +76,4 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
-      sap_instance: pas
+      sap_instance: aas
