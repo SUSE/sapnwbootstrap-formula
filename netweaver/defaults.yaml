@@ -1,4 +1,7 @@
 netweaver:
+  clean_nfs: True
+  installation_folder: /tmp/swpm_unattended
+  additional_dvds: []
   # Set this entry to false to disable creating swap
   create_swap:
       # Path containing the swapfile

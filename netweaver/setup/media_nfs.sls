@@ -1,7 +1,10 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 
 nfs-client:
-  pkg.installed
+  pkg.installed:
+    - retry:
+        attempts: 3
+        interval: 15
 
 mount_swpm:
   mount.mounted:

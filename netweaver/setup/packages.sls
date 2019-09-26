@@ -31,11 +31,14 @@ install_netweaver_packages:
 # Install shaptools depending on the os and python version
 install_netweaver_shaptools:
   pkg.installed:
-    {% if grains['pythonversion'][0] == 2 %}
-    - name: python-shaptools
-    {% else %}
-    - name: python3-shaptools
-    {% endif %}
+    - pkgs:
+      {% if grains['pythonversion'][0] == 2 %}
+      - python-PyHDB
+      - python-shaptools
+      {% else %}
+      - python3-PyHDB
+      - python3-shaptools
+      {% endif %}
     - retry:
         attempts: 3
         interval: 15

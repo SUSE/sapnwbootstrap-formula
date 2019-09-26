@@ -26,7 +26,7 @@ mount_usersapsys_{{ instance_name }}:
     - opts:
       - defaults
 
-{% if netweaver.clean_nfs|default(true) %}
+{% if netweaver.clean_nfs and node.sap_instance == 'ascs' %}
 
 clean_nfs_sapmnt_{{ instance_name }}:
   file.absent:
