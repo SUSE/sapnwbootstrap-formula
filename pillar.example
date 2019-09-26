@@ -18,7 +18,7 @@ netweaver:
   sapexe_folder: your_sapexe_sar_folder_relative_to_swpm_media
   # Folder where the installation files are stored. /tmp/unattended by default. Set None to use
   # SAP default folders (it will only work with ASCS and ERS)
-  installation_folder: /tmp/unattended
+  installation_folder: /tmp/swpm_unattended
   # DB/PAS/AAS instances require additional DVD folders like NW Export or HDB Client folder
   additional_dvd:
     - required_dvd1_folder
