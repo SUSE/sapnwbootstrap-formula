@@ -74,4 +74,4 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
-      sap_instance: pas
+      sap_instance: aas
