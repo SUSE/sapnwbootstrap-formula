@@ -3,9 +3,12 @@ netweaver:
     192.168.201.111: hacert01
     192.168.201.112: hacert02
     192.168.201.113: hacert03
+    192.168.201.114: hacert04
     192.168.201.115: sapha1as
     192.168.201.116: sapha1er
-    192.168.201.117: sapha1pas
+    192.168.201.117: sapha1db
+    192.168.201.118: sapha1pas
+    192.168.201.119: sapha1aas
   # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
   # True by default
   clean_nfs: True
@@ -20,6 +23,8 @@ netweaver:
   additional_dvd:
     - required_dvd1_folder
     - required_dvd2_folder
+  # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
+  ha_enabled: True
 
   # Information about the already deployed HANA Database
   # This entry is mandatory if DB/PAS/AAS are to be installed
@@ -61,6 +66,16 @@ netweaver:
       virtual_host: sapha1pas
       ascs_virtual_host: sapha1as
       sid: HA1
+      instance: 00
+      root_user: root
+      root_password: linux
+      master_password: your_password
+      sap_instance: db
+
+    - host: hacert03
+      virtual_host: sapha1pas
+      ascs_virtual_host: sapha1as
+      sid: HA1
       instance: 01
       root_user: root
       root_password: linux
@@ -70,7 +85,7 @@ netweaver:
     - host: hacert04
       virtual_host: sapha1aas
       sid: HA1
-      instance: 01
+      instance: 02
       root_user: root
       root_password: linux
       master_password: your_password

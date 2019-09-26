@@ -1,0 +1,58 @@
+{% set data = pillar.cluster.configure.template.parameters %}
+{% set sid = data.sid.upper() %}
+{% set ascs_instance = '{:0>2}'.format(data.ascs_instance) %}
+{% set ers_instance = '{:0>2}'.format(data.ers_instance) %}
+{% set ascs_device = data.ascs_device %}
+{% set ers_device = data.ers_device %}
+{% set ascs_ip_address = data.ascs_ip_address %}
+{% set ers_ip_address = data.ers_ip_address %}
+{% set ascs_virtual_host = data.ascs_virtual_host %}
+{% set ers_virtual_host = data.ers_virtual_host %}
+
+primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
+  params device="{{ ascs_device }}" directory="/usr/sap/{{ sid }}/ASCS{{ ascs_instance }}" \
+         fstype=xfs \
+  op start timeout=60s interval=0 \
+  op stop timeout=60s interval=0 \
+  op monitor interval=20s timeout=40s
+primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} IPaddr2 \
+  params ip={{ ascs_ip_address}} \
+  op monitor interval=10s timeout=20s
+primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
+  operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
+  op monitor interval=11 timeout=60 on_fail=restart \
+  params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
+     START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
+     AUTOMATIC_RECOVER=false \
+  meta resource-stickiness=5000 failure-timeout=60 \
+     migration-threshold=1 priority=10
+
+ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
+ rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
+       meta resource-stickiness=3000
+
+ primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
+   params device="{{ ers_device }}" directory="/usr/sap/{{ sid }}/ERS{{ ers_instance }}" fstype=xfs \
+   op start timeout=60s interval=0 \
+   op stop timeout=60s interval=0 \
+   op monitor interval=20s timeout=40s
+ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
+   params ip={{ ers_ip_address }} \
+   op monitor interval=10s timeout=20s
+ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
+   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
+   op monitor interval=11 timeout=60 on_fail=restart \
+   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
+          START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
+          AUTOMATIC_RECOVER=false IS_ERS=true \
+   meta priority=1000
+
+group grp_{{ sid }}_ERS{{ ers_instance }} \
+ rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }}
+
+colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
+location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
+        rule 2000: runs_ers_{{ sid }} eq 1
+
+order ord_sap_{{ sid }}_first_start_ascs Optional: rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}:start \
+      rsc_sap_{{ sid }}_ERS{{ ers_instance }}:stop symmetrical=false
