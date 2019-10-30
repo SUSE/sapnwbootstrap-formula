@@ -9,8 +9,8 @@ echo "==========================================="
 echo " Using sapha1as                            "
 echo "==========================================="
 
-cp pillar.example example/pillar/netweaver.sls
-cp example/salt/top.sls .
+cp pillar.example ci/example/pillar/netweaver.sls
+cp ci/example/salt/top.sls .
 
 cat >grains <<EOF
 host: hacert01
@@ -23,7 +23,7 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=example/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=ci/example/pillar --retcode-passthrough -l debug
 
 echo
 echo "==========================================="
@@ -41,7 +41,7 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=example/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=ci/example/pillar --retcode-passthrough -l debug
 
 echo
 echo "==========================================="
@@ -59,7 +59,7 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=example/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/example//pillar --retcode-passthrough -l debug
 
 echo
 echo "==========================================="
@@ -77,7 +77,7 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=example/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/example//pillar --retcode-passthrough -l debug
 
 echo
 echo "==========================================="
@@ -95,4 +95,4 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=example/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/example//pillar --retcode-passthrough -l debug
