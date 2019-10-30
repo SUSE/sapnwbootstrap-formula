@@ -8,6 +8,13 @@ stages:
 
 jobs:
   include:
+    - stage: validation
+
+      script:
+        - |
+          # validate states
+          ci/validate-formula.sh
+
     - stage: delivery
       if: type != pull_request
       env:
