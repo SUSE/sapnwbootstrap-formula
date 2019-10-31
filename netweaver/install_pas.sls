@@ -17,7 +17,7 @@ create_pas_inifile_{{ instance_name }}:
         sid: {{ node.sid }}
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
-        download_basket: /swpm/{{ netweaver.sapexe_folder }}
+        download_basket: {{ netweaver.sapexe_folder }}
         schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
         schema_password: {{ netweaver.schema.password }}
         ascs_virtual_hostname: {{ node.ascs_virtual_host }}
@@ -38,7 +38,7 @@ netweaver_install_{{ instance_name }}:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
     - password: {{ node.master_password }}
-    - software_path: /swpm/{{ netweaver.swpm_folder }}
+    - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: /tmp/pas.inifile.params
