@@ -23,6 +23,13 @@ create_db_inifile_{{ instance_name }}:
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
 
+check_sapprofile_directory_exists_{{ instance_name }}:
+  file.exists:
+    - name: /sapmnt/{{ node.sid.upper() }}/profile
+    - retry:
+        attempts: 10
+        interval: 180
+
 wait_for_hana_{{ instance_name }}:
   hana.available:
     - name: {{ netweaver.hana.host }}
@@ -49,6 +56,7 @@ netweaver_install_{{ instance_name }}:
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:
       - create_db_inifile_{{ instance_name }}
+      - check_sapprofile_directory_exists_{{ instance_name }}
       - wait_for_hana_{{ instance_name }}
     - retry:
         attempts: {{ node.attempts|default(5) }}
