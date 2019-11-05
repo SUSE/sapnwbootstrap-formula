@@ -22,8 +22,8 @@ check_sapprofile_directory_exists_{{ instance_name }}:
   file.exists:
     - name: /sapmnt/{{ node.sid.upper() }}/profile
     - retry:
-        attempts: 10
-        interval: 180
+        attempts: 70
+        interval: 30
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:

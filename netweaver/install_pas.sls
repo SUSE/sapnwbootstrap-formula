@@ -28,8 +28,8 @@ check_sapprofile_directory_exists_{{ instance_name }}:
   file.exists:
     - name: /sapmnt/{{ node.sid.upper() }}/profile
     - retry:
-        attempts: 10
-        interval: 180
+        attempts: 70
+        interval: 30
 
 wait_for_db_{{ instance_name }}:
   hana.available:
@@ -39,6 +39,8 @@ wait_for_db_{{ instance_name }}:
     - password: {{ netweaver.schema.password }}
     - timeout: 5000
     - interval: 30
+    - require:
+      - check_sapprofile_directory_exists_{{ instance_name }}
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
@@ -56,7 +58,6 @@ netweaver_install_{{ instance_name }}:
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:
       - create_pas_inifile_{{ instance_name }}
-      - check_sapprofile_directory_exists_{{ instance_name }}
       - wait_for_db_{{ instance_name }}
     - retry:
         attempts: {{ node.attempts|default(10) }}
