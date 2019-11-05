@@ -19,7 +19,7 @@
 # See also http://en.opensuse.org/openSUSE:Specfile_guidelines
 
 Name:           sapnwbootstrap-formula
-Version:        0.1.0
+Version:        0.1.1
 Release:        0
 Summary:        SAP Netweaver platform deployment formula
 License:        Apache-2.0
@@ -101,9 +101,9 @@ fi
 %{fdir}/states/%{fname}/%{ftemplates}
 %{fdir}/metadata/%{fname}
 
-%dir %attr(-, root, root) %{fdir}
-%dir %attr(-, root, root) %{fdir}/states
-%dir %attr(-, root, root) %{fdir}/metadata
+%dir %attr(0755, root, salt) %{fdir}
+%dir %attr(0755, root, salt) %{fdir}/states
+%dir %attr(0755, root, salt) %{fdir}/metadata
 
 %endif
 

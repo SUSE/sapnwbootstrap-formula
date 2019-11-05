@@ -15,7 +15,7 @@ create_db_inifile_{{ instance_name }}:
     - context: # set up context for template db.inifile.params.j2
         master_password: {{ node.master_password }}
         sid: {{ node.sid }}
-        download_basket: /swpm/{{ netweaver.sapexe_folder }}
+        download_basket: {{ netweaver.sapexe_folder }}
         schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
         schema_password: {{ netweaver.schema.password }}
         hana_host: {{ netweaver.hana.host }}
@@ -38,7 +38,7 @@ netweaver_install_{{ instance_name }}:
     - port: 3{{ hana_instance }}15
     - schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
     - schema_password: {{ netweaver.schema.password }}
-    - software_path: /swpm/{{ netweaver.swpm_folder }}
+    - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: /tmp/db.inifile.params

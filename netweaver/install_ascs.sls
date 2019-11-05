@@ -16,14 +16,14 @@ create_ascs_inifile_{{ instance_name }}:
         sid: {{ node.sid }}
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
-        download_basket: /swpm/{{ netweaver.sapexe_folder }}
+        download_basket: {{ netweaver.sapexe_folder }}
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
     - password: {{ node.master_password }}
-    - software_path: /swpm/{{ netweaver.swpm_folder }}
+    - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: /tmp/ascs.inifile.params

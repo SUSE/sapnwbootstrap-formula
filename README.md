@@ -27,7 +27,7 @@ The formula has some hard dependencies and all of them must be in place for a su
 
 - In order to deploy a correct Netweaver environment a NFS share is needed (SAP stores some shared files there). The NFS share must have the folders `sapmnt` and `usrsapsys` in the exposed folder. It's a good practice the store this folder with the Netweaver SID name (for example `/sapdata/HA1/sapmnt` and `/sapdata/HA1/usrsapsys`). **This subfolders content is removed by default during the deployment**.
 
-- Netweaver installation software (`swpm`) must be available in `swpm_media` variable in the pillar file pointing a NFS share. This folder must contain the `swpm` and `sapexe` folders (optionally the `Netweaver Export` and `HANA HDB Client` folder if the Database, PAS and AAS instances are installed).
+- Netweaver installation software (`swpm`) must be available in the system. To install the whole Netweaver environment with all the 4 components, the `swpm` folder, `sapexe` folder, `Netweaver Export` folder and `HANA HDB Client` folders must already exist, or be previously mounted when provided by external service, like NFS share. The `netweaver.sls` pillar file must be updated with all this information. `Netweaver Export` and `HANA HDB Client` folders must go in `additional_dvds` list. Check the [pillar.example](./pillar.example) for more details.
 
 - The optimal deployment requires 4 machines in the same network for each of the Netweaver instances (the DB instance can be installed anywhere after ASCS and ERS are installed).
 
