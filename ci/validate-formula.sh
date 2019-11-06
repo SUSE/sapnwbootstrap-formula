@@ -6,7 +6,7 @@ set -e
 # 01: hacert01
 
 echo "==========================================="
-echo " Using sapha1as                            "
+echo " Using host hacert01                       "
 echo "==========================================="
 
 cp pillar.example ci/pillar/netweaver.sls
@@ -27,7 +27,7 @@ sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pill
 
 echo
 echo "==========================================="
-echo " Using sapha1er                            "
+echo " Using host hacert02                       "
 echo "==========================================="
 
 cat >grains <<EOF
@@ -45,7 +45,7 @@ sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pill
 
 echo
 echo "==========================================="
-echo " Using sapha1db                           "
+echo " Using host hacert03                       "
 echo "==========================================="
 
 cat >grains <<EOF
@@ -59,29 +59,11 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=ci/pillar --retcode-passthrough -l debug
 
 echo
 echo "==========================================="
-echo " Using sapha1pas                           "
-echo "==========================================="
-
-cat >grains <<EOF
-host: hacert03
-virtual_host: sapha1pas
-sap_instance: pas
-EOF
-
-cat >minion <<EOF
-root_dir: $PWD
-id: travis
-EOF
-
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/pillar --retcode-passthrough -l debug
-
-echo
-echo "==========================================="
-echo " Using sapha1aas                           "
+echo " Using host hacert04                       "
 echo "==========================================="
 
 cat >grains <<EOF
@@ -95,4 +77,4 @@ root_dir: $PWD
 id: travis
 EOF
 
-sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root==ci/pillar --retcode-passthrough -l debug
+sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pillar-root=ci/pillar --retcode-passthrough -l debug
