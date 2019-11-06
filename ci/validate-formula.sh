@@ -45,12 +45,12 @@ sudo salt-call state.show_highstate --local --file-root=./ --config-dir=. --pill
 
 echo
 echo "==========================================="
-echo " Using sapha1pas                           "
+echo " Using sapha1db                           "
 echo "==========================================="
 
 cat >grains <<EOF
 host: hacert03
-virtual_host: sapha1pas
+virtual_host: sapha1db
 sap_instance: db
 EOF
 
@@ -67,7 +67,7 @@ echo " Using sapha1pas                           "
 echo "==========================================="
 
 cat >grains <<EOF
-host: hacert02
+host: hacert03
 virtual_host: sapha1pas
 sap_instance: pas
 EOF
