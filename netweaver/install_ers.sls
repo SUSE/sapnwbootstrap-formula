@@ -18,6 +18,13 @@ create_ers_inifile_{{ instance_name }}:
         virtual_hostname: {{ node.virtual_host }}
         download_basket: {{ netweaver.sapexe_folder }}
 
+check_sapprofile_directory_exists_{{ instance_name }}:
+  file.exists:
+    - name: /sapmnt/{{ node.sid.upper() }}/profile
+    - retry:
+        attempts: 70
+        interval: 30
+
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}
@@ -37,6 +44,7 @@ netweaver_install_{{ instance_name }}:
     - interval: 15
     - require:
       - create_ers_inifile_{{ instance_name }}
+      - check_sapprofile_directory_exists_{{ instance_name }}
 
 remove_ers_inifile_{{ instance_name }}:
   file.absent:
