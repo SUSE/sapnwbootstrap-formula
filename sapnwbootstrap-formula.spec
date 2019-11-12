@@ -19,7 +19,7 @@
 # See also http://en.opensuse.org/openSUSE:Specfile_guidelines
 
 Name:           sapnwbootstrap-formula
-Version:        0.1.2
+Version:        0.1.3
 Release:        0
 Summary:        SAP Netweaver platform deployment formula
 License:        Apache-2.0
@@ -30,11 +30,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 Requires:       habootstrap-formula
 Requires:       salt-shaptools
-
-# On SLE/Leap 15-SP1 and TW requires the new salt-formula configuration location.
-%if ! (0%{?sle_version:1} && 0%{?sle_version} < 150100)
 Requires:       salt-formulas-configuration
-%endif
 
 %define fname netweaver
 %define fdir  %{_datadir}/salt-formulas
@@ -52,16 +48,6 @@ their usage.
 
 %install
 
-# before SUMA 4.0/15-SP1, install on the standard Salt Location.
-%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
-
-mkdir -p %{buildroot}/srv/salt/
-cp -R %{fname} %{buildroot}/srv/salt/
-cp -R %{ftemplates} %{buildroot}/srv/salt/%{fname}/
-
-%else
-
-# On SUMA 4.0/15-SP1, a single shared directory will be used.
 mkdir -p %{buildroot}%{fdir}/states/%{fname}
 mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
 cp -R %{fname} %{buildroot}%{fdir}/states
@@ -72,9 +58,7 @@ then
   cp -R metadata.yml %{buildroot}%{fdir}/metadata/%{fname}
 fi
 
-%endif
 
-%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
 %files
 %defattr(-,root,root,-)
 %if 0%{?sle_version} < 120300
@@ -83,28 +67,13 @@ fi
 %doc README.md
 %license LICENSE
 %endif
-/srv/salt/%{fname}
-/srv/salt/%{fname}/%{ftemplates}
-
-%dir %attr(0755, root, salt) /srv/salt
-
-%else
-
-%files
-%defattr(-,root,root,-)
-%doc README.md
-%license LICENSE
-%dir %{fdir}
-%dir %{fdir}/states
-%dir %{fdir}/metadata
-%{fdir}/states/%{fname}
-%{fdir}/states/%{fname}/%{ftemplates}
-%{fdir}/metadata/%{fname}
 
 %dir %attr(0755, root, salt) %{fdir}
 %dir %attr(0755, root, salt) %{fdir}/states
 %dir %attr(0755, root, salt) %{fdir}/metadata
 
-%endif
+%attr(0755, root, salt) %{fdir}/states/%{fname}
+%attr(0755, root, salt) %{fdir}/states/%{fname}/%{ftemplates}
+%attr(0755, root, salt) %{fdir}/metadata/%{fname}
 
 %changelog
