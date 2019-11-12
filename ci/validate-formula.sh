@@ -14,8 +14,6 @@ cp ci/salt/top.sls .
 
 cat >grains <<EOF
 host: hacert01
-virtual_host: sapha1as
-sap_instance: ascs
 EOF
 
 cat >minion <<EOF
@@ -32,8 +30,6 @@ echo "==========================================="
 
 cat >grains <<EOF
 host: hacert02
-virtual_host: sapha1er
-sap_instance: ers
 EOF
 
 cat >minion <<EOF
@@ -50,8 +46,6 @@ echo "==========================================="
 
 cat >grains <<EOF
 host: hacert03
-virtual_host: sapha1db
-sap_instance: db
 EOF
 
 cat >minion <<EOF
@@ -68,8 +62,6 @@ echo "==========================================="
 
 cat >grains <<EOF
 host: hacert04
-virtual_host: sapha1aas
-sap_instance: aas
 EOF
 
 cat >minion <<EOF

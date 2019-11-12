@@ -11,6 +11,7 @@ addons:
         - salt-common
 
 stages:
+  - validation
   - delivery
   - submit
 
