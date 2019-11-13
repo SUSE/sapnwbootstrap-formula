@@ -44,6 +44,9 @@ netweaver:
   schema:
     name: schema_name
     password: your_password
+  
+  # The  master password will be used by default if NW instance_password is not provided for a node
+  master_password: your_password
 
   nodes:
     - host: hacert01
@@ -52,7 +55,7 @@ netweaver:
       instance: 00
       root_user: root
       root_password: linux
-      master_password: your_password
+      instance_password: your_as_password
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
@@ -63,7 +66,7 @@ netweaver:
       instance: 10
       root_user: root
       root_password: linux
-      master_password: your_password
+      instance_password: your_er_password
       shared_disk_dev: /dev/sbd
       sap_instance: ers
 
@@ -74,7 +77,7 @@ netweaver:
       instance: 00
       root_user: root
       root_password: linux
-      master_password: your_password
+      instance_password: your_db_password
       sap_instance: db
 
     - host: hacert03
@@ -84,7 +87,7 @@ netweaver:
       instance: 01
       root_user: root
       root_password: linux
-      master_password: your_password
+      instance_password: your_pas_password
       sap_instance: pas
 
     - host: hacert04
@@ -93,5 +96,5 @@ netweaver:
       instance: 02
       root_user: root
       root_password: linux
-      master_password: your_password
+      instance_password: your_aas_password
       sap_instance: aas

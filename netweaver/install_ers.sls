@@ -12,7 +12,7 @@ create_ers_inifile_{{ instance_name }}:
     - name: /tmp/ers.inifile.params
     - template: jinja
     - context: # set up context for template ers.inifile.params.j2
-        master_password: {{ node.master_password }}
+        master_password: {{ node.instance_password|default(netweaver.master_password) }}
         sid: {{ node.sid }}
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
@@ -29,7 +29,7 @@ netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
-    - password: {{ node.master_password }}
+    - password: {{ node.instance_password|default(netweaver.master_password) }}
     - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
@@ -39,7 +39,9 @@ netweaver_install_{{ instance_name }}:
     - product_id: NW_ERS:NW750.HDB.ABAPHA
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
-    - ascs_password: {{ node.master_password }}
+{% for node in netweaver.nodes if node.sap_instance == 'ascs' %}
+    - ascs_password: {{ node.instance_password|default(netweaver.master_password) }}
+{% endfor %}
     - timeout: 1500
     - interval: 15
     - require:
