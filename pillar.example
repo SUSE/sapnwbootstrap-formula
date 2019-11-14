@@ -9,6 +9,11 @@ netweaver:
     192.168.201.117: sapha1db
     192.168.201.118: sapha1pas
     192.168.201.119: sapha1aas
+  # Create sidadm and sapsys user/group.
+  # If this entry exists the user and group will be created before the installation, not otherwise
+  sidadm_user:
+    uid: 1001
+    gid: 1002
   # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
   # True by default
   clean_nfs: True
