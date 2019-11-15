@@ -132,6 +132,10 @@ nwUsers.sidAdmUID =
 # Instance number of the SAP HANA Database server
 storageBasedCopy.hdb.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
 
+# The instance number of the SAP HANA database server
+# This entry is used in newer versions of NW
+NW_HDB_getDBInfo.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
+
 # Password of user 'SYSTEM' inside the SAP HANA Database Server
 storageBasedCopy.hdb.systemPassword = {{ hana_password }}
 

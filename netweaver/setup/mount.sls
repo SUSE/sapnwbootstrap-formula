@@ -29,5 +29,11 @@ mount_ers_{{ instance_name }}:
     - opts:
       - defaults
 
+{% elif node.sap_instance.lower() in ['pas', 'aas'] %}
+
+create_dialog_folder_{{ node.sap_instance.lower() }}_{{ instance_name }}:
+  file.directory:
+    - name: /usr/sap/{{ node.sid.upper() }}/D{{ instance }}
+
 {% endif %}
 {% endfor %}
