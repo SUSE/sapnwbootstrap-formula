@@ -13,6 +13,8 @@ create_ers_inifile_{{ instance_name }}:
     - template: jinja
     - context: # set up context for template ers.inifile.params.j2
         master_password: {{ node.master_password }}
+        sap_adm_password: {{ node.sap_adm_password|default(node.master_password) }}
+        sid_adm_password: {{ node.sid_adm_password|default(node.master_password) }}
         sid: {{ node.sid }}
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}

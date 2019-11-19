@@ -53,6 +53,10 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
+      # sap_adm_password is optional, master password will be used as default, if value not provided
+      sap_adm_password: your_sapadm_password
+      # sid_adm_password is optional, master password will be used as default, if value not provided
+      sid_adm_password: your_sidadm_password
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
@@ -64,6 +68,8 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
+      sap_adm_password: your_sapadm_password
+      sid_adm_password: your_sidadm_password
       shared_disk_dev: /dev/sbd
       sap_instance: ers
 
@@ -75,6 +81,8 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
+      sap_adm_password: your_sapadm_password
+      sid_adm_password: your_sidadm_password
       sap_instance: db
 
     - host: hacert03
@@ -85,6 +93,8 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
+      sap_adm_password: your_sapadm_password
+      sid_adm_password: your_sidadm_password
       sap_instance: pas
 
     - host: hacert04
@@ -94,4 +104,6 @@ netweaver:
       root_user: root
       root_password: linux
       master_password: your_password
+      sap_adm_password: your_sapadm_password
+      sid_adm_password: your_sidadm_password
       sap_instance: aas
