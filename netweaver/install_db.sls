@@ -13,9 +13,9 @@ create_db_inifile_{{ instance_name }}:
     - name: /tmp/db.inifile.params
     - template: jinja
     - context: # set up context for template db.inifile.params.j2
-        master_password: {{ node.master_password }}
-        sap_adm_password: {{ node.sap_adm_password|default(node.master_password) }}
-        sid_adm_password: {{ node.sid_adm_password|default(node.master_password) }}
+        master_password: {{ netweaver.master_password }}
+        sap_adm_password: {{ netweaver.sap_adm_password|default(netweaver.master_password) }}
+        sid_adm_password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
         sid: {{ node.sid }}
         download_basket: {{ netweaver.sapexe_folder }}
         schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
