@@ -23,6 +23,13 @@ create_aas_inifile_{{ instance_name }}:
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
 
+check_sapprofile_directory_exists_{{ instance_name }}:
+  file.exists:
+    - name: /sapmnt/{{ node.sid.upper() }}/profile
+    - retry:
+        attempts: 70
+        interval: 30
+
 wait_for_db_{{ instance_name }}:
   hana.available:
     - name: {{ netweaver.hana.host }}
@@ -31,6 +38,8 @@ wait_for_db_{{ instance_name }}:
     - password: {{ netweaver.schema.password }}
     - timeout: 5000
     - interval: 30
+    - require:
+      - check_sapprofile_directory_exists_{{ instance_name }}
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
