@@ -1,9 +1,18 @@
 -------------------------------------------------------------------
+Thu Nov 28 10:14:56 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version bump 0.1.5
+  * Fix sapcontrol commands usage adding a sleep after them to give
+    sapcontrol time to perform the actions
+  * Fix list of string management converting to json:
+    https://docs.saltstack.com/en/latest/topics/releases/2019.2.0.html#non-backward-compatible-change-to-yaml-renderer
+
+-------------------------------------------------------------------
 Thu Nov 14 16:31:14 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version bump 0.1.4
-  * Add option to create the sidadm user and update NW folders 
-    to that user  
+  * Add option to create the sidadm user and update NW folders
+    to that user
 
 -------------------------------------------------------------------
 Mon Nov 11 12:28:07 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
