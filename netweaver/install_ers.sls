@@ -38,7 +38,7 @@ netweaver_install_{{ instance_name }}:
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
     - product_id: NW_ERS:NW750.HDB.ABAPHA
     - cwd: {{ netweaver.installation_folder }}
-    - additional_dvds: {{ netweaver.additional_dvds }}
+    - additional_dvds: {{ netweaver.additional_dvds|json }}
     - ascs_password: {{ node.master_password }}
     - timeout: 1500
     - interval: 15

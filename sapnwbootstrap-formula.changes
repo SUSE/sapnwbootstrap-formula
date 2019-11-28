@@ -1,9 +1,16 @@
 -------------------------------------------------------------------
+Thu Nov 28 10:14:56 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version bump 0.1.5
+  * Fix backward compatibility issues with salt versions based in py2
+    to format additional_dvds list correctly to json (remove u char) 
+
+-------------------------------------------------------------------
 Thu Nov 14 16:31:14 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version bump 0.1.4
-  * Add option to create the sidadm user and update NW folders 
-    to that user  
+  * Add option to create the sidadm user and update NW folders
+    to that user
 
 -------------------------------------------------------------------
 Mon Nov 11 12:28:07 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>

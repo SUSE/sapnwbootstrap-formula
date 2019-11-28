@@ -54,7 +54,7 @@ netweaver_install_{{ instance_name }}:
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
     - product_id: NW_DI:NW750.HDB.ABAPHA
     - cwd: {{ netweaver.installation_folder }}
-    - additional_dvds: {{ netweaver.additional_dvds }}
+    - additional_dvds: {{ netweaver.additional_dvds|json }}
     - require:
       - create_aas_inifile_{{ instance_name }}
       - wait_for_db_{{ instance_name }}
