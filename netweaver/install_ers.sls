@@ -31,7 +31,7 @@ netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
-    - password: {{ netweaver.master_password }}
+    - password: {{ netweaver.sid_adm_password }}
     - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
