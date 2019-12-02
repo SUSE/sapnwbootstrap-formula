@@ -41,6 +41,8 @@ stop_sap_instance_{{ instance_name }}:
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
+    - test.sleep:
+      - length: 2
 
 stop_sap_instance_service_{{ instance_name }}:
   module.run:
@@ -49,6 +51,8 @@ stop_sap_instance_service_{{ instance_name }}:
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
+    - test.sleep:
+      - length: 2
 
 add_ha_scripts_{{ instance_name }}:
   file.append:
@@ -104,5 +108,7 @@ start_sap_instance_{{ instance_name }}:
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
+    - test.sleep:
+      - length: 2
 
 {% endfor %}
