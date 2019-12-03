@@ -25,6 +25,24 @@ mount_{{ node.sap_instance.lower() }}_{{ instance_name }}:
     - opts:
       - defaults
 
+# This second loop is used to find ASCS/ERS shared instances to share their data as it's needed to enable HA before the cluster is created
+{% for shared_node in netweaver.nodes if host != shared_node.host and shared_node.sid == node.sid and shared_node.sap_instance.lower() in ['ascs', 'ers'] and ':' in shared_node.shared_disk_dev %}
+
+{% set shared_instance = '{:0>2}'.format(shared_node.instance) %}
+{% set shared_instance_name =  shared_node.sid~'_'~shared_instance %}
+
+mount_{{ shared_node.sap_instance.lower() }}_{{ shared_instance_name }}:
+  mount.mounted:
+    - name: /usr/sap/{{ shared_node.sid.upper() }}/{{ shared_node.sap_instance.upper() }}{{ shared_instance }}
+    - device: {{ shared_node.shared_disk_dev }}
+    - fstype: {{ fstype }}
+    - mkmnt: True
+    - opts:
+      - defaults
+
+{% endfor %}
+
+
 {% elif node.sap_instance.lower() in ['pas', 'aas'] %}
 
 create_folder_{{ node.sap_instance.lower() }}_{{ instance_name }}:
