@@ -41,7 +41,7 @@ netweaver_install_{{ instance_name }}:
     - product_id: NW_ERS:NW750.HDB.ABAPHA
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
-    - ascs_password: {{ netweaver.master_password }}
+    - ascs_password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - timeout: 1500
     - interval: 15
     - require:
