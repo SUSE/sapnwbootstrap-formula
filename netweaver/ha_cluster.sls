@@ -22,7 +22,7 @@ wait_until_systems_installed:
     - dispstatus: GREEN
     - sid: {{ node.sid.lower() }}
     - inst: {{ instance }}
-    - password: {{ node.master_password }}
+    - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - retry:
         attempts: 20
         interval: 30
@@ -32,7 +32,7 @@ update_sapservices_{{ instance_name }}:
       - name: {{ node.sap_instance.lower() }}
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
-      - password: {{ node.master_password }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
 
 stop_sap_instance_{{ instance_name }}:
   module.run:
@@ -40,7 +40,7 @@ stop_sap_instance_{{ instance_name }}:
       - function: 'Stop'
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
-      - password: {{ node.master_password }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
       - length: 2
 
@@ -50,7 +50,7 @@ stop_sap_instance_service_{{ instance_name }}:
       - function: 'StopService'
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
-      - password: {{ node.master_password }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
       - length: 2
 
@@ -97,7 +97,7 @@ start_sap_instance_service_{{ instance_name }}:
       - function: 'StartService {{ node.sid.upper() }}'
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
-      - password: {{ node.master_password }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
       - length: 2
 
@@ -107,7 +107,7 @@ start_sap_instance_{{ instance_name }}:
       - function: 'Start'
       - sid: {{ node.sid.lower() }}
       - inst: {{ instance }}
-      - password: {{ node.master_password }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
       - length: 2
 

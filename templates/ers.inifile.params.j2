@@ -16,6 +16,9 @@
 # Specify whether the all operating system users are to be removed from group 'sapinst' after the execution of Software Provisioning Manager has completed.
 NW_Delete_Sapinst_Users.removeUsers = true
 
+# Master password
+NW_GetMasterPassword.masterPwd = {{ master_password }}
+
 # SAP INTERNAL USE ONLY
 # NW_System.installSAPHostAgent = true
 
@@ -44,7 +47,7 @@ archives.downloadBasket = {{ download_basket }}
 # hostAgent.domain =
 
 # Password for the 'sapadm' user of the SAP Host Agent
-hostAgent.sapAdmPassword = {{ master_password }}
+hostAgent.sapAdmPassword = {{ sap_adm_password }}
 
 # Windows only: The domain of all users of this SAP system. Leave empty for default.
 # nwUsers.sapDomain =
@@ -62,7 +65,7 @@ nwUsers.sapsysGID =
 nwUsers.sidAdmUID =
 
 # The password of the '<sapsid>adm' user
-nwUsers.sidadmPassword = {{ master_password }}
+nwUsers.sidadmPassword = {{ sid_adm_password }}
 
 # The  instance number of the ERS instance. Leave empty for default.
 nw_instance_ers.ersInstanceNumber = {{ instance }}

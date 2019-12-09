@@ -14,6 +14,12 @@ netweaver:
   sidadm_user:
     uid: 1001
     gid: 1002
+  # sid_adm_password is optional, master password will be used as default, if value is not defined
+  sid_adm_password: your_sidadm_password
+  # sap_adm_password is optional, master password will be used as default, if value is not defined
+  sap_adm_password: your_sapadm_password
+  # Master password is used for all the SAP users that are created
+  master_password: your_password
   # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
   # True by default
   clean_nfs: True
@@ -52,7 +58,6 @@ netweaver:
       instance: 00
       root_user: root
       root_password: linux
-      master_password: your_password
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
@@ -63,7 +68,6 @@ netweaver:
       instance: 10
       root_user: root
       root_password: linux
-      master_password: your_password
       shared_disk_dev: /dev/sbd
       sap_instance: ers
 
@@ -74,7 +78,6 @@ netweaver:
       instance: 00
       root_user: root
       root_password: linux
-      master_password: your_password
       sap_instance: db
 
     - host: hacert03
@@ -84,7 +87,6 @@ netweaver:
       instance: 01
       root_user: root
       root_password: linux
-      master_password: your_password
       sap_instance: pas
 
     - host: hacert04
@@ -93,5 +95,4 @@ netweaver:
       instance: 02
       root_user: root
       root_password: linux
-      master_password: your_password
       sap_instance: aas

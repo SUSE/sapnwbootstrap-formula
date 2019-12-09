@@ -19,7 +19,7 @@ create_sidadm_user_{{ instance_name }}:
     - home: /home/{{ node.sid.lower() }}adm
     - uid: {{ netweaver.sidadm_user.uid }}
     - gid: {{ netweaver.sidadm_user.gid }}
-    - password: {{ node.master_password }}
+    - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - hash_password: True
     - groups:
       - sapsys
