@@ -1,7 +1,7 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 {% set host = grains['host'] %}
 
-{% for node in netweaver.nodes if host == node.host and node.shared_disk_dev is defined %}
+{% for node in netweaver.nodes if host == node.host and node.shared_disk_dev is defined and ':' not in node.shared_disk_dev %}
 
 {% if node.init_shared_disk is defined and node.init_shared_disk == True %}
 
