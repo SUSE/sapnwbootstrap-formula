@@ -1,4 +1,5 @@
 {% set data = pillar.cluster.configure.template.parameters %}
+{% set cloud_provider = grains['cloud_provider'] %}
 {% set sid = data.sid.upper() %}
 {% set ascs_instance = '{:0>2}'.format(data.ascs_instance) %}
 {% set ers_instance = '{:0>2}'.format(data.ers_instance) %}
@@ -27,14 +28,14 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
      AUTOMATIC_RECOVER=false \
   meta resource-stickiness=5000 failure-timeout=60 \
      migration-threshold=1 priority=10
-{% if data.platform == "azure" %}
+{% if cloud_provider == "microsoft-azure" %}
 primitive nc_{{ sid }}_ASCS anything \
   params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
   op monitor timeout=20s interval=10 depth=0
 {% endif %}
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
-  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if data.platform == "azure" %} nc_{{ sid }}_ASCS {% endif %} \
+  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ASCS {% endif %} \
   meta resource-stickiness=3000
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
@@ -52,14 +53,14 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
         AUTOMATIC_RECOVER=false IS_ERS=true \
   meta priority=1000
-{% if data.platform == "azure" %}
+{% if cloud_provider == "microsoft-azure" %}
 primitive nc_{{ sid }}_ERS anything \
  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
  op monitor timeout=20s interval=10 depth=0
 {% endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if data.platform == "azure" %} nc_{{ sid }}_ERS {% endif %}
+  rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ERS {% endif %}
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
