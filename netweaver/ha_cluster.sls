@@ -27,13 +27,6 @@ wait_until_systems_installed:
         attempts: 20
         interval: 30
 
-update_sapservices_{{ instance_name }}:
-    netweaver.sapservices_updated:
-      - name: {{ node.sap_instance.lower() }}
-      - sid: {{ node.sid.lower() }}
-      - inst: {{ instance }}
-      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
-
 stop_sap_instance_{{ instance_name }}:
   module.run:
     - netweaver.execute_sapcontrol:
@@ -53,6 +46,13 @@ stop_sap_instance_service_{{ instance_name }}:
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
       - length: 2
+
+update_sapservices_{{ instance_name }}:
+    netweaver.sapservices_updated:
+      - name: {{ node.sap_instance.lower() }}
+      - sid: {{ node.sid.lower() }}
+      - inst: {{ instance }}
+      - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
 
 add_ha_scripts_{{ instance_name }}:
   file.append:
