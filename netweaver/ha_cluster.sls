@@ -35,7 +35,7 @@ stop_sap_instance_{{ instance_name }}:
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
-      - length: 2
+      - length: 15
 
 stop_sap_instance_service_{{ instance_name }}:
   module.run:
@@ -45,7 +45,7 @@ stop_sap_instance_service_{{ instance_name }}:
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
-      - length: 2
+      - length: 15
 
 update_sapservices_{{ instance_name }}:
     netweaver.sapservices_updated:
@@ -99,7 +99,7 @@ start_sap_instance_service_{{ instance_name }}:
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
-      - length: 2
+      - length: 15
 
 start_sap_instance_{{ instance_name }}:
   module.run:
@@ -109,6 +109,6 @@ start_sap_instance_{{ instance_name }}:
       - inst: {{ instance }}
       - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - test.sleep:
-      - length: 2
+      - length: 15
 
 {% endfor %}
