@@ -4,7 +4,10 @@
 {% for node in netweaver.nodes if node.host == host and node.sap_instance == 'ascs' %}
 
 {% set instance = '{:0>2}'.format(node.instance) %}
-{% set instance_name =  node.sid~'_'~instance %}
+{% set instance_name = node.sid~'_'~instance %}
+
+{% set product_id = node.product_id|default(netweaver.product_id) %}
+{% set product_id = 'NW_ABAP_ASCS:'~product_id if 'NW_ABAP_ASCS' not in product_id else product_id %}
 
 create_ascs_inifile_{{ instance_name }}:
   file.managed:
@@ -31,7 +34,7 @@ netweaver_install_{{ instance_name }}:
     - config_file: /tmp/ascs.inifile.params
     - virtual_host: {{ node.virtual_host }}
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
-    - product_id: NW_ABAP_ASCS:NW750.HDB.ABAPHA
+    - product_id: {{ product_id }}
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:

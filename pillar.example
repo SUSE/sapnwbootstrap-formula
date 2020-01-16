@@ -51,6 +51,12 @@ netweaver:
     name: schema_name
     password: your_password
 
+  # The installed product id. If some particular node has its own product_id that one will have the preference
+  # Just put the product id ommiting the initial part like NW_ABAP_ASCS, NW_ERS, etc
+  # Examples
+  product_id: NW750.HDB.ABAPHA
+  #product_id: S4HANA1709.CORE.HDB.ABAPHA
+
   nodes:
     - host: hacert01
       virtual_host: sapha1as
@@ -61,6 +67,9 @@ netweaver:
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
+      # Set an specific product id. In this case the initial part of the code is accepted too, even though it's recommend to use the 1st example option
+      product_id: NW750.HDB.ABAPHA
+      #product_id: NW_ABAP_ASCS:S4HANA1709.CORE.HDB.ABAPHA
 
     - host: hacert02
       virtual_host: sapha1er
