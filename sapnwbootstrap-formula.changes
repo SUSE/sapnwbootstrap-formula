@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jan 16 08:10:20 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version bump 0.2.0
+  * Make the product_id parameter variable to provide the option
+    to install other SAP products than NW750 
+
+-------------------------------------------------------------------
 Thu Dec 19 12:19:23 UTC 2019 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version bump 0.1.8
