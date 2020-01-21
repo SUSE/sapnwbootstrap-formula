@@ -27,16 +27,28 @@ second_partition:
     - require:
       - label_partition
 
+# This state is done to avoid failure in disk formatting
+wait_until_partition:
+  module.run:
+    - test.sleep:
+      - length: 5
+    - require:
+      - sbd_partition
+      - first_partition
+      - second_partition
+
 format_first_partition:
   cmd.run:
     - name: /sbin/mkfs.xfs {{ node.shared_disk_dev }}2
     - require:
+      - wait_until_partition
       - first_partition
 
 format_second_partition:
   cmd.run:
     - name: /sbin/mkfs.xfs {{ node.shared_disk_dev }}3
     - require:
+      - wait_until_partition
       - second_partition
 
 {% else %}
@@ -47,6 +59,23 @@ rescan_partition:
     - output_loglevel: quiet
     - hide_output: True
     - timeout: 6000
+
+# This state is done to give always time to the disk formatting done by the 1st node
+wait_until_rescan:
+  module.run:
+    - test.sleep:
+      - length: 10
+    - require:
+      - rescan_partition
+
+rescan_after_formatting:
+  cmd.run:
+    - name: partprobe; fdisk -l {{ node.shared_disk_dev }}
+    - output_loglevel: quiet
+    - hide_output: True
+    - timeout: 6000
+    - require:
+      - wait_until_rescan
 
 {% endif %}
 {% endfor %}
