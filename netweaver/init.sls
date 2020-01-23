@@ -1,5 +1,6 @@
 include:
   - netweaver.setup
+  - netweaver.saptune
   - netweaver.install_ascs
   - netweaver.install_ers
   - netweaver.ha_cluster
