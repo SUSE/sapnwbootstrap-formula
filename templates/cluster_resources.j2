@@ -12,13 +12,15 @@
 {% set ascs_virtual_host = data.ascs_virtual_host %}
 {% set ers_virtual_host = data.ers_virtual_host %}
 
+{%- set nic = "nic="~pillar.cluster.interface|default('eth0')|json if cloud_provider == "google-cloud-platform" else "" %}
+
 primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
   params device="{{ ascs_device }}" directory="/usr/sap/{{ sid }}/ASCS{{ ascs_instance }}" fstype={{ ascs_fstype|default("xfs") }} \
   op start timeout=60s interval=0 \
   op stop timeout=60s interval=0 \
   op monitor interval=20s timeout=40s
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} IPaddr2 \
-  params ip={{ ascs_ip_address}} \
+  params ip={{ ascs_ip_address}} cidr_netmask="{{ 32 if cloud_provider == "google-cloud-platform" else data.virtual_ip_mask }}" {{ nic }} \
   op monitor interval=10s timeout=20s
 primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
@@ -44,7 +46,7 @@ primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
   op stop timeout=60s interval=0 \
   op monitor interval=20s timeout=40s
 primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
-  params ip={{ ers_ip_address }} \
+  params ip={{ ers_ip_address }} cidr_netmask="{{ 32 if cloud_provider == "google-cloud-platform" else data.virtual_ip_mask }}" {{ nic }} \
   op monitor interval=10s timeout=20s
 primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
