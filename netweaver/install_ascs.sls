@@ -30,7 +30,8 @@ netweaver_install_{{ instance_name }}:
     - root_password: {{ node.root_password }}
     - config_file: /tmp/ascs.inifile.params
     - virtual_host: {{ node.virtual_host }}
-    - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
+    - virtual_host_interface: {{ node.virtual_host_interface|default('eth0') }}
+    - virtual_host_mask: {{ node.virtual_host_mask|default(24) }}
     - product_id: NW_ABAP_ASCS:NW750.HDB.ABAPHA
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
