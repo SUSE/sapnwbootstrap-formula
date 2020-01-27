@@ -65,6 +65,8 @@ netweaver:
   nodes:
     - host: hacert01
       virtual_host: sapha1as
+      virtual_host_interface: eth1 # eth0 by default
+      virtual_host_mask: 32 # 24 by default
       sid: HA1
       instance: 00
       root_user: root
