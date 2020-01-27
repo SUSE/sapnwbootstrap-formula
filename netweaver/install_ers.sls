@@ -4,7 +4,10 @@
 {% for node in netweaver.nodes if node.host == host and node.sap_instance == 'ers' %}
 
 {% set instance = '{:0>2}'.format(node.instance) %}
-{% set instance_name =  node.sid~'_'~instance %}
+{% set instance_name = node.sid~'_'~instance %}
+
+{% set product_id = node.product_id|default(netweaver.product_id) %}
+{% set product_id = 'NW_ERS:'~product_id if 'NW_ERS' not in product_id else product_id %}
 
 create_ers_inifile_{{ instance_name }}:
   file.managed:
@@ -38,7 +41,7 @@ netweaver_install_{{ instance_name }}:
     - config_file: /tmp/ers.inifile.params
     - virtual_host: {{ node.virtual_host }}
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
-    - product_id: NW_ERS:NW750.HDB.ABAPHA
+    - product_id: {{ product_id }}
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
     - ascs_password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}

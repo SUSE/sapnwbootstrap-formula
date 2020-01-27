@@ -1,7 +1,14 @@
 -------------------------------------------------------------------
+Thu Fri 24 08:10:20 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version bump 0.2.1
+  * Make the product_id parameter variable to provide the option
+    to install other SAP products than NW750 
+
+-------------------------------------------------------------------
 Thu Jan 23 13:17:27 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
 
--  Version bump 0.2.0
+- Version bump 0.2.0
   * Add saptune module to apply a specific solutionn
 
 -------------------------------------------------------------------
