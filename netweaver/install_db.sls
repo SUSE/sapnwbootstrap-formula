@@ -5,7 +5,10 @@
 
 {% set instance = '{:0>2}'.format(node.instance) %}
 {% set hana_instance = '{:0>2}'.format(netweaver.hana.instance) %}
-{% set instance_name =  node.sid~'_'~instance %}
+{% set instance_name = node.sid~'_'~instance %}
+
+{% set product_id = node.product_id|default(netweaver.product_id) %}
+{% set product_id = 'NW_ABAP_DB:'~product_id if 'NW_ABAP_DB' not in product_id else product_id %}
 
 create_db_inifile_{{ instance_name }}:
   file.managed:
@@ -54,8 +57,9 @@ netweaver_install_{{ instance_name }}:
     - root_password: {{ node.root_password }}
     - config_file: /tmp/db.inifile.params
     - virtual_host: {{ node.virtual_host }}
-    - virtual_host_interface: {{ node.virtual_host_interface|default('eth1') }}
-    - product_id: NW_ABAP_DB:NW750.HDB.ABAPHA
+    - virtual_host_interface: {{ node.virtual_host_interface|default('eth0') }}
+    - virtual_host_mask: {{ node.virtual_host_mask|default(24) }}
+    - product_id: {{ product_id }}
     - cwd: {{ netweaver.installation_folder }}
     - additional_dvds: {{ netweaver.additional_dvds }}
     - require:

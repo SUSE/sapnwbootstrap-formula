@@ -37,6 +37,11 @@ netweaver:
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
 
+  # saptune solution to apply to all nodes ( by default nothing is applied)
+  # you can also use this to a single node if need to differ. see host hacert02
+  # Warning: only a unique solution can exist into a node.
+  saptune_solution: 'NETWEAVER'
+
   # Information about the already deployed HANA Database
   # This entry is mandatory if DB/PAS/AAS are to be installed
   hana:
@@ -51,9 +56,17 @@ netweaver:
     name: schema_name
     password: your_password
 
+  # The installed product id. If some particular node has its own product_id that one will have the preference
+  # Just put the product id ommiting the initial part like NW_ABAP_ASCS, NW_ERS, etc
+  # Examples
+  product_id: NW750.HDB.ABAPHA
+  #product_id: S4HANA1709.CORE.HDB.ABAPHA
+
   nodes:
     - host: hacert01
       virtual_host: sapha1as
+      virtual_host_interface: eth1 # eth0 by default
+      virtual_host_mask: 32 # 24 by default
       sid: HA1
       instance: 00
       root_user: root
@@ -61,11 +74,15 @@ netweaver:
       shared_disk_dev: /dev/sbd
       init_shared_disk: True
       sap_instance: ascs
+      # Set an specific product id. In this case the initial part of the code is accepted too, even though it's recommend to use the 1st example option
+      product_id: NW750.HDB.ABAPHA
+      #product_id: NW_ABAP_ASCS:S4HANA1709.CORE.HDB.ABAPHA
 
     - host: hacert02
       virtual_host: sapha1er
       sid: HA1
       instance: 10
+      saptune_solution: 'MAXDB'
       root_user: root
       root_password: linux
       shared_disk_dev: /dev/sbd
