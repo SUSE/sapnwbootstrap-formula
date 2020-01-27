@@ -37,6 +37,11 @@ netweaver:
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
 
+  # saptune solution to apply to all nodes ( by default nothing is applied)
+  # you can also use this to a single node if need to differ. see host hacert02
+  # Warning: only a unique solution can exist into a node.
+  saptune_solution: 'NETWEAVER'
+
   # Information about the already deployed HANA Database
   # This entry is mandatory if DB/PAS/AAS are to be installed
   hana:
@@ -75,6 +80,7 @@ netweaver:
       virtual_host: sapha1er
       sid: HA1
       instance: 10
+      saptune_solution: 'MAXDB'
       root_user: root
       root_password: linux
       shared_disk_dev: /dev/sbd
