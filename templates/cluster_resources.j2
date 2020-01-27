@@ -1,18 +1,19 @@
-{% set data = pillar.cluster.configure.template.parameters %}
-{% set cloud_provider = grains['cloud_provider'] %}
-{% set sid = data.sid.upper() %}
-{% set ascs_instance = '{:0>2}'.format(data.ascs_instance) %}
-{% set ers_instance = '{:0>2}'.format(data.ers_instance) %}
-{% set ascs_device = data.ascs_device %}
-{% set ers_device = data.ers_device %}
-{% set ascs_fstype = data.ascs_fstype %}
-{% set ers_fstype = data.ers_fstype %}
-{% set ascs_ip_address = data.ascs_ip_address %}
-{% set ers_ip_address = data.ers_ip_address %}
-{% set ascs_virtual_host = data.ascs_virtual_host %}
-{% set ers_virtual_host = data.ers_virtual_host %}
+{%- set data = pillar.cluster.configure.template.parameters %}
+{%- set cloud_provider = grains['cloud_provider'] %}
+{%- set sid = data.sid.upper() %}
+{%- set ascs_instance = '{:0>2}'.format(data.ascs_instance) %}
+{%- set ers_instance = '{:0>2}'.format(data.ers_instance) %}
+{%- set ascs_device = data.ascs_device %}
+{%- set ers_device = data.ers_device %}
+{%- set ascs_fstype = data.ascs_fstype %}
+{%- set ers_fstype = data.ers_fstype %}
+{%- set ascs_ip_address = data.ascs_ip_address %}
+{%- set ers_ip_address = data.ers_ip_address %}
+{%- set ascs_virtual_host = data.ascs_virtual_host %}
+{%- set ers_virtual_host = data.ers_virtual_host %}
 
 {%- set nic = "nic="~pillar.cluster.interface|default('eth0')|json if cloud_provider == "google-cloud-platform" else "" %}
+{%- set cidr_netmask = "cidr_netmask=32" if cloud_provider == "google-cloud-platform" else "" %}
 
 primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
   params device="{{ ascs_device }}" directory="/usr/sap/{{ sid }}/ASCS{{ ascs_instance }}" fstype={{ ascs_fstype|default("xfs") }} \
@@ -20,7 +21,7 @@ primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
   op stop timeout=60s interval=0 \
   op monitor interval=20s timeout=40s
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} IPaddr2 \
-  params ip={{ ascs_ip_address}} cidr_netmask="{{ 32 if cloud_provider == "google-cloud-platform" else data.virtual_ip_mask }}" {{ nic }} \
+  params ip={{ ascs_ip_address}} {{ cidr_netmask }} {{ nic }} \
   op monitor interval=10s timeout=20s
 primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
@@ -30,11 +31,11 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
      AUTOMATIC_RECOVER=false \
   meta resource-stickiness=5000 failure-timeout=60 \
      migration-threshold=1 priority=10
-{% if cloud_provider == "microsoft-azure" %}
+{%- if cloud_provider == "microsoft-azure" %}
 primitive nc_{{ sid }}_ASCS anything \
   params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
   op monitor timeout=20s interval=10 depth=0
-{% endif %}
+{%- endif %}
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ASCS {% endif %} \
@@ -46,7 +47,7 @@ primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
   op stop timeout=60s interval=0 \
   op monitor interval=20s timeout=40s
 primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
-  params ip={{ ers_ip_address }} cidr_netmask="{{ 32 if cloud_provider == "google-cloud-platform" else data.virtual_ip_mask }}" {{ nic }} \
+  params ip={{ ers_ip_address }} {{ cidr_netmask }} {{ nic }} \
   op monitor interval=10s timeout=20s
 primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
@@ -55,11 +56,11 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
         AUTOMATIC_RECOVER=false IS_ERS=true \
   meta priority=1000
-{% if cloud_provider == "microsoft-azure" %}
+{%- if cloud_provider == "microsoft-azure" %}
 primitive nc_{{ sid }}_ERS anything \
  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
  op monitor timeout=20s interval=10 depth=0
-{% endif %}
+{%- endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ERS {% endif %}
