@@ -5,11 +5,11 @@ mount_sapmnt:
   mount.mounted:
     - name: /sapmnt
     - device: {{ netweaver.sapmnt_inst_media }}/sapmnt
-    - fstype: nfs
+    - fstype: {{ netweaver.nfs_version }}
+    - opts:
+      - {{ netweaver.nfs_options }}
     - mkmnt: True
     - persist: True
-    - opts:
-      - defaults
 
 {% for node in netweaver.nodes if host == node.host %}
 
@@ -20,11 +20,12 @@ mount_usersapsys_{{ instance_name }}:
   mount.mounted:
     - name: /usr/sap/{{ node.sid.upper() }}/SYS
     - device: {{ netweaver.sapmnt_inst_media }}/usrsapsys
-    - fstype: nfs
+    - fstype: {{ netweaver.nfs_version }}
+    - opts:
+      - {{ netweaver.nfs_options }}
     - mkmnt: True
     - persist: True
-    - opts:
-      - defaults
+
 
 {% if netweaver.clean_nfs and node.sap_instance == 'ascs' %}
 

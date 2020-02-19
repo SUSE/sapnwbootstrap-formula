@@ -3,6 +3,8 @@ netweaver:
   installation_folder: /tmp/swpm_unattended
   additional_dvds: []
   ha_enabled: True
+  nfs_version: nfs4 # Used to connect to the nfs share
+  nfs_options: defaults
   # Set this entry to false to disable creating swap
   create_swap:
       # Path containing the swapfile
