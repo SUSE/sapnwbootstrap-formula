@@ -37,6 +37,12 @@ netweaver:
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
 
+  # Used to connect to the nfs share
+  nfs_version: nfs4
+  nfs_options: defaults
+  # Use the next options for AWS for example
+  # nfs_options: rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+
   # saptune solution to apply to all nodes ( by default nothing is applied)
   # you can also use this to a single node if need to differ. see host hacert02
   # Warning: only a unique solution can exist into a node.
