@@ -35,6 +35,21 @@ The formula has some hard dependencies and all of them must be in place for a su
 
 Find an example about all of the possible configurable options in the [pillar.example](pillar.example) file.
 
+## Salt pillar encryption
+
+Pillars are expected to contain private data such as user passwords required for the automated installation or other operations. Therefore, such pillar data need to be stored in an encrypted state, which can be decrypted during pillar compilation.
+
+SaltStack GPG renderer provides a secure encryption/decryption of pillar data. The configuration of GPG keys and procedure for pillar encryption are desribed in the Saltstack documentation guide:
+
+- [SaltStack pillar encryption](https://docs.saltstack.com/en/latest/topics/pillar/#pillar-encryption)
+
+- [SALT GPG RENDERERS](https://docs.saltstack.com/en/latest/ref/renderers/all/salt.renderers.gpg.html)
+
+**Note:**
+- Only passwordless gpg keys are supported, and the already existing keys cannot be used.
+
+- If a masterless approach is used (as in the current automated deployment) the gpg private key must be imported in all the nodes. This might require the copy/paste of the keys.
+
 ## License
 
 See the [LICENSE](LICENSE) file for license rights and limitations.
