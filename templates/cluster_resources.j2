@@ -12,30 +12,95 @@
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
 
+# General cluster options
+{%- if cloud_provider not in ["amazon-web-services"] %}
+
+property cib-bootstrap-options: \
+  stonith-enabled="true" \
+  stonith-action="poweroff" \
+  stonith-timeout="600s"
+
+rsc_defaults rsc-options: \
+	resource-stickiness=1 \
+	migration-threshold=3
+
+op_defaults op-options: \
+	timeout=600 \
+	record-pending=true
+
+{%- endif %}
+
+# Platform dependant (stonith, virtual ip address, cib options, etc) resource
+
+{%- if cloud_provider == "amazon-web-services" %}
+
+primitive res_aws_stonith_{{ sid }} stonith:external/ec2 \
+  params tag={{ data.instance_tag }} profile={{ data.cluster_profile}} \
+  op start interval=0 timeout=180 \
+  op stop interval=0 timeout=180 \
+  op monitor interval=120 timeout=60 \
+  meta target-role=Started
+
+primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:suse:aws-vpc-move-ip \
+  params ip={{ ascs_ip_address }} routing_table={{ data.route_table}} \
+  interface={{ pillar.cluster.interface|default('eth0')|json }} profile={{ data.cluster_profile}} \
+  op start interval=0 timeout=180 \
+  op stop interval=0 timeout=180 \
+  op monitor interval=60 timeout=60
+
+primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:suse:aws-vpc-move-ip \
+  params ip={{ ers_ip_address }} routing_table={{ data.route_table}} \
+  interface={{ pillar.cluster.interface|default('eth0')|json }} profile={{ data.cluster_profile}} \
+  op start interval=0 timeout=180 \
+  op stop interval=0 timeout=180 \
+  op monitor interval=60 timeout=60
+
+{%- else %}
+
 {%- set nic = "nic="~pillar.cluster.interface|default('eth0')|json if cloud_provider == "google-cloud-platform" else "" %}
 {%- set cidr_netmask = "cidr_netmask=32" if cloud_provider == "google-cloud-platform" else "" %}
 
-primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
-  params device="{{ ascs_device }}" directory="/usr/sap/{{ sid }}/ASCS{{ ascs_instance }}" fstype={{ ascs_fstype|default("xfs") }} \
-  op start timeout=60s interval=0 \
-  op stop timeout=60s interval=0 \
-  op monitor interval=20s timeout=40s
+{%- if cloud_provider == "microsoft-azure" %}
+
+primitive nc_{{ sid }}_ASCS anything \
+  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
+  op monitor timeout=20s interval=10 depth=0
+
+primitive nc_{{ sid }}_ERS anything \
+  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
+  op monitor timeout=20s interval=10 depth=0
+
+{%- endif %}
+
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} IPaddr2 \
   params ip={{ ascs_ip_address}} {{ cidr_netmask }} {{ nic }} \
   op monitor interval=10s timeout=20s
+
+primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
+  params ip={{ ers_ip_address }} {{ cidr_netmask }} {{ nic }} \
+  op monitor interval=10s timeout=20s
+
+{%- endif %}
+
+# SAP Netweaver related resources
+
+primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
+  params device="{{ ascs_device }}" directory="/usr/sap/{{ sid }}/ASCS{{ ascs_instance }}" fstype={{ ascs_fstype|default("xfs") }} \
+  {%- if cloud_provider == "amazon-web-services" %}
+  options="rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2" \
+  {%- endif %}
+  op start timeout=60s interval=0 \
+  op stop timeout=60s interval=0 \
+  op monitor interval=20s timeout=40s
+
 primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
-  op monitor interval=11 timeout=60 on_fail=restart \
+  op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
      START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
      AUTOMATIC_RECOVER=false \
   meta resource-stickiness=5000 failure-timeout=60 \
      migration-threshold=1 priority=10
-{%- if cloud_provider == "microsoft-azure" %}
-primitive nc_{{ sid }}_ASCS anything \
-  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
-  op monitor timeout=20s interval=10 depth=0
-{%- endif %}
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ASCS {% endif %} \
@@ -43,31 +108,27 @@ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
   params device="{{ ers_device }}" directory="/usr/sap/{{ sid }}/ERS{{ ers_instance }}" fstype={{ ers_fstype|default("xfs") }} \
+  {%- if cloud_provider == "amazon-web-services" %}
+  options="rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2" \
+  {%- endif %}
   op start timeout=60s interval=0 \
   op stop timeout=60s interval=0 \
   op monitor interval=20s timeout=40s
-primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
-  params ip={{ ers_ip_address }} {{ cidr_netmask }} {{ nic }} \
-  op monitor interval=10s timeout=20s
+
 primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
-  op monitor interval=11 timeout=60 on_fail=restart \
+  op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
         AUTOMATIC_RECOVER=false IS_ERS=true \
   meta priority=1000
-{%- if cloud_provider == "microsoft-azure" %}
-primitive nc_{{ sid }}_ERS anything \
- params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
- op monitor timeout=20s interval=10 depth=0
-{%- endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ERS {% endif %}
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
-        rule 2000: runs_ers_{{ sid }} eq 1
+  rule 2000: runs_ers_{{ sid }} eq 1
 
 order ord_sap_{{ sid }}_first_start_ascs Optional: rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}:start \
-      rsc_sap_{{ sid }}_ERS{{ ers_instance }}:stop symmetrical=false
+  rsc_sap_{{ sid }}_ERS{{ ers_instance }}:stop symmetrical=false
