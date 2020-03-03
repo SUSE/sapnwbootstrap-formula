@@ -58,17 +58,17 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:suse:aws-vpc-move-ip \
 {%- elif cloud_provider == "google-cloud-platform" %}
 
 # This stonith resource will be duplicated for each node in the cluster
-primitive rsc_gcp_stonith_{{ sid }}_HDB{{ ascs_instance }}_{{ grains['host'] }} stonith:fence_gce \
+primitive rsc_gcp_stonith_{{ sid }}_{{ grains['host'] }} stonith:fence_gce \
     params action=reboot plug={{ grains['host'] }} pcmk_host_map="{{ grains['host'] }}:{{ grains['host'] }}" \
     meta target-role=Started
 
-primitive rsc_ip_{{ sid }}_ASCS{{ instance }} ocf:heartbeat:gcp-vpc-move-route \
+primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:heartbeat:gcp-vpc-move-route \
     params ip={{ data.ascs_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.route_table }} \
     op start interval=0 timeout=180 \
     op stop interval=0 timeout=180 \
     op monitor interval=60 timeout=60
 
-primitive rsc_ip_{{ sid }}_ERS{{ instance }} ocf:heartbeat:gcp-vpc-move-route \
+primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-route \
     params ip={{ data.ers_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.route_table }} \
     op start interval=0 timeout=180 \
     op stop interval=0 timeout=180 \
