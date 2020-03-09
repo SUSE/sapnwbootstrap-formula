@@ -12,12 +12,13 @@
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
 
-# General cluster options
-{%- if cloud_provider not in ["amazon-web-services"] %}
+# Platform dependant (stonith, virtual ip address, cib options, etc) resource
+
+{%- if cloud_provider == "amazon-web-services" %}
 
 property cib-bootstrap-options: \
   stonith-enabled="true" \
-  stonith-action="poweroff" \
+  stonith-action="off" \
   stonith-timeout="600s"
 
 rsc_defaults rsc-options: \
@@ -27,12 +28,6 @@ rsc_defaults rsc-options: \
 op_defaults op-options: \
 	timeout=600 \
 	record-pending=true
-
-{%- endif %}
-
-# Platform dependant (stonith, virtual ip address, cib options, etc) resource
-
-{%- if cloud_provider == "amazon-web-services" %}
 
 primitive res_aws_stonith_{{ sid }} stonith:external/ec2 \
   params tag={{ data.instance_tag }} profile={{ data.cluster_profile}} \
