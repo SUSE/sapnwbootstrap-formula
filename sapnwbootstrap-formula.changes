@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 10 10:20:28 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.3.0
+  * Adapt the cluster template to use the proper gcp agents
+  (bsc#1161898, bsc#1160933)
+
+-------------------------------------------------------------------
 Mon Mar  9 15:55:49 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version 0.2.5
