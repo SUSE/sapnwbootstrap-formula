@@ -12,4 +12,7 @@ netweaver:
       # Swap size in MB
       size: 2048
   # by default the exporter is disabled
-  sap_host_exporter: false
+  sap_host_exporter:
+      enabled: false
+      sap_control_user: ""
+      sap_control_password: ""
