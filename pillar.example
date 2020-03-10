@@ -70,7 +70,7 @@ netweaver:
 
 
   # optional: enable sap_host_exporter by default disabled
-  sap_host_exporter: false
+  # sap_host_exporter: true
 
   nodes:
     - host: hacert01

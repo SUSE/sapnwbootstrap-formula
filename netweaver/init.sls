@@ -9,6 +9,6 @@ include:
   - netweaver.install_db
   - netweaver.install_pas
   - netweaver.install_aas
-  {% if netweaver.sap_host_exporter is sameas true %}
+  {%- if netweaver.sap_host_exporter is sameas true %}
   - netweaver.monitoring
-  {% endif %}
+  {%- endif %}
