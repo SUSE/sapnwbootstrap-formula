@@ -1,3 +1,10 @@
+-------------------------------------------------------------------
+Tue Mar 10 09:58:57 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
+
+-  Version 0.2.7
+  * Add option to activate the sap_host_exporter on the nodes
+  * Add user and password pillar for exporter
+
 Mon Mar  9 15:55:49 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version 0.2.6

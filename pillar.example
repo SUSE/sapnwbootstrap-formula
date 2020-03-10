@@ -70,11 +70,10 @@ netweaver:
 
 
   # optional: enable sap_host_exporter by default disabled
-  # sap_host_exporter: 
-	# enabled: true
-        # user and password are required to authenticate for some calls
-	# sap-control-user: "myuser"
-	# sap-control-password: "mypwd"
+  sap_host_exporter: 
+    enabled: false
+    sap_control_user: user
+    sap_control_password: password
 
   nodes:
     - host: hacert01
