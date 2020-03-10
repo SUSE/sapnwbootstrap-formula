@@ -1,6 +1,5 @@
 -------------------------------------------------------------------
 Tue Mar 10 09:58:57 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
-
 -  Version 0.2.6
   * Add option to activate the sap_host_exporter on the nodes
   * Add user and password pillar for exporter
@@ -12,7 +11,7 @@ Mon Mar  9 15:55:49 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
   * Fix "stonith-action" parameter usage in the HA cluster
     template for aws
     (jsc#SLE-4143, boo#1137989)
-
+    
 -------------------------------------------------------------------
 Fri Feb 21 08:38:47 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
