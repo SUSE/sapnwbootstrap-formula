@@ -111,6 +111,10 @@ netweaver:
       root_user: root
       root_password: linux
       sap_instance: pas
+      # Update configuration file custom parameters using extra_parameters option
+      # Example:
+      #extra_parameters:
+      #  NW_liveCache.useLiveCache: "false"
 
     - host: hacert04
       virtual_host: sapha1aas
