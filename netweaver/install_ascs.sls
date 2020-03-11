@@ -8,11 +8,12 @@
 
 {% set product_id = node.product_id|default(netweaver.product_id) %}
 {% set product_id = 'NW_ABAP_ASCS:'~product_id if 'NW_ABAP_ASCS' not in product_id else product_id %}
+{% set inifile = '/tmp/ascs.inifile'~instance_name~'.params' %}
 
 create_ascs_inifile_{{ instance_name }}:
   file.managed:
     - source: salt://netweaver/templates/ascs.inifile.params.j2
-    - name: /tmp/ascs.inifile.params
+    - name: {{ inifile }}
     - template: jinja
     - context: # set up context for template ascs.inifile.params.j2
         master_password: {{ netweaver.master_password }}
@@ -27,7 +28,7 @@ create_ascs_inifile_{{ instance_name }}:
 update_ascs_inifile_{{ instance_name }}:
   module.run:
     - netweaver.update_conf_file:
-      - conf_file: /tmp/ascs.inifile.params
+      - conf_file: {{ inifile }}
       - {%- for key,value in node.extra_parameters.items() %}
         {{ key }}: "{{ value|string }}"
         {%- endfor %}
@@ -41,7 +42,7 @@ netweaver_install_{{ instance_name }}:
     - software_path: {{ netweaver.swpm_folder }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
-    - config_file: /tmp/ascs.inifile.params
+    - config_file: {{ inifile }}
     - virtual_host: {{ node.virtual_host }}
     - virtual_host_interface: {{ node.virtual_host_interface|default('eth0') }}
     - virtual_host_mask: {{ node.virtual_host_mask|default(24) }}
@@ -53,7 +54,7 @@ netweaver_install_{{ instance_name }}:
 
 remove_ascs_inifile_{{ instance_name }}:
   file.absent:
-    - name: /tmp/ascs.inifile.params
+    - name: {{ inifile }}
     - require:
       - create_ascs_inifile_{{ instance_name }}
 
