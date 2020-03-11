@@ -102,6 +102,11 @@ netweaver:
       root_user: root
       root_password: linux
       sap_instance: db
+      # Retry options configuration. Only for ERS, DB, PAS and AAS instances
+      # How often retry the SAP instance installation (10 by default retries)
+      #attempts: 10
+      # Interval in seconds between retries (60 seconds by default)
+      #interval: 60
 
     - host: hacert03
       virtual_host: sapha1pas

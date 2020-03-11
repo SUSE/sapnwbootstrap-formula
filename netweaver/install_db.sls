@@ -78,7 +78,7 @@ netweaver_install_{{ instance_name }}:
       - wait_for_hana_{{ instance_name }}
     - retry:
         attempts: {{ node.attempts|default(5) }}
-        interval: 60
+        interval: {{ node.interval|default(60) }}
 
 remove_db_inifile_{{ instance_name }}:
   file.absent:

@@ -58,7 +58,7 @@ netweaver_install_{{ instance_name }}:
     - additional_dvds: {{ netweaver.additional_dvds }}
     - ascs_password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
     - timeout: 1500
-    - interval: 15
+    - interval: {{ node.interval|default(30) }}
     - require:
       - create_ers_inifile_{{ instance_name }}
       - check_sapprofile_directory_exists_{{ instance_name }}
