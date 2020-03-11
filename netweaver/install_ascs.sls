@@ -23,6 +23,16 @@ create_ascs_inifile_{{ instance_name }}:
         virtual_hostname: {{ node.virtual_host }}
         download_basket: {{ netweaver.sapexe_folder }}
 
+{% if node.extra_parameters is defined %}
+update_ascs_inifile_{{ instance_name }}:
+  module.run:
+    - netweaver.update_conf_file:
+      - conf_file: /tmp/ascs.inifile.params
+      - {%- for key,value in node.extra_parameters.items() %}
+        {{ key }}: "{{ value|string }}"
+        {%- endfor %}
+{% endif %}
+
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
     - name: {{ node.sid.lower() }}

@@ -23,6 +23,16 @@ create_ers_inifile_{{ instance_name }}:
         virtual_hostname: {{ node.virtual_host }}
         download_basket: {{ netweaver.sapexe_folder }}
 
+{% if node.extra_parameters is defined %}
+update_ers_inifile_{{ instance_name }}:
+  module.run:
+    - netweaver.update_conf_file:
+      - conf_file: /tmp/ers.inifile.params
+      - {%- for key,value in node.extra_parameters.items() %}
+        {{ key }}: "{{ value|string }}"
+        {%- endfor %}
+{% endif %}
+
 check_sapprofile_directory_exists_{{ instance_name }}:
   file.exists:
     - name: /sapmnt/{{ node.sid.upper() }}/profile

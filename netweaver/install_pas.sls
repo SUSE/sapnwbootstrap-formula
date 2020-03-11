@@ -29,6 +29,16 @@ create_pas_inifile_{{ instance_name }}:
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
 
+{% if node.extra_parameters is defined %}
+update_pas_inifile_{{ instance_name }}:
+  module.run:
+    - netweaver.update_conf_file:
+      - conf_file: /tmp/pas.inifile.params
+      - {%- for key,value in node.extra_parameters.items() %}
+        {{ key }}: "{{ value|string }}"
+        {%- endfor %}
+{% endif %}
+
 check_sapprofile_directory_exists_{{ instance_name }}:
   file.exists:
     - name: /sapmnt/{{ node.sid.upper() }}/profile
