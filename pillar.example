@@ -105,7 +105,7 @@ netweaver:
       # Retry options configuration. Only for ERS, DB, PAS and AAS instances
       # How often retry the SAP instance installation (10 by default retries)
       #attempts: 10
-      # Interval in seconds between retries (60 seconds by default)
+      # Interval in seconds between retries (60 seconds by default for DB and 600 seconds for PAS and AAS)
       #interval: 60
 
     - host: hacert03

@@ -77,7 +77,7 @@ netweaver_install_{{ instance_name }}:
       - wait_for_db_{{ instance_name }}
     - retry:
         attempts: {{ node.attempts|default(10) }}
-        interval: {{ node.interval|default(60) }}
+        interval: {{ node.interval|default(600) }}
 
 remove_aas_inifile_{{ instance_name }}:
   file.absent:
