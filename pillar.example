@@ -68,6 +68,12 @@ netweaver:
   product_id: NW750.HDB.ABAPHA
   #product_id: S4HANA1709.CORE.HDB.ABAPHA
 
+  # optional: enable sap_host_exporter (disabled by default)
+  # the exporter will be installed and configured in all the nodes if it is enabled
+  sap_host_exporter: 
+    enabled: false
+   
+
   nodes:
     - host: hacert01
       virtual_host: sapha1as

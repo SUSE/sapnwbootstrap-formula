@@ -11,3 +11,6 @@ netweaver:
       directory: /var/lib/swap
       # Swap size in MB
       size: 2048
+  # by default the exporter is disabled
+  sap_host_exporter:
+      enabled: false
