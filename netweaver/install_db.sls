@@ -63,7 +63,11 @@ netweaver_install_{{ instance_name }}:
     - port: 3{{ hana_instance }}15
     - schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
     - schema_password: {{ netweaver.schema.password }}
+    {% if netweaver.swpm_folder is defined %}
     - software_path: {{ netweaver.swpm_folder }}
+    {% else %}
+    - software_path: {{ netweaver.swpm_extract_dir }}
+    {% endif %}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: {{ inifile }}
