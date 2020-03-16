@@ -52,7 +52,11 @@ netweaver_install_{{ instance_name }}:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
     - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
+    {% if netweaver.swpm_folder is defined %}
     - software_path: {{ netweaver.swpm_folder }}
+    {% else %}
+    - software_path: {{ netweaver.swpm_extract_dir }}
+    {% endif %}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: /tmp/pas.inifile.params
