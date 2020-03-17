@@ -1,3 +1,8 @@
+Thu Mar 12 12:24:56 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
+-  Version 0.2.7
+   * Fix non-unique ID name error for monitoring.sls state
+   * Fix non unique ID error for salt state
+
 -------------------------------------------------------------------
 Mon Mar 16 11:02:26 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
@@ -5,9 +10,8 @@ Mon Mar 16 11:02:26 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
   * Add option to set custom parameters in the installation
     configuration files
   * Make the installation retry times customizable
-
 -------------------------------------------------------------------
-Tue Mar 10 09:58:57 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
+ue Mar 10 09:58:57 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
 - Version 0.2.6
   * Add option to activate the sap_host_exporter on the nodes
 
