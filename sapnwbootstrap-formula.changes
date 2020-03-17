@@ -1,10 +1,14 @@
 Thu Mar 12 12:24:56 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
 -  Version 0.2.7
    * Fix non-unique ID name error for monitoring.sls state
+<<<<<<< HEAD
    * Fix non unique ID error for salt state
 
 -------------------------------------------------------------------
 Mon Mar 16 11:02:26 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+=======
+   * Manage properly multiple exporters execution in the same host
+>>>>>>> update spec
 
 - Version 0.2.7
   * Add option to set custom parameters in the installation
