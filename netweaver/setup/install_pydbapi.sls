@@ -33,9 +33,16 @@ nw_install_pydbapi_client:
     {% else %}
     - name: /usr/bin/python3 -m pip install {{ pydbapi_output_dir }}/hdbcli-*.tar.gz
     {% endif %}
+    - reload_modules: true
     - require:
       - nw_install_python_pip
       - nw_extract_pydbapi_client
+
+nw_reload_hdb_connector:
+  module.run:
+    - hana.reload_hdb_connector:
+    - require:
+      - nw_install_pydbapi_client
 
 nw_remove_pydbapi_client:
   file.absent:
