@@ -1,7 +1,14 @@
+-------------------------------------------------------------------
+Fri Mar 20 13:14:30 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.2.9
+  * Install pydbapi package to connect to the HANA database
+
+-------------------------------------------------------------------
 Thu Mar 17 12:24:56 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
--  Version 0.2.8
-   * Fix non-unique ID name error for monitoring.sls state
-   * Manage properly multiple exporters execution in the same host
+- Version 0.2.8
+  * Fix non-unique ID name error for monitoring.sls state
+  * Manage properly multiple exporters execution in the same host
     update spec
 
 -------------------------------------------------------------------

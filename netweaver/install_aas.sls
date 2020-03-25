@@ -56,6 +56,7 @@ wait_for_db_{{ instance_name }}:
     - interval: 30
     - require:
       - check_sapprofile_directory_exists_{{ instance_name }}
+      - nw_install_pydbapi_client
 
 netweaver_install_{{ instance_name }}:
   netweaver.installed:
