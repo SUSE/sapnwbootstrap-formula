@@ -54,7 +54,7 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:suse:aws-vpc-move-ip \
 
 # This stonith resource will be duplicated for each node in the cluster
 primitive rsc_gcp_stonith_{{ sid }}_{{ grains['host'] }} stonith:fence_gce \
-    params action=reboot plug={{ grains['host'] }} pcmk_host_map="{{ grains['host'] }}:{{ grains['host'] }}" \
+    params plug={{ grains['gcp_instance_id'] }} \
     meta target-role=Started
 
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:heartbeat:gcp-vpc-move-route \
