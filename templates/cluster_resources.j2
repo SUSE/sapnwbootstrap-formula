@@ -93,6 +93,22 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
 
 {%- endif %}
 
+{%- if data.monitoring_enabled %}
+
+primitive rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} systemd:prometheus-sap_host_exporter@{{ sid }}_ASCS{{ ascs_instance }}
+    op start interval=0 timeout=60 \
+    op stop interval=0 timeout=60 \
+    op monitor interval=10 \
+    meta target-role=Started
+
+primitive rsc_exporter_{{ sid }}_ERS{{ ers_instance }} systemd:prometheus-sap_host_exporter@{{ sid }}_ERS{{ ers_instance }}
+    op start interval=0 timeout=60 \
+    op stop interval=0 timeout=60 \
+    op monitor interval=10 \
+    meta target-role=Started
+
+{%- endif %}
+
 # SAP Netweaver related resources
 
 primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
@@ -114,7 +130,11 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
      migration-threshold=1 priority=10
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
-  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ASCS {% endif %} \
+  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} \
+  rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} \
+  rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
+  {%- if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ASCS \{% endif %}
+  {%- if data.monitoring_enabled %} rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \{% endif %}
   meta resource-stickiness=3000
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
@@ -135,7 +155,12 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   meta priority=1000
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ERS {% endif %}
+  rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
+  rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
+  rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
+  {%- if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ERS \{% endif %}
+  {%- if data.monitoring_enabled %} rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \{% endif %}
+  meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
