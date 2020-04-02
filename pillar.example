@@ -24,7 +24,14 @@ netweaver:
   # True by default
   clean_nfs: True
   sapmnt_inst_media: your_nfs_share_SID_folder
+  # Specify the path to already extracted SWPM installer folder
   swpm_folder: your_swpm_folder_absolute_path
+  # Or specify the path to the sapcar executable & SWPM installer sar archive, to extract the installer
+  # The sar archive will be extracted to path specified at swpm_extract_dir (optional, by default /sapmedia/NW/SWPM)
+  # Make sure to use the latest/compatible version of sapcar executable, and that it has correct execute permissions
+  sapcar_exe_file: your_sapcar_exe_file_absolute_path
+  swpm_sar_file: your_swpm_sar_file_absolute_path
+  swpm_extract_dir: location_to_extract_swpm_sar_absolute_path
   sapexe_folder: your_sapexe_sar_folder_absolute_path
   # Folder where the installation files are stored. /tmp/swpm_unattended by default. Set None to use
   # SAP default folders (it will only work with ASCS and ERS).

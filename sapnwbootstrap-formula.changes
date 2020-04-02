@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Mar 27 18:23:40 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
+
+- Version 0.2.10
+  * Add support for extracting installer sar file
+  * Update installation logic to use installer from extracted installation media
+
+-------------------------------------------------------------------
 Fri Mar 20 13:14:30 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version 0.2.9

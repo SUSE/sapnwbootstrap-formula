@@ -3,6 +3,7 @@
 include:
   - netweaver.setup
   - netweaver.saptune
+  - netweaver.extract_installer
   - netweaver.install_ascs
   - netweaver.install_ers
   - netweaver.ha_cluster
