@@ -11,6 +11,7 @@
 {%- set ers_ip_address = data.ers_ip_address %}
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
+{%- set monitoring_enabled = data.monitoring_enabled|default(False) %}
 
 # Platform dependant (stonith, virtual ip address, cib options, etc) resource
 
@@ -93,7 +94,7 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
 
 {%- endif %}
 
-{%- if data.monitoring_enabled %}
+{%- if monitoring_enabled %}
 
 primitive rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} systemd:prometheus-sap_host_exporter@{{ sid }}_ASCS{{ ascs_instance }} \
     op start interval=0 timeout=100 \
@@ -134,7 +135,7 @@ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
   {% if cloud_provider == "microsoft-azure" -%} rsc_socat_{{ sid }}_ASCS \ {%- endif %}
-  {% if data.monitoring_enabled -%} rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \ {%- endif %}
+  {% if monitoring_enabled -%} rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \ {%- endif %}
   meta resource-stickiness=3000
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
@@ -159,7 +160,7 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
   rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
   {% if cloud_provider == "microsoft-azure" -%} rsc_socat_{{ sid }}_ERS \ {%- endif %}
-  {% if data.monitoring_enabled -%} rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \ {%- endif %}
+  {% if monitoring_enabled -%} rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \ {%- endif %}
   meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
