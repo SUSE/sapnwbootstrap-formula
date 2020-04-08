@@ -96,14 +96,14 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} IPaddr2 \
 {%- if data.monitoring_enabled %}
 
 primitive rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} systemd:prometheus-sap_host_exporter@{{ sid }}_ASCS{{ ascs_instance }} \
-    op start interval=0 timeout=60 \
-    op stop interval=0 timeout=60 \
+    op start interval=0 timeout=100 \
+    op stop interval=0 timeout=100 \
     op monitor interval=10 \
     meta target-role=Started
 
 primitive rsc_exporter_{{ sid }}_ERS{{ ers_instance }} systemd:prometheus-sap_host_exporter@{{ sid }}_ERS{{ ers_instance }} \
-    op start interval=0 timeout=60 \
-    op stop interval=0 timeout=60 \
+    op start interval=0 timeout=100 \
+    op stop interval=0 timeout=100 \
     op monitor interval=10 \
     meta target-role=Started
 
