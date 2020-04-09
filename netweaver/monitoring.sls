@@ -15,12 +15,8 @@ sap_host_exporter_configuration_{{ exporter_instance }}:
   file.managed:
     - name: /etc/sap_host_exporter/{{ exporter_instance }}.yaml
     - contents: |
-         port: "9680"
          address: {{ node.virtual_host }}
-         log-level: "info"
-         sap-control-url: "http://127.0.0.1:5{{ sap_instance_nr }}13"
-         sap-control-user: "{{ node.sid.lower() }}adm"
-         sap-control-password: "{{ netweaver.sid_adm_password|default(netweaver.master_password) }}"
+         sap-control-uds: /tmp/.sapstream5{{ sap_instance_nr }}13
     - require:
       - pkg: prometheus_sap_host_exporter_pkg
 
