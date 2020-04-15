@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 14 13:38:47 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.2.11
+  * Update anyting socat resource by azure-lb as recommended in
+  the updated best practices guide 
+
+-------------------------------------------------------------------
 Fri Mar 27 18:23:40 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
 
 - Version 0.2.10

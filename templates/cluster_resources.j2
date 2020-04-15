@@ -57,12 +57,12 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:suse:aws-vpc-move-ip \
 
 {%- if cloud_provider == "microsoft-azure" %}
 
-primitive nc_{{ sid }}_ASCS anything \
-  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
+primitive rsc_socat_{{ sid }}_ASCS azure-lb \
+  params port=620{{ ascs_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
-primitive nc_{{ sid }}_ERS anything \
-  params binfile="/usr/bin/socat" cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
+primitive rsc_socat_{{ sid }}_ERS azure-lb \
+  params port=621{{ ers_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
 {%- endif %}
@@ -98,7 +98,7 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
      migration-threshold=1 priority=10
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
-  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ASCS {% endif %} \
+  rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} {% if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ASCS {% endif %} \
   meta resource-stickiness=3000
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
@@ -119,7 +119,7 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   meta priority=1000
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} nc_{{ sid }}_ERS {% endif %}
+  rsc_ip_{{ sid }}_ERS{{ ers_instance }} rsc_fs_{{ sid }}_ERS{{ ers_instance }} rsc_sap_{{ sid }}_ERS{{ ers_instance }} {% if cloud_provider == "microsoft-azure" %} rsc_socat_{{ sid }}_ERS {% endif %}
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
