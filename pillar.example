@@ -24,7 +24,14 @@ netweaver:
   # True by default
   clean_nfs: True
   sapmnt_inst_media: your_nfs_share_SID_folder
+  # Specify the path to already extracted SWPM installer folder
   swpm_folder: your_swpm_folder_absolute_path
+  # Or specify the path to the sapcar executable & SWPM installer sar archive, to extract the installer
+  # The sar archive will be extracted to path specified at swpm_extract_dir (optional, by default /sapmedia/NW/SWPM)
+  # Make sure to use the latest/compatible version of sapcar executable, and that it has correct execute permissions
+  sapcar_exe_file: your_sapcar_exe_file_absolute_path
+  swpm_sar_file: your_swpm_sar_file_absolute_path
+  swpm_extract_dir: location_to_extract_swpm_sar_absolute_path
   sapexe_folder: your_sapexe_sar_folder_absolute_path
   # Folder where the installation files are stored. /tmp/swpm_unattended by default. Set None to use
   # SAP default folders (it will only work with ASCS and ERS).
@@ -68,6 +75,12 @@ netweaver:
   product_id: NW750.HDB.ABAPHA
   #product_id: S4HANA1709.CORE.HDB.ABAPHA
 
+  # optional: enable sap_host_exporter (disabled by default)
+  # the exporter will be installed and configured in all the nodes if it is enabled
+  sap_host_exporter: 
+    enabled: false
+   
+
   nodes:
     - host: hacert01
       virtual_host: sapha1as
@@ -102,6 +115,11 @@ netweaver:
       root_user: root
       root_password: linux
       sap_instance: db
+      # Retry options configuration. Only for ERS, DB, PAS and AAS instances
+      # How often retry the SAP instance installation (10 by default retries)
+      #attempts: 10
+      # Interval in seconds between retries (60 seconds by default for DB and 600 seconds for PAS and AAS)
+      #interval: 60
 
     - host: hacert03
       virtual_host: sapha1pas
@@ -111,6 +129,10 @@ netweaver:
       root_user: root
       root_password: linux
       sap_instance: pas
+      # Update configuration file custom parameters using extra_parameters option
+      # Example:
+      #extra_parameters:
+      #  NW_liveCache.useLiveCache: "false"
 
     - host: hacert04
       virtual_host: sapha1aas

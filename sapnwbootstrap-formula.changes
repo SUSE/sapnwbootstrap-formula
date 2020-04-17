@@ -6,6 +6,46 @@ Tue Mar 10 10:20:28 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
   (bsc#1161898, bsc#1160933)
 
 -------------------------------------------------------------------
+Tue Apr 14 13:38:47 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.2.11
+  * Update anyting socat resource by azure-lb as recommended in
+  the updated best practices guide 
+
+-------------------------------------------------------------------
+Fri Mar 27 18:23:40 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
+
+- Version 0.2.10
+  * Add support for extracting installer sar file
+  * Update installation logic to use installer from extracted installation media
+
+-------------------------------------------------------------------
+Fri Mar 20 13:14:30 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.2.9
+  * Install pydbapi package to connect to the HANA database
+
+-------------------------------------------------------------------
+Thu Mar 17 12:24:56 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
+- Version 0.2.8
+  * Fix non-unique ID name error for monitoring.sls state
+  * Manage properly multiple exporters execution in the same host
+    update spec
+
+-------------------------------------------------------------------
+Mon Mar 16 11:02:26 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Version 0.2.7
+  * Add option to set custom parameters in the installation
+    configuration files
+  * Make the installation retry times customizable
+
+-------------------------------------------------------------------
+Tue Mar 10 09:58:57 UTC 2020 - Dario Maiocchi <dmaiocchi@suse.com>
+- Version 0.2.6
+  * Add option to activate the sap_host_exporter on the nodes
+
+-------------------------------------------------------------------
 Mon Mar  9 15:55:49 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
 - Version 0.2.5
