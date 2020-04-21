@@ -134,8 +134,12 @@ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
-  {% if cloud_provider == "microsoft-azure" -%} rsc_socat_{{ sid }}_ASCS \ {%- endif %}
-  {% if monitoring_enabled -%} rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \ {%- endif %}
+  {%- if cloud_provider == "microsoft-azure" %}
+  rsc_socat_{{ sid }}_ASCS \
+  {%- endif %}
+  {%- if monitoring_enabled %}
+  rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \
+  {%- endif %}
   meta resource-stickiness=3000
 
 primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
@@ -159,8 +163,12 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
   rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
-  {% if cloud_provider == "microsoft-azure" -%} rsc_socat_{{ sid }}_ERS \ {%- endif %}
-  {% if monitoring_enabled -%} rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \ {%- endif %}
+  {%- if cloud_provider == "microsoft-azure" %}
+  rsc_socat_{{ sid }}_ERS \
+  {%- endif %}
+  {%- if monitoring_enabled -%}
+  rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \
+  {%- endif %}
   meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
