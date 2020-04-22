@@ -1,5 +1,9 @@
+{%- from "netweaver/map.jinja" import netweaver with context -%}
+
 include:
+{% if netweaver.install_packages is sameas true %}
   - netweaver.setup.packages
+{% endif %}
   - netweaver.setup.install_pydbapi
   - netweaver.setup.shared_disk
   - netweaver.setup.virtual_addresses
