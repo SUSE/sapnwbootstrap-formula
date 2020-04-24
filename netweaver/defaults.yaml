@@ -1,4 +1,5 @@
 netweaver:
+  install_packages: true
   clean_nfs: True
   installation_folder: /tmp/swpm_unattended
   swpm_extract_dir: /sapmedia/NW/SWPM

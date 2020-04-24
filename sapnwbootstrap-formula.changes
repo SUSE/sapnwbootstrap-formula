@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr 22 19:17:03 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
+
+- Version 0.4.1
+  * Make it optional to install netweaver required packages
+
+-------------------------------------------------------------------
 Tue Apr 21 16:25:44 UTC 2020 - Stefano Torresi <stefano.torresi@suse.com>
 
 - Version 0.4.0
