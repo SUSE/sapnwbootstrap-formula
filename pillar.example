@@ -82,10 +82,9 @@ netweaver:
   # For HA S4/HANA
   #product_id: S4HANA1709.CORE.HDB.ABAPHA
 
-  # optional: enable sap_host_exporter (disabled by default)
-  # the exporter will be installed and configured in all the nodes if it is enabled
-  sap_host_exporter:
-    enabled: false
+  # optional: enables monitoring via sap_host_exporter (disabled by default)
+  # the exporter will be installed and configured in all the nodes
+  monitoring_enabled: true
 
   nodes:
     - host: hacert01

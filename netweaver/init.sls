@@ -10,6 +10,6 @@ include:
   - netweaver.install_db
   - netweaver.install_pas
   - netweaver.install_aas
-  {%- if netweaver.sap_host_exporter.enabled is sameas true %}
+  {%- if netweaver.monitoring_enabled %}
   - netweaver.monitoring
   {%- endif %}
