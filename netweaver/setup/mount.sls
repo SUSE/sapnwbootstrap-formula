@@ -7,6 +7,13 @@
 
 {% if node.sap_instance.lower() in ['ascs', 'ers'] %}
 
+create_folder_{{ node.sap_instance.lower() }}_{{ instance_name }}:
+  file.directory:
+    - name: /usr/sap/{{ node.sid.upper() }}/{{ node.sap_instance.upper() }}{{ instance }}
+
+# HA scenario where ASCS and ERS must share a disk to start/stop the processes as cluster
+{% if node.shared_disk_dev is defined %}
+
 {% if ':' in node.shared_disk_dev %} # This means that the device is a nfs share
 {% set device = node.shared_disk_dev %}
 {% set fstype = netweaver.nfs_version %}
@@ -36,6 +43,7 @@ create_folder_{{ shared_node.sap_instance.lower() }}_{{ shared_instance_name }}:
     - name: /usr/sap/{{ shared_node.sid.upper() }}/{{ shared_node.sap_instance.upper() }}{{ shared_instance }}
 
 {% endfor %}
+{% endif %}
 
 {% elif node.sap_instance.lower() in ['pas', 'aas'] %}
 

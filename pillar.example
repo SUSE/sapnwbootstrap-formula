@@ -77,13 +77,15 @@ netweaver:
   # Just put the product id ommiting the initial part like NW_ABAP_ASCS, NW_ERS, etc
   # Examples
   product_id: NW750.HDB.ABAPHA
+  # For non HA environments
+  #product_id: NW750.HDB.ABAP
+  # For HA S4/HANA
   #product_id: S4HANA1709.CORE.HDB.ABAPHA
 
   # optional: enable sap_host_exporter (disabled by default)
   # the exporter will be installed and configured in all the nodes if it is enabled
-  sap_host_exporter: 
+  sap_host_exporter:
     enabled: false
-   
 
   nodes:
     - host: hacert01
@@ -94,12 +96,17 @@ netweaver:
       instance: 00
       root_user: root
       root_password: linux
+      # Set the shared disk used in HA environments. Skip this parameter in non HA environments
       shared_disk_dev: /dev/sbd
+      # Or if a nfs share is used to manage the HA mounting point, like in the cloud providers
+      #shared_disk_dev: your_nfs_share_SID_folder/ASCS
+      # Init the shared disk. Only used if a shared disk is provided, not in nfs share cases
       init_shared_disk: True
-      sap_instance: ascs
       # Set an specific product id. In this case the initial part of the code is accepted too, even though it's recommend to use the 1st example option
       product_id: NW750.HDB.ABAPHA
+      #product_id: NW750.HDB.ABAP
       #product_id: NW_ABAP_ASCS:S4HANA1709.CORE.HDB.ABAPHA
+      sap_instance: ascs
 
     - host: hacert02
       virtual_host: sapha1er
@@ -108,7 +115,10 @@ netweaver:
       saptune_solution: 'MAXDB'
       root_user: root
       root_password: linux
+      # Set the shared disk used in HA environments. Skip this parameter in non HA environments
       shared_disk_dev: /dev/sbd
+      # If a nfs share is used to manage the HA mounting point, like in the cloud
+      #shared_disk_dev: your_nfs_share_SID_folder/ERS
       sap_instance: ers
 
     - host: hacert03
