@@ -59,13 +59,13 @@ primitive rsc_gcp_stonith_{{ sid }}_{{ grains['host'] }} stonith:fence_gce \
     meta target-role=Started
 
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:heartbeat:gcp-vpc-move-route \
-    params ip={{ data.ascs_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.route_table }} \
+    params ip={{ data.ascs_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.ascs_route_name|default("nw-ascs-"~sid~"-route") }} \
     op start interval=0 timeout=180 \
     op stop interval=0 timeout=180 \
     op monitor interval=60 timeout=60
 
 primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-route \
-    params ip={{ data.ers_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.route_table }} \
+    params ip={{ data.ers_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.ers_route_name|default("nw-ers-"~sid~"-route") }} \
     op start interval=0 timeout=180 \
     op stop interval=0 timeout=180 \
     op monitor interval=60 timeout=60
