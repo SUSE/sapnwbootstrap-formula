@@ -1,4 +1,6 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
+{%- from "netweaver/extract_nw_archives.sls" import additional_dvd_folders with context -%}
+{%- from "netweaver/extract_nw_archives.sls" import swpm_extract_dir with context -%}
 {% set host = grains['host'] %}
 
 {% for node in netweaver.nodes if node.host == host and node.sap_instance == 'aas' %}
@@ -63,7 +65,7 @@ netweaver_install_{{ instance_name }}:
     - name: {{ node.sid.lower() }}
     - inst: {{ instance }}
     - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
-    - software_path: {{ netweaver.swpm_folder|default(netweaver.swpm_extract_dir) }}
+    - software_path: {{ netweaver.swpm_folder|default(swpm_extract_dir) }}
     - root_user: {{ node.root_user }}
     - root_password: {{ node.root_password }}
     - config_file: {{ inifile }}
@@ -72,7 +74,7 @@ netweaver_install_{{ instance_name }}:
     - virtual_host_mask: {{ node.virtual_host_mask|default(24) }}
     - product_id: {{ product_id }}
     - cwd: {{ netweaver.installation_folder }}
-    - additional_dvds: {{ netweaver.additional_dvds }}
+    - additional_dvds: {{ additional_dvd_folders }}
     - require:
       - create_aas_inifile_{{ instance_name }}
       - wait_for_db_{{ instance_name }}
