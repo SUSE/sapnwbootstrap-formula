@@ -14,22 +14,29 @@ extract_installer_file:
     sapcar.extracted:
     - name: {{ netweaver.swpm_sar_file }}
     - sapcar_exe: {{ netweaver.sapcar_exe_file }}
-    - output_dir: {{ nw_extract_dir }}/SWPM
+    - output_dir: {{ swpm_extract_dir }}
     - options: "-manifest SIGNATURE.SMF"
 
 {% endif %}
 
 {% set additional_dvd_folders = [] %}
 
-{% for dvd in netweaver.additional_dvds %}
-{% set dvd_folder = salt['file.basename'](dvd.split('.')[0]) %}
-{% do additional_dvd_folders.append(nw_extract_dir | path_join(dvd_folder)) %}
+{% for dvd_entry in netweaver.additional_dvds %}
+{% set dvd = dvd_entry | string %}
+{% set dvd_folder_name = salt['file.basename'](dvd.split('.')[0]) %}
+{% set dvd_extract_dir = nw_extract_dir | path_join(dvd_folder_name) %}
+
+{%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar", ".exe", ".EXE")) %}
+{% do additional_dvd_folders.append(dvd_extract_dir) %}
+{%- else %}
+{% do additional_dvd_folders.append(dvd) %}
+{%- endif %}
 
 {%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar")) %}
 
 extract_nw_archive:
   archive.extracted:
-    - name: {{ nw_extract_dir | path_join(dvd_folder) }}
+    - name: {{ dvd_extract_dir }}
     - enforce_toplevel: False
     - source: {{ dvd }}
 
@@ -43,7 +50,7 @@ install_unrar_package:
 extract_nw_multipart_archive:
   cmd.run:
     - name: unrar x {{ dvd }}
-    - cwd: {{ nw_extract_dir | path_join(dvd_folder) }}
+    - cwd: {{ dvd_extract_dir }}
     - require:
         - install_unrar_package
 
