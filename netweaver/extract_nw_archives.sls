@@ -1,6 +1,6 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 {% set nw_extract_dir = netweaver.nw_extract_dir %}
-{% set swpm_extract_dir = nw_extract_dir~'/SWPM' %}
+{% set swpm_extract_dir = nw_extract_dir| path_join('SWPM') %}
 
 setup_nw_extract_directory:
   file.directory:
@@ -22,14 +22,14 @@ extract_installer_file:
 {% set additional_dvd_folders = [] %}
 
 {% for dvd in netweaver.additional_dvds %}
-{% set dvd_folder = dvd.split('.')[0] %}
-{% if additional_dvd_folders.append(dvd_folder) %}{% endif %}
+{% set dvd_folder = salt['file.basename'](dvd.split('.')[0]) %}
+{% do additional_dvd_folders.append(nw_extract_dir | path_join(dvd_folder)) %}
 
 {%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar")) %}
 
 extract_nw_archive:
   archive.extracted:
-    - name: {{ dvd_folder }}
+    - name: {{ nw_extract_dir | path_join(dvd_folder) }}
     - enforce_toplevel: False
     - source: {{ dvd }}
 
@@ -43,7 +43,7 @@ install_unrar_package:
 extract_nw_multipart_archive:
   cmd.run:
     - name: unrar x {{ dvd }}
-    - cwd: {{ dvd_folder }}
+    - cwd: {{ nw_extract_dir | path_join(dvd_folder) }}
     - require:
         - install_unrar_package
 

@@ -1,4 +1,6 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
+{%- from "netweaver/extract_nw_archives.sls" import additional_dvd_folders with context -%}
+
 {% set host = grains['host'] %}
 
 {% for node in netweaver.nodes if node.host == host and node.sap_instance in ['db', 'pas', 'aas'] %}
@@ -19,7 +21,7 @@ nw_install_python_pip:
 nw_extract_pydbapi_client:
   hana.pydbapi_extracted:
     - name: PYDBAPI.TGZ
-    - software_folders: {{ netweaver.additional_dvds }}
+    - software_folders: {{ additional_dvd_folders }}
     - output_dir: {{ pydbapi_output_dir }}
     - hana_version: '20'
     - force: true
