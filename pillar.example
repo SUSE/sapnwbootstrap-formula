@@ -42,10 +42,10 @@ netweaver:
   # This folder content will be removed before the installation so be extra careful!
   installation_folder: /tmp/swpm_unattended
   # DB/PAS/AAS instances require additional DVD folders like NW Export or HDB Client folder
-  # Provide the software folder or archives with additional SAP software needed to install netweaver
+  # Provide the absolute path to software folder or archives with additional SAP software needed to install netweaver
   additional_dvds:
-    - required_dvd1_folder_or_archive_absolute_path
-    - required_dvd2_folder_or_archive_absolute_path
+    - /sapmedia/HANA/51053492
+    - /sapmedia/NW/51050829_3.ZIP
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
 

@@ -34,7 +34,7 @@ extract_installer_file:
 
 {%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar")) %}
 
-extract_nw_archive:
+extract_nw_archive_{{ dvd }}:
   archive.extracted:
     - name: {{ dvd_extract_dir }}
     - enforce_toplevel: False
@@ -43,11 +43,11 @@ extract_nw_archive:
 {%- elif dvd.endswith((".exe", ".EXE")) %}
 
 {% set unrar_package = 'unrar_wrapper' if grains['osrelease_info'][0] == 15 else 'unrar' %}
-install_unrar_package:
+install_unrar_package_to_extract__{{ dvd }}:
   pkg.installed:
     - name: {{ unrar_package }}
 
-extract_nw_multipart_archive:
+extract_nw_multipart_archive_{{ dvd }}:
   cmd.run:
     - name: unrar x {{ dvd }}
     - cwd: {{ dvd_extract_dir }}
