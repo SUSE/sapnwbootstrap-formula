@@ -47,6 +47,7 @@ netweaver:
     - /sapmedia/HANA/51053492
     - /sapmedia/NW/51050829_3.ZIP
     - /tmp/sapmedia/51050818_5.EXE
+    - /tmp/sapmedia/IMDB_SERVER.SAR
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
 
