@@ -42,10 +42,12 @@ extract_nw_archive_{{ dvd }}:
 
 {%- elif dvd.endswith((".exe", ".EXE")) %}
 
+{% if loop.first %}
 {% set unrar_package = 'unrar_wrapper' if grains['osrelease_info'][0] == 15 else 'unrar' %}
 install_unrar_package_to_extract__{{ dvd }}:
   pkg.installed:
     - name: {{ unrar_package }}
+{%- endif %}
 
 extract_nw_multipart_archive_{{ dvd }}:
   cmd.run:
