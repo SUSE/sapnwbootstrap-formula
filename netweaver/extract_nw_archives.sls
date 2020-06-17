@@ -22,16 +22,13 @@ extract_installer_file:
 {% set additional_dvd_folders = [] %}
 
 {% for dvd_entry in netweaver.additional_dvds %}
+
+{# Set the extraction path for various archives in dvds list based on the dvd extension name #}
 {% set dvd = dvd_entry | string %}
 {% set dvd_folder_name = salt['file.basename'](dvd.split('.')[0]) %}
 {% set dvd_extract_dir = nw_extract_dir | path_join(dvd_folder_name) %}
 
-{%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar", ".exe", ".EXE", ".sar", ".SAR")) %}
-{% do additional_dvd_folders.append(dvd_extract_dir) %}
-{%- else %}
-{% do additional_dvd_folders.append(dvd) %}
-{%- endif %}
-
+{# Conditions to extract archives based on extension name #}
 {%- if dvd.endswith((".ZIP", ".zip", ".RAR", ".rar")) %}
 
 extract_nw_archive_{{ dvd }}:
@@ -40,11 +37,13 @@ extract_nw_archive_{{ dvd }}:
     - enforce_toplevel: False
     - source: {{ dvd }}
 
+{% do additional_dvd_folders.append(dvd_extract_dir) %}
+
 {%- elif dvd.endswith((".exe", ".EXE")) %}
 
 {% if loop.first %}
 {% set unrar_package = 'unrar_wrapper' if grains['osrelease_info'][0] == 15 else 'unrar' %}
-install_unrar_package_to_extract__{{ dvd }}:
+install_unrar_package_to_extract_{{ dvd }}:
   pkg.installed:
     - name: {{ unrar_package }}
 {%- endif %}
@@ -52,9 +51,13 @@ install_unrar_package_to_extract__{{ dvd }}:
 extract_nw_multipart_archive_{{ dvd }}:
   cmd.run:
     - name: unrar x {{ dvd }}
-    - cwd: {{ dvd_extract_dir }}
+    - cwd: {{ nw_extract_dir }}
     - require:
         - install_unrar_package
+{# As temporary workaround, the extraction path for multpart archive is calculated from archive name #}
+{# TODO: Find better solution to set or detect the correct extraction path when extracting multipart rar archive #}
+{% set exe_dvd_extract_dir = nw_extract_dir | path_join(dvd_folder_name.split('_')[0]) %}
+{% do additional_dvd_folders.append(exe_dvd_extract_dir) %}
 
 {%- elif dvd.endswith((".sar", ".SAR")) and netweaver.sapcar_exe_file is defined  %}
 
@@ -64,6 +67,11 @@ extract_sar_archive_{{ dvd }}:
     - sapcar_exe: {{ netweaver.sapcar_exe_file }}
     - output_dir: {{ dvd_extract_dir }}
     - options: "-manifest SIGNATURE.SMF"
+
+{% do additional_dvd_folders.append(dvd_extract_dir) %}
+
+{%- else %}
+{% do additional_dvd_folders.append(dvd) %}
 
 {%- endif %}
 {%- endfor %}
