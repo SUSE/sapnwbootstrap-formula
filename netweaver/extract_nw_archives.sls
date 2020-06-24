@@ -8,6 +8,12 @@ setup_nw_extract_directory:
     - mode: 755
     - makedirs: True
 
+{# Install unrar tool needed for extracting multipart archives, based on SLES version #}
+{% set unrar_package = 'unrar_wrapper' if grains['osrelease_info'][0] == 15 else 'unrar' %}
+install_unrar_package:
+  pkg.installed:
+    - name: {{ unrar_package }}
+
 {% if netweaver.sapcar_exe_file is defined and netweaver.swpm_sar_file is defined %}
 
 extract_installer_file:
@@ -40,13 +46,6 @@ extract_nw_archive_{{ dvd }}:
 {% do additional_dvd_folders.append(dvd_extract_dir) %}
 
 {%- elif dvd.endswith((".exe", ".EXE")) %}
-
-{% if loop.first %}
-{% set unrar_package = 'unrar_wrapper' if grains['osrelease_info'][0] == 15 else 'unrar' %}
-install_unrar_package_to_extract_{{ dvd }}:
-  pkg.installed:
-    - name: {{ unrar_package }}
-{%- endif %}
 
 extract_nw_multipart_archive_{{ dvd }}:
   cmd.run:
