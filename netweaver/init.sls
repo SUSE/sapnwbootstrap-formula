@@ -3,7 +3,8 @@
 include:
   - netweaver.setup
   - netweaver.saptune
-  - netweaver.extract_installer
+  - netweaver.extract_nw_archives
+  - netweaver.install_pydbapi
   - netweaver.install_ascs
   - netweaver.install_ers
   - netweaver.ha_cluster

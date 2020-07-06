@@ -2,7 +2,7 @@ netweaver:
   install_packages: true
   clean_nfs: True
   installation_folder: /tmp/swpm_unattended
-  swpm_extract_dir: /sapmedia/NW/SWPM
+  nw_extract_dir: /sapmedia/NW
   additional_dvds: []
   ha_enabled: True
   nfs_version: nfs4 # Used to connect to the nfs share

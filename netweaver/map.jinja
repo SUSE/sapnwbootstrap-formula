@@ -3,4 +3,3 @@
 
 {% import_yaml "netweaver/defaults.yaml" as defaults %}
 {% set netweaver = salt['pillar.get']('netweaver', default=defaults.netweaver, merge=True) %}
-{% do netweaver.update({'additional_dvds': netweaver.additional_dvds|json}) %}
