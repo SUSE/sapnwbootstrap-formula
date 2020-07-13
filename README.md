@@ -1,4 +1,4 @@
-# SAP Netweaver salt formula
+# SAP Netweaver Salt formula
 
 Salt formula to bootstrap and manage SAP Netweaver platforms.
 
@@ -36,9 +36,9 @@ On openSUSE or SUSE Linux Enterprise you can just use the `zypper` system packag
 zypper install sapnwbootstrap-formula
 ```
 
-**Important!** This will install the formula in `/usr/share/salt-formulas/states/netweaver`. Make sure that `/usr/share/salt-formulas/states` entry is correctly configured in your salt minion configuration `file_roots` entry if the formula is used in a masterless mode.
+**Important!** This will install the formula in `/usr/share/salt-formulas/states/netweaver`. Make sure that `/usr/share/salt-formulas/states` entry is correctly configured in your Salt minion configuration `file_roots` entry if the formula is used in a masterless mode.
 
-You can find the latest development repositories at [SUSE's Open Build Service](https://build.opensuse.org/package/show/network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula).
+Find the latest development repositories at SUSE's Open Build Service [network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula](https://build.opensuse.org/package/show/network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula).
 
 ### Manual clone
 
@@ -47,7 +47,7 @@ git clone https://github.com/SUSE/sapnwbootstrap-formula
 cp -R cluster /srv/salt
 ```
 
-**Important!** The formulas depends on [salt-shaptools](https://github.com/SUSE/salt-shaptools) package, so make sure it is installed properly if you follow the manual installation (the package can be installed as a RPM package too).
+**Important!** The formulas depends on [salt-shaptools](https://github.com/SUSE/salt-shaptools) package. Make sure it is installed properly if you follow the manual installation (the package can be installed as a RPM package too).
 
 ## Usage
 
@@ -67,24 +67,41 @@ Find an example about all of the possible configurable options in the [pillar.ex
 
 ### Configuration
 
-To use the formula the `netweaver` entry must be included in the salt execution `top.sls` file. Here an example to execute the netweaver formula in all of the nodes:
+Follow the next steps to configure the formula execution. After this, the formula can be executed using `master/minion` or `masterless` options:
 
-```
-# This file is /srv/salt/top.sls
-base:
-  '*':
-    - netweaver
-```
+1. Modify the `top.sls` file (by default stored in `/srv/salt`) including the `netweaver` entry.
 
-To configure the execution a pillar file is needed. Here an example of a pillar file for this formula: [pillar.example](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/pillar.example)
-This file must be stored in `/srv/pillar` as `netweaver.sls` and the same folder must contain a `top.sls` to use it. For example:
+   Here an example to execute the Netweaver formula in all of the nodes:
 
-```
-# This file is /srv/pillar/top.sls
-base:
-  '*':
-    - netweaver
-```
+   ```
+   # This file is /srv/salt/top.sls
+   base:
+     '*':
+       - netweaver
+   ```
+
+2. Customize the execution pillar file. Here an example of a pillar file for this formula with all of the options: [pillar.example](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/pillar.example)
+
+3. Set the execution pillar file. For that, modify the `top.sls` of the pillars (by default stored in `/srv/pillar`) including the `netweaver` entry and copy your specific `netweaver.sls` pillar file in the same folder.
+
+   Here an example to apply the recently created `netweaver.sls` pillar file to all of the nodes:
+
+   ```
+   # This file is /srv/pillar/top.sls
+   base:
+     '*':
+       - netweaver
+   ```
+
+4. Execute the formula.
+
+   1. Master/Minion execution.
+
+      `salt '*' state.highstate`
+
+   2. Masterless execution.
+
+      `salt-call --local state.highstate`
 
 **Important!** The hostnames and minion names of the netweaver nodes must match the output of the `hostname` command.
 
@@ -102,6 +119,15 @@ SaltStack GPG renderer provides a secure encryption/decryption of pillar data. T
 - Only passwordless gpg keys are supported, and the already existing keys cannot be used.
 
 - If a masterless approach is used (as in the current automated deployment) the gpg private key must be imported in all the nodes. This might require the copy/paste of the keys.
+
+## OBS Packaging
+
+The CI automatically publishes new releases to SUSE's Open Build Service every time a pull request is merged into `master` branch. For that, update the new package version in [sapnwbootstrap-formula.spec](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.spec) and
+add the new changes in [sapnwbootstrap-formula.changes](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.changes).
+
+The new version is published at:
+- https://build.opensuse.org/package/show/network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula
+- https://build.opensuse.org/package/show/openSUSE:Factory/sapnwbootstrap-formula (only if the spec file version is increased)
 
 ## License
 
