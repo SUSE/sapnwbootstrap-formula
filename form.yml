@@ -1,0 +1,298 @@
+netweaver:
+  $name: Netweaver
+  $type: group
+  
+  install_packages:
+    $name: Install required packages
+    $type: boolean
+    $default: true
+    $help: Install all required packages to install SAP Netweaver
+    $optional: true
+  
+  virtual_addresses:
+    $name: Virtual Addresses
+    $type: edit-group
+    $prototype:
+      ip_address:
+        $name: IP Address
+        $type: text
+        $optional: false
+      hostname:
+        $name: Hostname
+        $type: text
+        $optional: false
+  
+  sidadm_user:
+    $name: SAP User/Group
+    $type: edit-group
+    $help: Create the SAP sidadm user and group before the installation
+    $prototype:
+      uid:
+        $name: User ID
+        $type: text
+        $optional: true
+      gid:
+        $name: Group ID
+        $type: text
+        $optional: true
+  
+  sap_passwords_checkbox:
+    $name: Provide SAP user passwords
+    $type: boolean
+    $default: false
+  sidadm_password:
+    $name: SAP <sid>adm user password
+    $visibleIf: .sap_passwords_checkbox == true
+    $type: password
+    $help: The password of the SAP <sid>adm user
+    $optional: true
+  sapadm_password:
+    $name: SAP admin password
+    $visibleIf: .sap_passwords_checkbox == true
+    $type: password
+    $help: The password of the SAP <sap>adm user
+    $optional: true
+  master_password:
+    $name: Master password
+    $type: password
+    $help: Master password is used for all the SAP users that are created
+
+  sapmnt_inst_media:
+    $name: sapmnt media
+    $type: text
+    $help: NFS share with SID folder
+    $optional: false
+  
+  nfs_version:
+    $name: NFS version
+    $type: text
+    $default: nfs4
+    $help: Used to connect to the nfs share
+    $optional: true
+
+  nfs_options:
+    $name: NFS options
+    $type: text
+    $default: defaults
+    $help: Specify the options for nfs share
+    $optional: true
+
+  use_swpm_sar_file:
+    $name: Provide SWPM installer sar archive for Netweaver installation 
+    $type: boolean
+    $default: false
+    $help: Mark this option if you want to use swpm sar archive file for the installation
+  swpm_sar_file:
+    $name: Path to SWPM archive
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $help: The path to swpm installer media archive in SAR format.Please also provide the sapcar executable path for extraction
+    $optional: true
+  nw_extract_dir:
+    $name: Path to extract the Netweaver installation media
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $default: /sapmedia/NW
+    $help: The NW media will be extracted to this path. By default this path is /sapmedia/NW
+    $optional: true
+  sapcar_exe_file:
+    $name: Path to sapcar executable if extracting NW SAR archive
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $help: The path to sapcar executable to extract NW SAR archive
+    $optional: true
+
+  swpm_folder:
+    $name: swpm folder location
+    $type: text
+    $help: Path to already extracted SWPM installer folder
+    $optional: true
+  
+  sapexe_folder:
+    $name: SAP exe folder location
+    $type: text
+    $help: Path to sap exe folder
+    $optional: false
+  
+  installation_folder:
+    $name: Netweaver installation folder
+    $type: text
+    $default: /tmp/swpm_unattended
+    $help: Path to run the installation
+    $optional: false
+  
+  ha_enabled:
+    $name: Enable HA cluster configuration
+    $type: boolean
+    $default: true
+    $help: Enable the HA cluster configuration
+    $optional: false
+  
+  clean_nfs:
+    $name: clean nfs share content
+    $type: boolean
+    $default: true
+    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content
+    $optional: false
+  additional_dvds:
+    $name: Additional dvds
+    $type: edit-group
+    $help: Path to software folder or archives with additional SAP software
+    $prototype:
+      additional_dvd:
+        $name: Additional DVD
+        $type: text
+        $optional: false
+  saptune_solution:
+    $name: saptune solution to apply
+    $type: text
+    $help: saptune solution to apply to all nodes
+    $optional: true
+
+  hana:
+    $name: Hana
+    $type: edit-group
+    $help: Information about the already deployed HANA Database
+    $prototype:
+      host:
+        $name: Host
+        $type: text
+        $optional: false
+      sid:
+        $name: SID
+        $type: text
+        $optional: false
+      instance:
+        $name: Instance
+        $type: text
+        $optional: false
+      password:
+        $name: Password
+        $type: text
+        $optional: false
+
+  schema:
+    $name: Schema
+    $type: edit-group
+    $help: Information about the Schema created during DB installation and used by PAS/AAS
+    $prototype:
+      name:
+        $name: schema name
+        $type: text
+        $optional: true
+      password:
+        $type: text
+        $optional: true
+
+  product_id:
+    $name: SAP product ID
+    $type: text
+    $help: The installed SAP product id. If some particular node has its own product_id that one will have the preference
+    $optional: false
+
+  monitoring_enabled:
+    $name: Enable the host to be monitored by exporters
+    $type: boolean
+    $default: false
+    $help: Enable the node monitoring via exporters which will be installed and configured in all the nodes.
+
+  nodes:
+    $name: Nodes
+    $type: edit-group
+    $minItems: 1
+    $itemName: ""
+    $prototype:
+      host:
+        $name: Hostname to install Netweaver
+        $type: text
+        $optional: false
+      virtual_host:
+        $name: Virtual Hostname
+        $type: text
+        $optional: false
+      virtual_host_interface:
+        $name: Virtual host interface
+        $type: text
+        $default: eth0
+        $optional: true
+      virtual_host_mask:
+        $name: Virtual host mask
+        $type: text
+        $default: 32
+        $optional: true
+      sid:
+        $name: SAP system identifier (SID)
+        $type: text
+        $optional: false
+        $help: System ID of the HANA installation
+      instance:
+        $name: SAP instance number
+        $type: text
+        $optional: false
+      root_user:
+        $name: Root user
+        $type: text
+        $optional: false
+      root_password:
+        $name: Root user password
+        $type: password
+        $optional: false      
+      shared_disk_dev:
+        $name: Shared disk device
+        $type: text
+        $optional: true
+        $help: Set the shared disk used in HA environments. Skip this parameter in non HA environments
+      use_nfs_disk_checkbox:
+        $name: Use nfs share SID folder
+        $type: boolean
+        $default: false
+        $help: If a nfs share is used to manage the HA mounting point
+      init_shared_disk:
+        $name: Init the shared disk
+        $visibleIf: .use_nfs_disk_checkbox == true
+        $type: boolean
+        $optional: true
+        $help: Init the shared disk. Only used if a shared disk is provided
+      node_product_id:
+        $name: SAP product ID
+        $type: text
+        $help: The installed SAP product id. This will have the preference over global product id
+        $optional: true      
+      sap_instance:
+        $name: SAP Instance
+        $type: text
+        $optional: false
+      extra_parameters_checkbox:
+        $name: Provide extra installation parameters
+        $type: boolean
+        $optional: true  
+      extra_parameters:
+        $name: Installation extra options
+        $visibleIf: .extra_parameters_checkbox == true
+        $help: Optional configuration parameters
+        $optional: true
+        $type: edit-group
+        $itemName: ""
+        $prototype:
+          $name: Extra parameter
+          key:
+            $name: Value to update
+          value:
+            $name: New value
+      retry_checkbox:
+        $name: Retry the SAP instance installation
+        $type: boolean
+        $help: How often retry the SAP instance installation 
+        $optional: true
+      retry_attempts:
+        $name: Retry attempts
+        $visibleIf: .retry_checkbox == true
+        $type: text
+        $default: 10
+        $optional: true
+      retry_interval:
+        $name: Retry interval
+        $visibleIf: .retry_checkbox == true
+        $type: text
+        $default: 60
+        $optional: true
