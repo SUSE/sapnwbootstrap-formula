@@ -122,7 +122,7 @@ SaltStack GPG renderer provides a secure encryption/decryption of pillar data. T
 
 ## OBS Packaging
 
-The CI automatically publishes new releases to SUSE's Open Build Service every time a pull request is merged into `master` branch. For that, update the new package version in [sapnwbootstrap-formula.spec](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.spec) and
+The CI automatically publishes new releases to SUSE's Open Build Service every time a pull request is merged into `master` branch. For that, update the new package version in [_service](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/_service) and
 add the new changes in [sapnwbootstrap-formula.changes](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.changes).
 
 The new version is published at:
