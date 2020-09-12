@@ -44,7 +44,7 @@ Find the latest development repositories at SUSE's Open Build Service [network:h
 
 ```
 git clone https://github.com/SUSE/sapnwbootstrap-formula
-cp -R cluster /srv/salt
+cp -R netweaver /srv/salt
 ```
 
 **Important!** The formulas depends on [salt-shaptools](https://github.com/SUSE/salt-shaptools) package. Make sure it is installed properly if you follow the manual installation (the package can be installed as a RPM package too).
@@ -122,7 +122,7 @@ SaltStack GPG renderer provides a secure encryption/decryption of pillar data. T
 
 ## OBS Packaging
 
-The CI automatically publishes new releases to SUSE's Open Build Service every time a pull request is merged into `master` branch. For that, update the new package version in [sapnwbootstrap-formula.spec](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.spec) and
+The CI automatically publishes new releases to SUSE's Open Build Service every time a pull request is merged into `master` branch. For that, update the new package version in [_service](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/_service) and
 add the new changes in [sapnwbootstrap-formula.changes](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/sapnwbootstrap-formula.changes).
 
 The new version is published at:
