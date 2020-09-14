@@ -15,8 +15,6 @@
 
 # Platform dependant (stonith, virtual ip address, cib options, etc) resource
 
-{%- if cloud_provider == "amazon-web-services" %}
-
 property cib-bootstrap-options: \
   stonith-enabled="true" \
   stonith-action="off" \
@@ -29,6 +27,8 @@ rsc_defaults rsc-options: \
 op_defaults op-options: \
 	timeout=600 \
 	record-pending=true
+
+{%- if cloud_provider == "amazon-web-services" %}
 
 primitive res_aws_stonith_{{ sid }} stonith:external/ec2 \
   params tag={{ data.instance_tag }} profile={{ data.cluster_profile}} \
@@ -123,7 +123,7 @@ primitive rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} Filesystem \
 
 primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
-  op monitor interval=120 timeout=60 on_fail=restart \
+  op monitor interval=11 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
      START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
      AUTOMATIC_RECOVER=false \
@@ -153,7 +153,7 @@ primitive rsc_fs_{{ sid }}_ERS{{ ers_instance }} Filesystem \
 
 primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
-  op monitor interval=120 timeout=60 on_fail=restart \
+  op monitor interval=11 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
         AUTOMATIC_RECOVER=false IS_ERS=true \
@@ -169,7 +169,6 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   {%- if monitoring_enabled -%}
   rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \
   {%- endif %}
-  meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
