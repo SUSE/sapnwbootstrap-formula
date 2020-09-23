@@ -1,5 +1,6 @@
 {%- set data = pillar.cluster.configure.template.parameters %}
 {%- set cloud_provider = grains['cloud_provider'] %}
+{%- set ensa_version = data.ensa_version|default(grains['ensa_version']|int)|int %}
 {%- set sid = data.sid.upper() %}
 {%- set ascs_instance = '{:0>2}'.format(data.ascs_instance) %}
 {%- set ers_instance = '{:0>2}'.format(data.ers_instance) %}
@@ -127,8 +128,7 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
      START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
      AUTOMATIC_RECOVER=false \
-  meta resource-stickiness=5000 failure-timeout=60 \
-     migration-threshold=1 priority=10
+  meta resource-stickiness=5000 {%- if ensa_version == 1 %}failure-timeout=60 migration-threshold=1 priority=10{%- endif %}
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} \
@@ -156,8 +156,7 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
-        AUTOMATIC_RECOVER=false IS_ERS=true \
-  meta priority=1000
+        AUTOMATIC_RECOVER=false IS_ERS=true {%- if ensa_version == 1 %}meta priority=1000{%- endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
@@ -172,8 +171,10 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
+{%- if ensa_version == 1 %}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
   rule 2000: runs_ers_{{ sid }} eq 1
+{%- endif %}
 
 order ord_sap_{{ sid }}_first_start_ascs Optional: rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}:start \
   rsc_sap_{{ sid }}_ERS{{ ers_instance }}:stop symmetrical=false

@@ -7,6 +7,7 @@ include:
   - netweaver.install_pydbapi
   - netweaver.install_ascs
   - netweaver.install_ers
+  - netweaver.ensa_version_detection
   - netweaver.ha_cluster
   - netweaver.install_db
   - netweaver.install_pas
