@@ -10,3 +10,4 @@ include:
   - netweaver.setup.mount
   - netweaver.setup.users
   - netweaver.setup.swap_space
+  - netweaver.setup.keepalive
