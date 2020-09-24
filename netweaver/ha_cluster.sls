@@ -89,7 +89,7 @@ set_keepalive_option_{{ instance_name }}:
     - content: enque/encni/set_so_keepalive = true
     # onlyif statements can be improved when salt version 3000 is used
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#onlyif
-    - onlyif: cat /etc/salt/grains | grep "ensa_version:.*1"
+    - onlyif: cat /etc/salt/grains | grep "ensa_version_{{ node.sid.lower() }}_{{ instance }}:.*1"
 
 {% elif node.sap_instance.lower() == 'ers' %}
 
