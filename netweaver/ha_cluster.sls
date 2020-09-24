@@ -84,7 +84,8 @@ adapt_sap_profile_ascs_{{ instance_name }}:
 set_keepalive_option_{{ instance_name }}:
   file.line:
     - name: {{ profile_file }}
-    - mode: ensure
+    - mode: insert
+    - location: end
     - content: enque/encni/set_so_keepalive = true
     # onlyif statements can be improved when salt version 3000 is used
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#onlyif

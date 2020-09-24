@@ -128,7 +128,7 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
      START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
      AUTOMATIC_RECOVER=false \
-  meta resource-stickiness=5000 {%- if ensa_version == 1 %}failure-timeout=60 migration-threshold=1 priority=10{%- endif %}
+  meta resource-stickiness=5000 {% if ensa_version == 1 %}failure-timeout=60 migration-threshold=1 priority=10{%- endif %}
 
 group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} \
@@ -156,7 +156,7 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
         START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
-        AUTOMATIC_RECOVER=false IS_ERS=true {%- if ensa_version == 1 %}meta priority=1000{%- endif %}
+        AUTOMATIC_RECOVER=false IS_ERS=true {% if ensa_version == 1 %}meta priority=1000{%- endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
