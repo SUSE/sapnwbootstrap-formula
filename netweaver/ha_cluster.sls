@@ -81,6 +81,16 @@ adapt_sap_profile_ascs_{{ instance_name }}:
     - pattern: '^Restart_Program_01 = local \$\(_EN\) pf=\$\(_PF\)'
     - repl: 'Start_Program_01 = local $(_EN) pf=$(_PF)'
 
+set_keepalive_option_{{ instance_name }}:
+  file.line:
+    - name: {{ profile_file }}
+    - mode: insert
+    - location: end
+    - content: enque/encni/set_so_keepalive = true
+    # onlyif statements can be improved when salt version 3000 is used
+    # https://docs.saltstack.com/en/latest/ref/states/requisites.html#onlyif
+    - onlyif: cat /etc/salt/grains | grep "ensa_version_{{ node.sid.lower() }}_{{ instance }}:.*1"
+
 {% elif node.sap_instance.lower() == 'ers' %}
 
 adapt_sap_profile_ers_{{ instance_name }}:
@@ -88,6 +98,12 @@ adapt_sap_profile_ers_{{ instance_name }}:
     - name: {{ profile_file }}
     - pattern: '^Restart_Program_00 = local \$\(_ER\) pf=\$\(_PFL\) NR=\$\(SCSID\)'
     - repl: 'Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)'
+
+remove_autostart_option_{{ instance_name }}:
+  file.line:
+    - name: {{ profile_file }}
+    - match: ^Autostart = 1.*$
+    - mode: delete
 
 {% endif %}
 

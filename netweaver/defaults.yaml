@@ -9,8 +9,12 @@ netweaver:
   nfs_options: defaults
   # Set this entry to false to disable creating swap
   create_swap:
-      # Path containing the swapfile
-      directory: /var/lib/swap
-      # Swap size in MB
-      size: 2048
+    # Path containing the swapfile
+    directory: /var/lib/swap
+    # Swap size in MB
+    size: 2048
+  sysctl_values:
+    net.ipv4.tcp_keepalive_time: 300
+    net.ipv4.tcp_keepalive_intvl: 75
+    net.ipv4.tcp_keepalive_probes: 9
   monitoring_enabled: false
