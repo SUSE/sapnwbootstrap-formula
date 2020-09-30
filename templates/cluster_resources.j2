@@ -90,11 +90,11 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
 
 {%- if cloud_provider == "microsoft-azure" %}
 
-primitive rsc_socat_{{ sid }}_ASCS azure-lb \
+primitive rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} azure-lb \
   params port=620{{ ascs_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
-primitive rsc_socat_{{ sid }}_ERS azure-lb \
+primitive rsc_socat_{{ sid }}_ERS{{ ers_instance }} azure-lb \
   params port=621{{ ers_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
