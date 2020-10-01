@@ -176,14 +176,13 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
-  {%- if cloud_provider == "microsoft-azure" %}
-  rsc_socat_{{ sid }}_ERS \
+  rsc_sap_{{ sid }}_ERS{{ ers_instance }}
+  {%- if cloud_provider == "microsoft-azure" %} \
+  rsc_socat_{{ sid }}_ERS
   {%- endif %}
-  {%- if monitoring_enabled -%}
-  rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \
+  {%- if monitoring_enabled %} \
+  rsc_exporter_{{ sid }}_ERS{{ ers_instance }}
   {%- endif %}
-  meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 {%- if ensa_version == 1 %}
