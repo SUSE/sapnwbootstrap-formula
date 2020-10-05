@@ -17,37 +17,47 @@ netweaver:
           $name: IP Address
       $type: text
       $name: Hostname
-  
+
+  sidadm_user_checkbox:
+    $name: Create the SAP sidadm user and group before the installation
+    $type: boolean
+    $default: false      
   sidadm_user:
     $name: SAP User/Group
-    $type: edit-group
-    $help: Create the SAP sidadm user and group before the installation
-    $prototype:
-      uid:
-        $name: User ID
-        $type: text
-        $optional: true
-      gid:
-        $name: Group ID
-        $type: text
-        $optional: true
-  
-  sap_passwords_checkbox:
-    $name: Provide SAP user passwords
+    $visibleIf: .sidadm_user_checkbox == true
+    $type: group
+    $help: If this entry exists the user and group will be created before the installation, not otherwise
+    uid:
+      $name: User ID
+      $type: text
+    gid:
+      $name: Group ID
+      $type: text
+
+  sid_adm_password_checkbox:
+    $name: Provide SAP <sid>adm user password
     $type: boolean
     $default: false
-  sidadm_password:
+    $help: <sid>adm password is optional, master password will be used as default, if the value is not defined
+  sid_adm_password:
     $name: SAP <sid>adm user password
-    $visibleIf: .sap_passwords_checkbox == true
+    $visibleIf: .sid_adm_password_checkbox == true
     $type: password
-    $help: The password of the SAP <sid>adm user
+    $help: The password of the SAP <sid>adm user. If not set master password will be used as default
     $optional: true
-  sapadm_password:
-    $name: SAP admin password
-    $visibleIf: .sap_passwords_checkbox == true
+  
+  sap_adm_password_checkbox:
+    $name: Provide SAP <sap>adm user password
+    $type: boolean
+    $default: false
+    $help: <sap>adm password is optional, master password will be used as default, if the value is not defined
+  sap_adm_password:
+    $name: SAP admin <sap>adm user password
+    $visibleIf: .sap_adm_password_checkbox == true
     $type: password
-    $help: The password of the SAP <sap>adm user
+    $help: The password of the SAP <sap>adm user. If not set master password will be used as default
     $optional: true
+  
   master_password:
     $name: Master password
     $type: password
