@@ -7,20 +7,16 @@ netweaver:
     $type: boolean
     $default: true
     $help: Install all required packages to install SAP Netweaver
-    $optional: true
   
   virtual_addresses:
     $name: Virtual Addresses
     $type: edit-group
     $prototype:
-      ip_address:
-        $name: IP Address
-        $type: text
-        $optional: false
-      hostname:
-        $name: Hostname
-        $type: text
-        $optional: false
+      $key:
+          $type: text
+          $name: IP Address
+      $type: text
+      $name: Hostname
   
   sidadm_user:
     $name: SAP User/Group
