@@ -81,12 +81,12 @@ netweaver:
     $name: Provide SWPM installer sar archive for Netweaver installation 
     $type: boolean
     $default: false
-    $help: Mark this option if you want to use swpm sar archive file for the installation
+    $help: Mark this option if you want to use swpm sar archive file for the installation instead of already extracted SWPM installer
   swpm_sar_file:
     $name: Path to SWPM archive
     $visibleIf: .use_swpm_sar_file == true
     $type: text
-    $help: The path to swpm installer media archive in SAR format.Please also provide the sapcar executable path for extraction
+    $help: The path to swpm installer media archive in SAR format. You also need to provide the sapcar executable path for extraction
     $optional: true
   nw_extract_dir:
     $name: Path to extract the Netweaver installation media
@@ -103,7 +103,7 @@ netweaver:
     $optional: true
 
   swpm_folder:
-    $name: swpm folder location
+    $name: SWPM folder location
     $type: text
     $help: Path to already extracted SWPM installer folder
     $optional: true
@@ -128,7 +128,7 @@ netweaver:
     $help: Enable the HA cluster configuration
     $optional: false
 
-    nfs_version:
+  nfs_version:
     $name: NFS version
     $type: text
     $default: nfs4
@@ -146,51 +146,58 @@ netweaver:
     $name: Additional dvds
     $type: edit-group
     $help: Path to software folder or archives with additional SAP software
+    $minItems: 1
     $prototype:
-      additional_dvd:
         $name: Additional DVD
         $type: text
         $optional: false
+
   saptune_solution:
     $name: saptune solution to apply
     $type: text
+    $default: NETWEAVER
     $help: saptune solution to apply to all nodes
     $optional: true
 
+  hana_checkbox:
+    $name: Add information about installed HANA database (mandatory for DB/PAS/AAS instances)
+    $type: boolean
+    $default: false
+    $help: Information about the already deployed HANA Database. It is mandatory if DB/PAS/AAS are to be installed
   hana:
-    $name: Hana
-    $type: edit-group
-    $help: Information about the already deployed HANA Database
-    $prototype:
-      host:
-        $name: Host
-        $type: text
-        $optional: false
-      sid:
-        $name: SID
-        $type: text
-        $optional: false
-      instance:
-        $name: Instance
-        $type: text
-        $optional: false
-      password:
-        $name: Password
-        $type: text
-        $optional: false
+    $name: Hana database information
+    $visibleIf: .hana_checkbox == true
+    $type: group
+    $help: Information about the already deployed HANA Database. Mandatory for DB/PAS/AAS instances
+    host:
+      $name: Host
+      $type: text
+    sid:
+      $name: SID
+      $type: text
+    instance:
+      $name: Instance
+      $type: text
+    password:
+      $name: Password
+      $type: password
 
+  schema_checkbox:
+    $name: Add schema information from DB installation
+    $type: boolean
+    $default: false
+    $help: Information about the Schema created during DB installation and used by PAS/AAS
   schema:
     $name: Schema
-    $type: edit-group
+    $visibleIf: .schema_checkbox == true
+    $type: group
     $help: Information about the Schema created during DB installation and used by PAS/AAS
-    $prototype:
-      name:
-        $name: schema name
-        $type: text
-        $optional: true
-      password:
-        $type: text
-        $optional: true
+    name:
+      $name: Schema name
+      $type: text
+    password:
+      $name: Password
+      $type: password
 
   product_id:
     $name: SAP product ID
