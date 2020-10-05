@@ -62,26 +62,20 @@ netweaver:
     $name: Master password
     $type: password
     $help: Master password is used for all the SAP users that are created
+    $optional: false
+
+  clean_nfs:
+    $name: Clean NFS share content
+    $type: boolean
+    $default: true
+    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
+    $optional: false
 
   sapmnt_inst_media:
-    $name: sapmnt media
+    $name: NFS share containing Netweaver SID folder
     $type: text
-    $help: NFS share with SID folder
+    $help: NFS share with the SID folder
     $optional: false
-  
-  nfs_version:
-    $name: NFS version
-    $type: text
-    $default: nfs4
-    $help: Used to connect to the nfs share
-    $optional: true
-
-  nfs_options:
-    $name: NFS options
-    $type: text
-    $default: defaults
-    $help: Specify the options for nfs share
-    $optional: true
 
   use_swpm_sar_file:
     $name: Provide SWPM installer sar archive for Netweaver installation 
@@ -133,13 +127,21 @@ netweaver:
     $default: true
     $help: Enable the HA cluster configuration
     $optional: false
-  
-  clean_nfs:
-    $name: clean nfs share content
-    $type: boolean
-    $default: true
-    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content
-    $optional: false
+
+    nfs_version:
+    $name: NFS version
+    $type: text
+    $default: nfs4
+    $help: Used to connect to the nfs share
+    $optional: true
+
+  nfs_options:
+    $name: NFS options
+    $type: text
+    $default: defaults
+    $help: Specify the options for nfs share
+    $optional: true
+
   additional_dvds:
     $name: Additional dvds
     $type: edit-group
