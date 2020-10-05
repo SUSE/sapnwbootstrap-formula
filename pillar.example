@@ -57,6 +57,16 @@ netweaver:
   # Use the next options for AWS for example
   # nfs_options: rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
 
+  # syctl options. Some system options must be update for optimal usage, like tcp keepalive parameter
+  # sysctl values based on:
+  # https://launchpad.support.sap.com/#/notes/1410736
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/workloads/sap/high-availability-guide-suse#2d6008b0-685d-426c-b59e-6cd281fd45d7  
+  # Do not touch if not sure about the changes
+  #sysctl_values:
+  #  net.ipv4.tcp_keepalive_time: 300
+  #  net.ipv4.tcp_keepalive_intvl: 75
+  #  net.ipv4.tcp_keepalive_probes: 9
+
   # saptune solution to apply to all nodes ( by default nothing is applied)
   # you can also use this to a single node if need to differ. see host hacert02
   # Warning: only a unique solution can exist into a node.

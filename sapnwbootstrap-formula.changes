@@ -1,8 +1,15 @@
 -------------------------------------------------------------------
+Thu Sep 24 12:43:47 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Implement the differences between ENSA1 and ENSA2 versions
+- Add the keepalive configuration changes 
+
+-------------------------------------------------------------------
 Thu Aug 20 02:19:18 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
 
 - Version 0.5.1
   * Add pillar.example to package 
+  (bsc#1174994, jsc#SLE-4047)
 
 -------------------------------------------------------------------
 Thu May 28 22:00:38 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
