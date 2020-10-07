@@ -268,14 +268,15 @@ netweaver:
         $type: boolean
         $optional: true
         $help: Init the shared disk. Only used if a shared disk is provided
-      node_product_id:
+      product_id:
         $name: SAP product ID
         $type: text
-        $help: The installed SAP product id. This will have the preference over global product id
+        $help: Set an specific product id. This will have the preference over global product id
         $optional: true      
       sap_instance:
         $name: SAP Instance
         $type: text
+        $help: Provide the netweaver instance/server type
         $optional: false
       extra_parameters_checkbox:
         $name: Provide extra installation parameters
@@ -297,17 +298,19 @@ netweaver:
       retry_checkbox:
         $name: Retry the SAP instance installation
         $type: boolean
-        $help: How often retry the SAP instance installation 
+        $help: Retry installation options configuration. Only for ERS, DB, PAS and AAS instances
         $optional: true
-      retry_attempts:
+      attempts:
         $name: Retry attempts
         $visibleIf: .retry_checkbox == true
         $type: text
         $default: 10
+        $help: How often to retry the SAP instance installation. (10 by default retries)
         $optional: true
-      retry_interval:
+      interval:
         $name: Retry interval
         $visibleIf: .retry_checkbox == true
         $type: text
         $default: 60
+        $help: Interval in seconds between retries (60 seconds by default for DB and 600 seconds for PAS and AAS)
         $optional: true
