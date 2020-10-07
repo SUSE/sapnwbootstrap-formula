@@ -9,6 +9,11 @@
 
 {% for node in netweaver.nodes if node.host == host %}
 
+    {# Check for ascs_virtual_host checkbox #}
+    {% if node.ascs_virtual_host_checkbox is defined and node.ascs_virtual_host_checkbox == false %}
+        {% do node.pop('ascs_virtual_host', none) %}
+    {% endif %}
+
     {# Check netweaver extra parameters #}
     {% if node.extra_parameters is defined and node.extra_parameters|length > 0 and node.extra_parameters is not mapping %}
       {% set new_extra_parameters = {} %}

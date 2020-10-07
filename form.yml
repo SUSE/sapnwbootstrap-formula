@@ -225,6 +225,16 @@ netweaver:
         $name: Virtual Hostname
         $type: text
         $optional: false
+      ascs_virtual_host_checkbox:
+        $name: Provide the ASCS Virtual Hostname (needed for PAS instance only)
+        $type: boolean
+        $default: false
+        $help: If a nfs share is used to manage the HA mounting point
+      ascs_virtual_host:
+        $name: ASCS Virtual Hostname
+        $visibleIf: .ascs_virtual_host_checkbox == true
+        $type: text
+        $optional: true
       virtual_host_interface:
         $name: Virtual host interface
         $type: text
