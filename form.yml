@@ -30,9 +30,17 @@ netweaver:
     uid:
       $name: User ID
       $type: text
+      $optional: true
     gid:
       $name: Group ID
       $type: text
+      $optional: true
+
+  master_password:
+    $name: Master password
+    $type: password
+    $help: Master password is used for all the SAP users that are created
+    $optional: false
 
   sid_adm_password_checkbox:
     $name: Provide SAP <sid>adm user password
@@ -57,12 +65,6 @@ netweaver:
     $type: password
     $help: The password of the SAP <sap>adm user. If not set master password will be used as default
     $optional: true
-  
-  master_password:
-    $name: Master password
-    $type: password
-    $help: Master password is used for all the SAP users that are created
-    $optional: false
 
   clean_nfs:
     $name: Clean NFS share content
@@ -92,8 +94,8 @@ netweaver:
     $name: Path to extract the Netweaver installation media
     $visibleIf: .use_swpm_sar_file == true
     $type: text
-    $default: /sapmedia/NW
-    $help: The NW media will be extracted to this path. By default this path is /sapmedia/NW
+    $default: /sapmedia_extract/NW
+    $help: The NW media will be extracted to this path. By default this path is /sapmedia_extract/NW
     $optional: true
   sapcar_exe_file:
     $name: Path to sapcar executable if extracting NW SAR archive
@@ -104,6 +106,7 @@ netweaver:
 
   swpm_folder:
     $name: SWPM folder location
+    $visibleIf: .use_swpm_sar_file == false
     $type: text
     $help: Path to already extracted SWPM installer folder
     $optional: true
@@ -111,21 +114,21 @@ netweaver:
   sapexe_folder:
     $name: SAP exe folder location
     $type: text
-    $help: Path to sap exe folder
+    $help: Path to sap exe folder. This folder must contain all the downloaded software from SAP download center to install the Netweaver systems. like SAPEXE, SAPEXEDB, igshelper, etc
     $optional: false
   
   installation_folder:
     $name: Netweaver installation folder
     $type: text
     $default: /tmp/swpm_unattended
-    $help: Path to run the installation
+    $help: Folder where the installation is executed. It must be an empty folder. The execution logs will be stored there
     $optional: false
   
   ha_enabled:
     $name: Enable HA cluster configuration
     $type: boolean
     $default: true
-    $help: Enable the HA cluster configuration
+    $help: Enable the HA cluster configuration. In order to make this work, ASCS and ERS system must be installed together in parallel.
     $optional: false
 
   nfs_version:
@@ -202,7 +205,7 @@ netweaver:
   product_id:
     $name: SAP product ID
     $type: text
-    $help: The installed SAP product id. If some particular node has its own product_id that one will have the preference
+    $help: The installed SAP product id. If some particular node has its own product_id that one will have the preference. The options are. NW750.HDB.ABAPHA, S4HANA1709.CORE.HDB.ABAPHA, S4HANA1809.CORE.HDB.ABAPHA, S4HANA1909.CORE.HDB.ABAPHA. Remove the 'HA' from the end for non HA environment (without ERS)
     $optional: false
 
   monitoring_enabled:
@@ -263,7 +266,7 @@ netweaver:
         $type: password
         $optional: false      
       shared_disk_dev:
-        $name: Shared disk device
+        $name: Shared disk device (valid only for libvirt provider)
         $type: text
         $optional: true
         $help: Set the shared disk used in HA environments. Skip this parameter in non HA environments
@@ -286,7 +289,7 @@ netweaver:
       sap_instance:
         $name: SAP Instance
         $type: text
-        $help: Provide the netweaver instance/server type
+        $help: Provide the netweaver instance/server type - ascs, ers, db, pas, aas
         $optional: false
       extra_parameters_checkbox:
         $name: Provide extra installation parameters
