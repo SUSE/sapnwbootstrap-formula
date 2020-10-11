@@ -6,11 +6,12 @@ netweaver:
     $name: Install required packages
     $type: boolean
     $default: true
-    $help: Install all required packages to install SAP Netweaver
+    $help: Install all the required packages to install SAP Netweaver
   
   virtual_addresses:
     $name: Virtual Addresses
     $type: edit-group
+    $help: Define the IP addresses and hostnames for machines used in SAP Netweaver installation. These machines will be part of the HA cluster
     $prototype:
       $key:
           $type: text
@@ -19,8 +20,9 @@ netweaver:
       $name: Hostname
 
   sidadm_user_checkbox:
-    $name: Create the SAP sidadm user and group before the installation
+    $name: Create the SAP sidadm user and sapsys group before the installation
     $type: boolean
+    $help: Choose this option if the SAP sidadm user and sapsys group need to be created before the installation
     $default: false      
   sidadm_user:
     $name: SAP User/Group
@@ -30,10 +32,12 @@ netweaver:
     uid:
       $name: User ID
       $type: text
+      $help: User ID for the SAP sidadm user
       $optional: true
     gid:
       $name: Group ID
       $type: text
+      $help: Group ID for the SAP sidadm user's 'sapsys' group
       $optional: true
 
   master_password:
@@ -76,7 +80,7 @@ netweaver:
   sapmnt_inst_media:
     $name: NFS share containing Netweaver SID folder
     $type: text
-    $help: NFS share with the SID folder
+    $help: NFS share with the Netweaver SID folder. This folder is shared amongst the Netweaver instances
     $optional: false
 
   use_swpm_sar_file:
@@ -108,7 +112,7 @@ netweaver:
     $name: SWPM folder location
     $visibleIf: .use_swpm_sar_file == false
     $type: text
-    $help: Path to already extracted SWPM installer folder
+    $help: Path to already extracted SWPM installer folder. This installation path will have have preference over extracted swpm sar folder
     $optional: true
   
   sapexe_folder:
@@ -148,7 +152,7 @@ netweaver:
   additional_dvds:
     $name: Additional dvds
     $type: edit-group
-    $help: Path to software folder or archives with additional SAP software
+    $help: Path to software folder or archives with additional SAP software. This software will be used for installation of SAP components as required
     $minItems: 1
     $prototype:
         $name: Additional DVD
@@ -175,15 +179,19 @@ netweaver:
     host:
       $name: Host
       $type: text
+      $help: IP address of machine with already deployed HANA Database
     sid:
       $name: SID
       $type: text
+      $help: System ID of the SAP HANA installation. It will be 3 character string used as ID of the SAP HANA Database like PRD, QAS etc 
     instance:
       $name: Instance
       $type: text
+      $help: Instance number of the SAP HANA installation. It will be a two digit instance number between 00 to 99
     password:
       $name: Password
       $type: password
+      $help: Password of the SAP HANA 'SYSTEM' user. 
 
   schema_checkbox:
     $name: Add schema information from DB installation
@@ -232,7 +240,7 @@ netweaver:
         $name: Provide the ASCS Virtual Hostname (needed for PAS instance only)
         $type: boolean
         $default: false
-        $help: If a nfs share is used to manage the HA mounting point
+        $help: Provide the ASCS Virtual Hostname which is need for installation of PAS instance. This value must match the ASCS virtual host entry in the virtual addresses
       ascs_virtual_host:
         $name: ASCS Virtual Hostname
         $visibleIf: .ascs_virtual_host_checkbox == true
@@ -252,19 +260,22 @@ netweaver:
         $name: SAP system identifier (SID)
         $type: text
         $optional: false
-        $help: System ID of the HANA installation
+        $help: System ID of the SAP installation. It must be 3 character string used as ID of the SAP system like PRD, HA1 etc 
       instance:
         $name: SAP instance number
         $type: text
         $optional: false
+        $help: Instance number of the SAP instance.  Each SAP application instance is assigned a two digit instance number between 00 to 99
       root_user:
         $name: Root user
         $type: text
         $optional: false
+        $help: Provide the system root user
       root_password:
         $name: Root user password
         $type: password
-        $optional: false      
+        $optional: false     
+        $help: Provide the system root user's password. If the root user is passwordless, this value is not used
       shared_disk_dev:
         $name: Shared disk device (valid only for libvirt provider)
         $type: text
@@ -274,7 +285,7 @@ netweaver:
         $name: Use nfs share SID folder
         $type: boolean
         $default: false
-        $help: If a nfs share is used to manage the HA mounting point
+        $help: Choose this option if a nfs share will be used to manage the HA mounting point
       init_shared_disk:
         $name: Init the shared disk
         $visibleIf: .use_nfs_disk_checkbox == true
@@ -294,11 +305,12 @@ netweaver:
       extra_parameters_checkbox:
         $name: Provide extra installation parameters
         $type: boolean
+        $help: Choose this option if additional configuration parameters will be provided for installation configuration file
         $optional: true  
       extra_parameters:
         $name: Installation extra options
         $visibleIf: .extra_parameters_checkbox == true
-        $help: Optional configuration parameters
+        $help: Additional configuration parameters that will be added in the installation. These are key/value entries that will be updated in SAP installation configuration file.
         $optional: true
         $type: edit-group
         $itemName: ""
