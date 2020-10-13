@@ -1,6 +1,7 @@
 {% from "netweaver/map.jinja" import netweaver with context %}
 
 include:
+  - netweaver.pre_validation
   - netweaver.setup
   - netweaver.saptune
   - netweaver.extract_nw_archives

@@ -1,0 +1,345 @@
+netweaver:
+  $name: Netweaver
+  $type: group
+  
+  install_packages:
+    $name: Install required packages
+    $type: boolean
+    $default: true
+    $help: Install all the required packages to install SAP Netweaver
+  
+  virtual_addresses:
+    $name: Virtual Addresses
+    $type: edit-group
+    $help: Define the virtual IP addresses and virtual hostnames for all of the SAP machines that belong to the same installation. These virtual hostnames are later used internally by SAP to know the other machines in the same landscape. Each entry must contain an IP address and a hostname such as 192.168.201.111 & hacert01
+    $prototype:
+      $key:
+          $type: text
+          $name: IP Address
+      $type: text
+      $name: Hostname
+
+  sidadm_user_checkbox:
+    $name: Create the SAP <sid>adm user and sapsys group
+    $type: boolean
+    $help: Choose this option if the SAP <sid>adm user and sapsys group need to be created before the installation
+    $default: false      
+  sidadm_user:
+    $name: SAP User/Group
+    $visibleIf: .sidadm_user_checkbox == true
+    $type: group
+    $help: If this entry exists the user and group will be created before the installation, not during the installation [default]
+    uid:
+      $name: User ID
+      $default: 2001
+      $type: text
+      $help: Operating system User ID for the SAP <sid>adm user
+      $optional: true
+    gid:
+      $name: Group ID
+      $default: 2002
+      $type: text
+      $help: Operating system Group ID for the SAP <sid>adm user's 'sapsys' group
+      $optional: true
+
+  master_password:
+    $name: Master password
+    $type: password
+    $help: Master password is used for all the SAP users that are created. It must be 8 characters long and follows the SAP Password policies
+    $optional: false
+
+  sid_adm_password_checkbox:
+    $name: Provide SAP <sid>adm user password
+    $type: boolean
+    $default: false
+    $help: <sid>adm password is optional, master password will be used as default, if the value is not defined
+  sid_adm_password:
+    $name: SAP <sid>adm user password
+    $visibleIf: .sid_adm_password_checkbox == true
+    $type: password
+    $help: The password of the SAP <sid>adm user. If not set master password will be used as default
+    $optional: true
+  
+  sap_adm_password_checkbox:
+    $name: Provide SAP <sap>adm user password
+    $type: boolean
+    $default: false
+    $help: <sap>adm password is optional, master password will be used as default, if the value is not defined
+  sap_adm_password:
+    $name: SAP admin <sap>adm user password
+    $visibleIf: .sap_adm_password_checkbox == true
+    $type: password
+    $help: The password of the SAP <sap>adm user. If not set master password will be used as default
+    $optional: true
+
+  clean_nfs:
+    $name: Clean NFS share content
+    $type: boolean
+    $default: false
+    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined. Note this is destructive operation and will remove the NFS share contents 
+    $optional: false
+
+  use_swpm_sar_file:
+    $name: Provide SWPM installer sar archive for Netweaver installation 
+    $type: boolean
+    $default: false
+    $help: Mark this option if you want to use swpm sar archive file for the installation instead of already extracted SWPM installer
+  swpm_sar_file:
+    $name: Path to SWPM archive
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $help: The absolute path to swpm installer media archive in SAR format. You also need to provide the sapcar executable path for extraction
+    $optional: true
+  nw_extract_dir:
+    $name: Path to extract the Netweaver installation media
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $default: /sapmedia_extract/NW
+    $help: The NW media will be extracted to this path. By default this path is /sapmedia_extract/NW
+    $optional: true
+  sapcar_exe_file:
+    $name: Path to sapcar executable if extracting NW SAR archive
+    $visibleIf: .use_swpm_sar_file == true
+    $type: text
+    $help: The absolute path to sapcar executable to extract NW SAR archive. SAPCAR is a SAP utility tool to extract SAR archive files
+    $optional: true
+
+  swpm_folder:
+    $name: SWPM folder location
+    $visibleIf: .use_swpm_sar_file == false
+    $type: text
+    $help: Absolute path to already extracted SWPM installer folder. This installation path will have have preference over extracted swpm sar folder
+    $optional: true
+  
+  sapexe_folder:
+    $name: SAP exe folder location
+    $type: text
+    $help: Absolute path to sap exe folder. This folder must contain all the downloaded software from SAP download center to install the Netweaver systems. like SAPEXE, SAPEXEDB, igshelper, etc
+    $optional: false
+
+  additional_dvds:
+    $name: Additional dvds
+    $type: edit-group
+    $help: Absolute path to software folder or archives with additional SAP software. This software paths will be used for installation of SAP components such as NW export and HANA HDB client
+    $minItems: 1
+    $prototype:
+        $name: Additional DVD
+        $type: text
+        $optional: false
+
+  installation_folder:
+    $name: Netweaver installation folder
+    $type: text
+    $default: /tmp/swpm_unattended
+    $help: Folder where the installation is executed. It must be an empty folder. The execution logs will be stored there
+    $optional: false
+  
+  ha_enabled:
+    $name: Enable HA cluster configuration
+    $type: boolean
+    $default: true
+    $help: Enable the HA cluster configuration. In order to make this work, ASCS and ERS system must be installed together in parallel.
+    $optional: false
+
+  sapmnt_inst_media:
+    $name: sapmnt NFS share containing Netweaver SID folder
+    $type: text
+    $help: NFS share with the Netweaver SID folder. This sap mount folder is shared amongst the Netweaver instances
+    $optional: false
+
+  nfs_version:
+    $name: sapmnt NFS version
+    $type: text
+    $default: nfs4
+    $help: NFS version used to connect to the sapmnt nfs share
+    $optional: true
+
+  nfs_options:
+    $name: sapmnt NFS options
+    $type: text
+    $default: defaults
+    $help: Specify the options for nfs share
+    $optional: true
+
+  saptune_solution:
+    $name: saptune solution to apply
+    $type: text
+    $default: NETWEAVER
+    $help: saptune solution to apply to all nodes
+    $optional: true
+
+  hana_checkbox:
+    $name: Add information about installed HANA database (mandatory for DB/PAS/AAS instances)
+    $type: boolean
+    $default: false
+    $help: Information about the already deployed HANA Database. It is mandatory if DB/PAS/AAS are to be installed
+  hana:
+    $name: Hana database information
+    $visibleIf: .hana_checkbox == true
+    $type: group
+    $help: Information about the already deployed HANA Database. Mandatory for DB/PAS/AAS instances
+    host:
+      $name: Host
+      $type: text
+      $help: IP address of machine with already deployed HANA Database
+    sid:
+      $name: SID
+      $type: text
+      $help: System ID of the SAP HANA installation. It will be 3 character string used as ID of the SAP HANA Database like PRD, QAS etc 
+    instance:
+      $name: Instance
+      $type: text
+      $help: Instance number of the SAP HANA installation. It will be a two digit instance number between 00 to 99
+    password:
+      $name: Password
+      $type: password
+      $help: Password of the SAP HANA 'SYSTEM' user. 
+
+  schema_checkbox:
+    $name: Add schema information from DB installation
+    $type: boolean
+    $default: false
+    $help: Information about the Schema created during DB installation and used by PAS/AAS
+  schema:
+    $name: Schema
+    $visibleIf: .schema_checkbox == true
+    $type: group
+    $help: Information about the Schema created during DB installation and used by PAS/AAS
+    name:
+      $name: Schema name
+      $default: SAPABAP1
+      $type: text
+      help: The defatul schema name used by Netweaver is SAPABAP1 and for S/4 HANA the default schema name is SAPHANADB 
+    password:
+      $name: Password
+      $type: password
+
+  product_id:
+    $name: SAP product ID
+    $type: text
+    $help: The SAP product id used for installation. If some particular node has its own product_id that one will have the preference. The options are. NW750.HDB.ABAPHA, S4HANA1709.CORE.HDB.ABAPHA, S4HANA1809.CORE.HDB.ABAPHA, S4HANA1909.CORE.HDB.ABAPHA. Remove the 'HA' from the end for non HA environment (without ERS)
+    $optional: false
+
+  monitoring_enabled:
+    $name: Enable the prometheus SAP host exporter
+    $type: boolean
+    $default: false
+    $help: Enable the node monitoring via exporters which will be installed and configured in all the nodes.
+
+  nodes:
+    $name: Nodes
+    $type: edit-group
+    $minItems: 1
+    $itemName: ""
+    $prototype:
+      host:
+        $name: Hostname to install Netweaver
+        $type: text
+        $optional: false
+        $help: This node configuration is applied for the hostname matching this entry
+      virtual_host:
+        $name: Virtual Hostname
+        $type: text
+        $optional: false
+        $help: This entry must match with one of the virtual hostname entries defined in the virtual addresses section
+      sap_instance:
+        $name: SAP Instance
+        $type: select
+        $help: Provide the netweaver instance/server type - ascs, ers, db, pas, aas
+        $values: [ascs, ers, db, pas, aas]
+        $optional: false
+      product_id:
+        $name: SAP product ID
+        $type: text
+        $help: Set an specific product id for this node. This will have the preference over global product id defined above
+        $optional: true
+      ascs_virtual_host_checkbox:
+        $name: Provide the ASCS Virtual Hostname (needed for PAS instance only)
+        $type: boolean
+        $default: false
+        $help: Provide the ASCS Virtual Hostname which is need for installation of PAS instance. This value must match the ASCS virtual host entry in the virtual addresses
+      ascs_virtual_host:
+        $name: ASCS Virtual Hostname
+        $visibleIf: .ascs_virtual_host_checkbox == true
+        $type: text
+        $optional: true
+      virtual_host_interface:
+        $name: Virtual host interface
+        $type: text
+        $default: eth0
+        $optional: true
+        $help: Network interface where the Virtual IP address is attached
+      virtual_host_mask:
+        $name: Virtual host mask
+        $type: text
+        $default: 32
+        $optional: true
+        $help: Network mask where the Virtual IP address is attached
+      sid:
+        $name: SAP system identifier (SID)
+        $type: text
+        $optional: false
+        $help: System ID of the SAP installation. It must be 3 character string used as ID of the SAP system like PRD, HA1 etc 
+      instance:
+        $name: SAP instance number
+        $type: text
+        $optional: false
+        $help: Instance number of the SAP instance.  Each SAP application instance is assigned a two digit instance number between 00 to 99
+      root_user:
+        $name: Root user
+        $type: text
+        $optional: false
+        $help: Provide the system root user for executing SAP installation
+      root_password:
+        $name: Root user password
+        $type: password
+        $optional: false     
+        $help: Provide the system root user's password. If the root user is passwordless, this value is not used
+      shared_disk_dev:
+        $name: Shared disk device (only for libvirt)
+        $type: text
+        $optional: true
+        $help: Set the shared disk used in HA environments such as NFS share or /dev/vdb. Skip this parameter in non HA environments.
+      init_shared_disk:
+        $name: Init the shared disk
+        $visibleIf: .use_nfs_disk_checkbox == true
+        $type: boolean
+        $optional: true
+        $help: Init the shared disk. Only used if a shared disk is provided and not an NFS shared folder   
+      extra_parameters_checkbox:
+        $name: Provide extra installation parameters
+        $type: boolean
+        $help: Choose this option if additional configuration parameters will be provided for installation configuration file
+        $optional: true  
+      extra_parameters:
+        $name: Installation extra options
+        $visibleIf: .extra_parameters_checkbox == true
+        $help: Additional configuration parameters that will be added in the installation. These are key/value entries that will be updated in SAP installation configuration file.
+        $optional: true
+        $type: edit-group
+        $itemName: ""
+        $prototype:
+          $name: Extra parameter
+          key:
+            $name: Value to update
+          value:
+            $name: New value
+      retry_checkbox:
+        $name: Retry the SAP instance installation
+        $type: boolean
+        $help: Retry installation options configuration. Only for ERS, DB, PAS and AAS instances
+        $optional: true
+      attempts:
+        $name: Retry attempts
+        $visibleIf: .retry_checkbox == true
+        $type: text
+        $default: 10
+        $help: How often to retry the SAP instance installation. (10 by default retries)
+        $optional: true
+      interval:
+        $name: Retry interval
+        $visibleIf: .retry_checkbox == true
+        $type: text
+        $default: 60
+        $help: Interval in seconds between retries (60 seconds by default for DB and 600 seconds for PAS and AAS)
+        $optional: true
