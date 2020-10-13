@@ -11,7 +11,7 @@ netweaver:
   virtual_addresses:
     $name: Virtual Addresses
     $type: edit-group
-    $help: Define the IP addresses and hostnames for machines used in SAP Netweaver installation. These machines will be part of the HA cluster
+    $help: Define the IP addresses and hostnames for machines used in SAP Netweaver installation. These machines will be part of the HA cluster. Each entry must contain an IP address and a hostname such as 192.168.201.111 & hacert01
     $prototype:
       $key:
           $type: text
@@ -20,24 +20,24 @@ netweaver:
       $name: Hostname
 
   sidadm_user_checkbox:
-    $name: Create the SAP sidadm user and sapsys group before the installation
+    $name: Create the SAP <sid>adm user and sapsys group before the installation
     $type: boolean
-    $help: Choose this option if the SAP sidadm user and sapsys group need to be created before the installation
+    $help: Choose this option if the SAP <sid>adm user and sapsys group need to be created before the installation
     $default: false      
   sidadm_user:
     $name: SAP User/Group
     $visibleIf: .sidadm_user_checkbox == true
     $type: group
-    $help: If this entry exists the user and group will be created before the installation, not otherwise
+    $help: If this entry exists the user and group will be created before the installation, not during the installation [default]
     uid:
       $name: User ID
       $type: text
-      $help: User ID for the SAP sidadm user
+      $help: User ID for the SAP <sid>adm user
       $optional: true
     gid:
       $name: Group ID
       $type: text
-      $help: Group ID for the SAP sidadm user's 'sapsys' group
+      $help: Group ID for the SAP <sid>adm user's 'sapsys' group
       $optional: true
 
   master_password:
@@ -139,7 +139,7 @@ netweaver:
     $name: NFS version
     $type: text
     $default: nfs4
-    $help: Used to connect to the nfs share
+    $help: NFS version used to connect to the nfs share
     $optional: true
 
   nfs_options:
@@ -152,7 +152,7 @@ netweaver:
   additional_dvds:
     $name: Additional dvds
     $type: edit-group
-    $help: Path to software folder or archives with additional SAP software. This software will be used for installation of SAP components as required
+    $help: Path to software folder or archives with additional SAP software. This software paths will be used for installation of SAP components such as NW export and HANA HDB client
     $minItems: 1
     $prototype:
         $name: Additional DVD
