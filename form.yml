@@ -11,7 +11,7 @@ netweaver:
   virtual_addresses:
     $name: Virtual Addresses
     $type: edit-group
-    $help: Define the IP addresses and hostnames for machines used in SAP Netweaver installation. These machines will be part of the HA cluster. Each entry must contain an IP address and a hostname such as 192.168.201.111 & hacert01
+    $help: Define the virtual IP addresses and virtual hostnames for all of the SAP machines that belong to the same installation. These virtual hostnames are later used internally by SAP to know the other machines in the same landscape. Each entry must contain an IP address and a hostname such as 192.168.201.111 & hacert01
     $prototype:
       $key:
           $type: text
@@ -73,8 +73,8 @@ netweaver:
   clean_nfs:
     $name: Clean NFS share content
     $type: boolean
-    $default: true
-    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
+    $default: false
+    $help: Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined. Note this is destructive operation and will remove the NFS share contents 
     $optional: false
 
   sapmnt_inst_media:
@@ -139,7 +139,7 @@ netweaver:
     $name: NFS version
     $type: text
     $default: nfs4
-    $help: NFS version used to connect to the nfs share
+    $help: NFS version used to connect to the sapmnt nfs share
     $optional: true
 
   nfs_options:
@@ -299,8 +299,9 @@ netweaver:
         $optional: true      
       sap_instance:
         $name: SAP Instance
-        $type: text
+        $type: select
         $help: Provide the netweaver instance/server type - ascs, ers, db, pas, aas
+        $values: [ascs, ers, db, pas, aas]
         $optional: false
       extra_parameters_checkbox:
         $name: Provide extra installation parameters
