@@ -2,7 +2,14 @@
 Thu Oct 15 07:21:21 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
 
 - Update the db installation template to use correctly the schema
-  names for S/4HANA 
+  names for S/4HANA
+
+-------------------------------------------------------------------
+Wed Oct  7 19:58:03 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
+
+- Version 0.5.2
+  * Create SUMA form based on latest pillar and formula data
+  (jsc#SLE-4047)
 
 -------------------------------------------------------------------
 Thu Sep 24 12:43:47 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
