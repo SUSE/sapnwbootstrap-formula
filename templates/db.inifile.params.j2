@@ -17,7 +17,8 @@
 # HDB_Schema_Check_Dialogs.dropSchema = false
 
 # The name of the database schema.
-{% if schema_name == 'SAPABAP1' %}
+# For S/4HANA new versions (1809 and beyond), the DB is always named `SAPHANADB`
+{% if schema_name in ['SAPABAP1', 'SAPHANADB'] %}
 # HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}
 {% else %}
 HDB_Schema_Check_Dialogs.schemaName = {{ schema_name }}

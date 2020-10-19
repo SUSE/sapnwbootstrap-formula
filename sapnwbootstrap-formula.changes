@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 15 07:21:21 UTC 2020 - Xabier Arbulu <xarbulu@suse.com>
+
+- Update the db installation template to use correctly the schema
+  names for S/4HANA
+  
+-------------------------------------------------------------------
 Wed Oct 14 23:40:20 UTC 2020 - Simranpal Singh <simranpal.singh@suse.com>
 
 - Update the default 'nw_extract_dir' SWPM media extraction location 
