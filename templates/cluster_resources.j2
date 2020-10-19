@@ -13,6 +13,7 @@
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
 {%- set monitoring_enabled = pillar.cluster.monitoring_enabled|default(False) %}
+{%- set native_fencing = data.native_fencing|default(True) %}
 
 {%- if data.ensa_version is defined %}
 {%- set ensa_version = data.ensa_version|int %}
@@ -28,11 +29,6 @@
 
 {%- if cloud_provider == "amazon-web-services" %}
 
-property cib-bootstrap-options: \
-  stonith-enabled="true" \
-  stonith-action="off" \
-  stonith-timeout="600s"
-
 rsc_defaults rsc-options: \
 	resource-stickiness=1 \
 	migration-threshold=3
@@ -41,12 +37,19 @@ op_defaults op-options: \
 	timeout=600 \
 	record-pending=true
 
+{%- if native_fencing %}
+property cib-bootstrap-options: \
+  stonith-enabled="true" \
+  stonith-action="off" \
+  stonith-timeout="600s"
+
 primitive res_aws_stonith_{{ sid }} stonith:external/ec2 \
   params tag={{ data.instance_tag }} profile={{ data.cluster_profile}} \
   op start interval=0 timeout=180 \
   op stop interval=0 timeout=180 \
   op monitor interval=120 timeout=60 \
   meta target-role=Started
+{%- endif %}
 
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:suse:aws-vpc-move-ip \
   params ip={{ ascs_ip_address }} routing_table={{ data.route_table}} \
@@ -64,10 +67,12 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:suse:aws-vpc-move-ip \
 
 {%- elif cloud_provider == "google-cloud-platform" %}
 
+{%- if native_fencing %}
 # This stonith resource will be duplicated for each node in the cluster
 primitive rsc_gcp_stonith_{{ sid }}_{{ grains['host'] }} stonith:fence_gce \
     params plug={{ grains['gcp_instance_name'] }} pcmk_host_map="{{ grains['host'] }}:{{ grains['gcp_instance_name'] }}" \
     meta target-role=Started
+{%- endif %}
 
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:heartbeat:gcp-vpc-move-route \
     params ip={{ data.ascs_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.ascs_route_name|default("nw-ascs-"~sid~"-route") }} \
@@ -85,11 +90,11 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
 
 {%- if cloud_provider == "microsoft-azure" %}
 
-primitive rsc_socat_{{ sid }}_ASCS azure-lb \
+primitive rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} azure-lb \
   params port=620{{ ascs_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
-primitive rsc_socat_{{ sid }}_ERS azure-lb \
+primitive rsc_socat_{{ sid }}_ERS{{ ers_instance }} azure-lb \
   params port=621{{ ers_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
@@ -171,14 +176,13 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
-  {%- if cloud_provider == "microsoft-azure" %}
-  rsc_socat_{{ sid }}_ERS \
+  rsc_sap_{{ sid }}_ERS{{ ers_instance }}
+  {%- if cloud_provider == "microsoft-azure" %} \
+  rsc_socat_{{ sid }}_ERS
   {%- endif %}
-  {%- if monitoring_enabled -%}
-  rsc_exporter_{{ sid }}_ERS{{ ers_instance }} \
+  {%- if monitoring_enabled %} \
+  rsc_exporter_{{ sid }}_ERS{{ ers_instance }}
   {%- endif %}
-  meta resource-stickiness=3000
 
 colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 {%- if ensa_version == 1 %}
