@@ -74,3 +74,5 @@ extract_sar_archive_{{ dvd }}:
 
 {%- endif %}
 {%- endfor %}
+
+{%- set additional_dvd_folders = additional_dvd_folders | tojson %}
