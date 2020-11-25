@@ -8,9 +8,11 @@
 {% set instance_folder = node.sap_instance.upper()~instance %}
 {% set profile_file = '/usr/sap/'~node.sid.upper()~'/SYS/profile/'~node.sid.upper()~'_'~instance_folder~'_'~node.virtual_host %}
 
-install_suse_connetor:
+install_suse_connector:
   pkg.installed:
     - name: sap-suse-cluster-connector
+    - require:
+      - netweaver_install_{{ instance_name }}
 
 wait_until_systems_installed:
   netweaver.check_instance_present:
@@ -26,6 +28,8 @@ wait_until_systems_installed:
     - retry:
         attempts: 20
         interval: 30
+    - require:
+      - netweaver_install_{{ instance_name }}
 
 update_sapservices_{{ instance_name }}:
     netweaver.sapservices_updated:
