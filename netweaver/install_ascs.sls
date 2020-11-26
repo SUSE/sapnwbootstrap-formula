@@ -60,5 +60,6 @@ remove_ascs_inifile_{{ instance_name }}:
     - name: {{ inifile }}
     - require:
       - create_ascs_inifile_{{ instance_name }}
+      - netweaver_install_{{ instance_name }}
 
 {% endfor %}
