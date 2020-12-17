@@ -13,5 +13,7 @@ set_ensa_version_data_in_grains_{{ instance_name }}:
     - sid: {{ node.sid.lower() }}
     - inst: {{ instance }}
     - password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
+    - require:
+      - netweaver_install_{{ instance_name }}
 
 {% endfor %}

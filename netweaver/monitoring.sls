@@ -9,6 +9,7 @@ prometheus_sap_host_exporter_pkg:
 {% for node in netweaver.nodes if node.sap_instance != "db" %}
 {% set sap_instance_nr = '{:0>2}'.format(node.instance) %}
 {% set exporter_instance = '{}_{}{}'.format(node.sid, node.sap_instance.upper(), sap_instance_nr) %}
+{% set instance_name = node.sid~'_'~sap_instance_nr %}
 
 # we bind each exporter instance to a SAP instance virtual host
 sap_host_exporter_configuration_{{ exporter_instance }}:
@@ -19,6 +20,7 @@ sap_host_exporter_configuration_{{ exporter_instance }}:
          sap-control-uds: /tmp/.sapstream5{{ sap_instance_nr }}13
     - require:
       - pkg: prometheus_sap_host_exporter_pkg
+      - netweaver_install_{{ instance_name }}
 
 {% if host == node.host %}
 sap_host_exporter_service_{{ exporter_instance }}:
