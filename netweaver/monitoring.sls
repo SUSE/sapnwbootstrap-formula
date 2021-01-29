@@ -32,5 +32,5 @@ sap_host_exporter_service_{{ exporter_instance }}:
       - file: sap_host_exporter_configuration_{{ exporter_instance }}
     - watch:
       - file: sap_host_exporter_configuration_{{ exporter_instance }}
-{% endif %}
+
 {% endfor %}
