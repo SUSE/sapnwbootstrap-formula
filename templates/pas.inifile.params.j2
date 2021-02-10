@@ -115,8 +115,20 @@ NW_GetMasterPassword.masterPwd = {{ master_password }}
 # Install the SAP HANA database client in a central or local directory. Possible values are: 'SAPCPE', 'LOCAL'
 # NW_HDB_DBClient.clientPathStrategy = LOCAL
 
+# Database host
+NW_HDB_getDBInfo.dbhost = {{ hana_host }}
+
+# Database system ID
+NW_HDB_getDBInfo.dbsid = {{ hana_sid.upper() }}
+
+# The instance number of the SAP HANA database server
+NW_HDB_getDBInfo.instanceNumber = {{ '{:0>2}'.format(hana_inst) }}
+
 # Password of user 'SYSTEM' within the 'SystemDB' tenant in an SAP HANA MultiDB server
 NW_HDB_getDBInfo.systemDbPassword = {{ hana_password }}
+
+# Password of user 'SYSTEM' inside the SAP HANA database server
+NW_HDB_getDBInfo.systemPassword = {{ hana_password }}
 
 # Enable the instance agent (sapstartsrv) data supplier to send operating system information to the System Landscape Directory (SLD). Default is 'false'.
 # NW_SLD_Configuration.configureSld = false

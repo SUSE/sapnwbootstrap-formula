@@ -28,6 +28,8 @@ create_aas_inifile_{{ instance_name }}:
         download_basket: {{ netweaver.sapexe_folder }}
         schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
         schema_password: {{ netweaver.schema.password }}
+        hana_host: {{ netweaver.hana.host }}
+        hana_sid: {{ netweaver.hana.sid }}
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
 

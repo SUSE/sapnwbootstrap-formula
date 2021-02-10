@@ -30,6 +30,8 @@ create_pas_inifile_{{ instance_name }}:
         schema_name: {{ netweaver.schema.name|default('SAPABAP1') }}
         schema_password: {{ netweaver.schema.password }}
         ascs_virtual_hostname: {{ node.ascs_virtual_host }}
+        hana_host: {{ netweaver.hana.host }}
+        hana_sid: {{ netweaver.hana.sid }}
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
 
