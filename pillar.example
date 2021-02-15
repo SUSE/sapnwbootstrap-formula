@@ -24,10 +24,20 @@ netweaver:
   sap_adm_password: your_sapadm_password
   # Master password is used for all the SAP users that are created
   master_password: your_password
-  # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
-  # True by default
-  clean_nfs: True
+
+  # Define NFS share where `sapmnt` and `SYS` folder will be mounted. This NFS share must already have
+  # the `sapmnt` and `usrsapsys` folders
+  # If it is not used or empty string is set, the `sapmnt` and `SYS` folder are created locally
   sapmnt_inst_media: your_nfs_share_SID_folder
+  # Clean /sapmnt/{sid} and /usr/sap/{sid}/SYS content. It will only work if ASCS node is defined.
+  # True by default. It only works if a NFS share is defined in `sapmnt_inst_media`
+  clean_nfs: True
+  # Used to connect to the nfs share
+  nfs_version: nfs4
+  nfs_options: defaults
+  # Use the next options for AWS for example
+  # nfs_options: rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+
   # Specify the path to already extracted SWPM installer folder
   swpm_folder: your_swpm_folder_absolute_path
   # Or specify the path to the sapcar executable & SWPM installer sar archive, to extract the installer
@@ -48,19 +58,14 @@ netweaver:
     - /sapmedia/NW/51050829_3.ZIP
     - /tmp/sap_media/51050818_part1.EXE
     - /tmp/sapmedia/IMDB_SERVER.SAR
+
   # Enable operations in ASCS and ERS to set HA environment correctly (HA cluster is not installed)
   ha_enabled: True
-
-  # Used to connect to the nfs share
-  nfs_version: nfs4
-  nfs_options: defaults
-  # Use the next options for AWS for example
-  # nfs_options: rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
 
   # syctl options. Some system options must be update for optimal usage, like tcp keepalive parameter
   # sysctl values based on:
   # https://launchpad.support.sap.com/#/notes/1410736
-  # https://docs.microsoft.com/en-us/azure/virtual-machines/workloads/sap/high-availability-guide-suse#2d6008b0-685d-426c-b59e-6cd281fd45d7  
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/workloads/sap/high-availability-guide-suse#2d6008b0-685d-426c-b59e-6cd281fd45d7
   # Do not touch if not sure about the changes
   #sysctl_values:
   #  net.ipv4.tcp_keepalive_time: 300
