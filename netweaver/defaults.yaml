@@ -5,6 +5,7 @@ netweaver:
   nw_extract_dir: /sapmedia_extract/NW
   additional_dvds: []
   ha_enabled: True
+  sapmnt_path: /sapmnt
   sapmnt_inst_media: "" # NFS share to mount /sapmnt and /usr/sap/{sid}/SYS. Empty string means that folders are mounted locally
   nfs_version: nfs4 # Used to connect to the nfs share
   nfs_options: defaults

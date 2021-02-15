@@ -35,7 +35,7 @@ NW_getFQDN.setFQDN = false
 # NW_getUnicode.isUnicode =
 
 # Provide  'profile' directory of SAP Netweaver-based system.
-NW_readProfileDir.profileDir = /sapmnt/{{ sid.upper() }}/profile/
+NW_readProfileDir.profileDir = {{ sapmnt_path }}/{{ sid.upper() }}/profile/
 
 # Windows only: The drive to use
 # NW_readProfileDir.sapdrive =

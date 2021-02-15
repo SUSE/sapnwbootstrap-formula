@@ -34,6 +34,7 @@ create_pas_inifile_{{ instance_name }}:
         hana_sid: {{ netweaver.hana.sid }}
         hana_password: {{ netweaver.hana.password }}
         hana_inst: {{ hana_instance }}
+        sapmnt_path: {{ netweaver.sapmnt_path }}
 
 {% if node.extra_parameters is defined %}
 update_pas_inifile_{{ instance_name }}:
@@ -47,7 +48,7 @@ update_pas_inifile_{{ instance_name }}:
 
 check_sapprofile_directory_exists_{{ instance_name }}:
   file.exists:
-    - name: /sapmnt/{{ node.sid.upper() }}/profile
+    - name: {{ netweaver.sapmnt_path }}/{{ node.sid.upper() }}/profile
     - retry:
         attempts: 70
         interval: 30

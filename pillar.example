@@ -25,6 +25,10 @@ netweaver:
   # Master password is used for all the SAP users that are created
   master_password: your_password
 
+  # Local path where sapmnt data is stored. This is a local path. This folder can be mounted in a NFS share
+  # using `sapmnt_inst_media`
+  # /sapmnt by default
+  sapmnt_path: /sapmnt
   # Define NFS share where `sapmnt` and `SYS` folder will be mounted. This NFS share must already have
   # the `sapmnt` and `usrsapsys` folders
   # If it is not used or empty string is set, the `sapmnt` and `SYS` folder are created locally

@@ -26,6 +26,7 @@ create_ascs_inifile_{{ instance_name }}:
         instance: {{ instance }}
         virtual_hostname: {{ node.virtual_host }}
         download_basket: {{ netweaver.sapexe_folder }}
+        sapmnt_path: {{ netweaver.sapmnt_path }}
 
 {% if node.extra_parameters is defined %}
 update_ascs_inifile_{{ instance_name }}:

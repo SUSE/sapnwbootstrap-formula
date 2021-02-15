@@ -12,7 +12,7 @@
 {% if loop.first %}
 mount_sapmnt:
   mount.mounted:
-    - name: /sapmnt
+    - name: {{ netweaver.sapmnt_path }}
     - device: {{ netweaver.sapmnt_inst_media }}/sapmnt
     - fstype: {{ netweaver.nfs_version }}
     - opts:
@@ -34,7 +34,7 @@ mount_usersapsys_{{ instance_name }}:
 {% if netweaver.clean_nfs and node.sap_instance == 'ascs' %}
 clean_nfs_sapmnt_{{ instance_name }}:
   file.absent:
-    - name: /sapmnt/{{ node.sid.upper() }}
+    - name: {{ netweaver.sapmnt_path }}/{{ node.sid.upper() }}
 
 clean_nfs_usr_{{ instance_name }}:
   file.directory:
@@ -47,7 +47,7 @@ clean_nfs_usr_{{ instance_name }}:
 {% if loop.first %}
 create_folder_sapmnt:
   file.directory:
-    - name: /sapmnt
+    - name: {{ netweaver.sapmnt_path }}
     - makedirs: True
 {% endif %}
 
