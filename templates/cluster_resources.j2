@@ -14,6 +14,7 @@
 {%- set ers_virtual_host = data.ers_virtual_host %}
 {%- set monitoring_enabled = pillar.cluster.monitoring_enabled|default(False) %}
 {%- set native_fencing = data.native_fencing|default(True) %}
+{%- set sapmnt_path = data.sapmnt_path|default('/sapmnt') %}
 
 {%- if data.ensa_version is defined %}
 {%- set ensa_version = data.ensa_version|int %}
@@ -141,7 +142,7 @@ primitive rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ASCS{{ ascs_instance }}-operations \
   op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }} \
-     START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
+     START_PROFILE="{{ sapmnt_path }}/{{ sid }}/profile/{{ sid }}_ASCS{{ ascs_instance }}_{{ ascs_virtual_host }}" \
      AUTOMATIC_RECOVER=false \
   meta resource-stickiness=5000 {% if ensa_version == 1 %}failure-timeout=60 migration-threshold=1 priority=10{%- endif %}
 
@@ -170,7 +171,7 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
   operations $id=rsc_sap_{{ sid }}_ERS{{ ers_instance }}-operations \
   op monitor interval=120 timeout=60 on_fail=restart \
   params InstanceName={{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }} \
-        START_PROFILE="/sapmnt/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
+        START_PROFILE="{{ sapmnt_path }}/{{ sid }}/profile/{{ sid }}_ERS{{ ers_instance }}_{{ ers_virtual_host }}" \
         AUTOMATIC_RECOVER=false IS_ERS=true {% if ensa_version == 1 %}meta priority=1000{%- endif %}
 
 group grp_{{ sid }}_ERS{{ ers_instance }} \
