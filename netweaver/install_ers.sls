@@ -19,6 +19,7 @@ create_ers_inifile_{{ instance_name }}:
     - name: {{ inifile }}
     - template: jinja
     - context: # set up context for template ers.inifile.params.j2
+        product_id: {{ product_id }}
         master_password: {{ netweaver.master_password }}
         sap_adm_password: {{ netweaver.sap_adm_password|default(netweaver.master_password) }}
         sid_adm_password: {{ netweaver.sid_adm_password|default(netweaver.master_password) }}
