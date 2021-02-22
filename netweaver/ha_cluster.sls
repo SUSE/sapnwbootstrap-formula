@@ -7,6 +7,17 @@
 {% set instance_name = node.sid~'_'~instance %}
 {% set instance_folder = node.sap_instance.upper()~instance %}
 {% set profile_file = '/usr/sap/'~node.sid.upper()~'/SYS/profile/'~node.sid.upper()~'_'~instance_folder~'_'~node.virtual_host %}
+{% set virtual_host_interface = node.virtual_host_interface|default('eth0') %}
+{% set ifcfg_file = '/etc/sysconfig/network/ifcfg-'~virtual_host_interface %}
+
+{% for virtual_ip, hostname in netweaver.virtual_addresses.items() if hostname == node.virtual_host %}
+# Remove permanent ip address as the element is managed by the cluster
+remove_permanent_ipaddr_{{ instance_name }}:
+  file.line:
+    - name: {{ ifcfg_file }}
+    - match: {{ virtual_ip }}
+    - mode: delete
+{% endfor %}
 
 install_suse_connector:
   pkg.installed:
