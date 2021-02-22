@@ -1,8 +1,11 @@
 ####################################################################################################################################################################################################################
 #                                                                                                                                                                                                                  #
 # Installation service 'NW_ABAP_CI:XXX' #
+# Used product id: {{ product_id }}
 #                                                                                                                                                                                                                  #
 ####################################################################################################################################################################################################################
+
+{%- set product_id_header = product_id.split(":")[1].split(".")[0] %}
 
 # Password for the Diagnostics Agent specific <dasid>adm user. Provided value may be encoded.
 # DiagnosticsAgent.dasidAdmPassword =
@@ -129,6 +132,11 @@ NW_HDB_getDBInfo.systemDbPassword = {{ hana_password }}
 
 # Password of user 'SYSTEM' inside the SAP HANA database server
 NW_HDB_getDBInfo.systemPassword = {{ hana_password }}
+
+{%- if product_id_header in ['S4HANA1709'] %}
+# S4HANA specific values
+NW_liveCache.useLiveCache = false
+{%- endif %}
 
 # Enable the instance agent (sapstartsrv) data supplier to send operating system information to the System Landscape Directory (SLD). Default is 'false'.
 # NW_SLD_Configuration.configureSld = false

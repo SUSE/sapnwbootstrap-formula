@@ -1,8 +1,11 @@
 ##################################################################################################################################################################################################
 #                                                                                                                                                                                                #
 # Installation service 'NW_ABAP_DB:XXX' #
+# Used product id: {{ product_id }}
 #                                                                                                                                                                                                #
 ##################################################################################################################################################################################################
+
+{%- set product_id_header = product_id.split(":")[1].split(".")[0] %}
 
 # Password for the Diagnostics Agent specific <dasid>adm user. Provided value may be encoded.
 # DiagnosticsAgent.dasidAdmPassword =
@@ -31,7 +34,11 @@ HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
 # HDB_Schema_Check_Dialogs.validateSchemaName = true
 
 # Use SAP HANA Media on CD, do not ask for SAR archives
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+HDB_Software_Dialogs.useMediaCD = false
+{%- else %}
 HDB_Software_Dialogs.useMediaCD = true
+{%- endif %}
 
 # Database hostnames that will be set directly in hdbuserstore without resolving them in HANA. Comma separated. Example (host1,host2)
 # HDB_Userstore.doNotResolveHostnames =
@@ -97,7 +104,11 @@ NW_GetMasterPassword.masterPwd = {{ master_password }}
 # NW_HDB_DB.javaSchemaPassword =
 
 # Install the SAP HANA database client in a central or local directory. Possible values are: 'SAPCPE', 'LOCAL'
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+NW_HDB_DBClient.clientPathStrategy = LOCAL
+{%- else %}
 # NW_HDB_DBClient.clientPathStrategy = LOCAL
+{%- endif %}
 
 # Database host
 NW_HDB_getDBInfo.dbhost = {{ hana_host }}
@@ -125,6 +136,19 @@ NW_HDB_getDBInfo.systemid = {{ hana_sid.upper() }}
 
 # A dedicated OS user for the tenant database, required for SAP HANA multitenant database containers with high isolation level.
 # NW_HDB_getDBInfo.tenantOsUser =
+
+
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+# S4HANA specific values
+NW_Recovery_Install_HDB.extractLocation = /usr/sap/{{ hana_sid.upper() }}/HDB{{ '{:0>2}'.format(hana_inst) }}/backup/data/DB_{{ hana_sid.upper() }}
+
+NW_Recovery_Install_HDB.sidAdmName = {{ hana_sid.lower() }}adm
+
+NW_Recovery_Install_HDB.sidAdmPassword = {{ hana_password }}
+
+# By default, the value matches the number of extract files. Decreased to avoid high memory usage
+NW_Recovery_Install_HDB.extractParallelJobs = 5
+{%- endif %}
 
 # SAP INTERNAL USE ONLY
 # NW_adaptProfile.templateFiles =
