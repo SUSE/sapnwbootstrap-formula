@@ -151,7 +151,7 @@ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
   {%- if cloud_provider == "microsoft-azure" %}
-  rsc_socat_{{ sid }}_ASCS \
+  rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} \
   {%- endif %}
   {%- if monitoring_enabled %}
   rsc_exporter_{{ sid }}_ASCS{{ ascs_instance }} \
@@ -179,7 +179,7 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
   rsc_sap_{{ sid }}_ERS{{ ers_instance }}
   {%- if cloud_provider == "microsoft-azure" %} \
-  rsc_socat_{{ sid }}_ERS
+  rsc_socat_{{ sid }}_ERS{{ ers_instance }}
   {%- endif %}
   {%- if monitoring_enabled %} \
   rsc_exporter_{{ sid }}_ERS{{ ers_instance }}
