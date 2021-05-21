@@ -1,5 +1,6 @@
 netweaver:
   install_packages: true
+  virtual_addresses: {}
   clean_nfs: True
   installation_folder: /tmp/swpm_unattended
   nw_extract_dir: /sapmedia_extract/NW
