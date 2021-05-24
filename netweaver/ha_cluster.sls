@@ -1,5 +1,7 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 {% set host = grains['host'] %}
+# Hack to get empty dictionary on SUMA
+{%- set virtual_addresses = salt['pillar.get']('netweaver:virtual_addresses', {}) or {} %}
 
 {% for node in netweaver.nodes if netweaver.ha_enabled and host == node.host and node.sap_instance in ['ascs', 'ers'] %}
 
@@ -10,7 +12,7 @@
 {% set virtual_host_interface = node.virtual_host_interface|default('eth0') %}
 {% set ifcfg_file = '/etc/sysconfig/network/ifcfg-'~virtual_host_interface %}
 
-{% for virtual_ip, hostname in netweaver.virtual_addresses.items() if hostname == node.virtual_host %}
+{% for virtual_ip, hostname in virtual_addresses.items() if hostname == node.virtual_host %}
 # Remove permanent ip address as the element is managed by the cluster
 remove_permanent_ipaddr_{{ instance_name }}:
   file.line:

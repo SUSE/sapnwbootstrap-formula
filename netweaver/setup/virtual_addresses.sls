@@ -1,7 +1,9 @@
 {%- from "netweaver/map.jinja" import netweaver with context -%}
 {%- set host = grains['host'] %}
+# Hack to get empty dictionary on SUMA
+{%- set virtual_addresses = salt['pillar.get']('netweaver:virtual_addresses', {}) or {} %}
 
-{% for ip_address, hostname in netweaver.virtual_addresses.items() %}
+{% for ip_address, hostname in virtual_addresses.items() %}
 {{ hostname }}:
   host.present:
     - ip: {{ ip_address }}
@@ -35,7 +37,7 @@ add_boot_proto_{{ virtual_host_interface }}:
 {% endif %}
 
 {% set current_iddr = loop.index0+iddr_count %}
-{% for virtual_ip, hostname in netweaver.virtual_addresses.items() if hostname == node.virtual_host %}
+{% for virtual_ip, hostname in virtual_addresses.items() if hostname == node.virtual_host %}
 add_ipaddr_{{ virtual_host_interface }}_{{ instance_name }}:
   file.append:
     - name: {{ ifcfg_file }}
