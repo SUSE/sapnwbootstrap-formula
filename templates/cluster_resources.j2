@@ -90,6 +90,17 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
 {%- else %}
 
 {%- if cloud_provider == "microsoft-azure" %}
+{%- if native_fencing %}
+property $id="cib-bootstrap-options" \
+    stonith-enabled="true" \
+    stonith-action="off" \
+    concurrent-fencing=true
+
+primitive rsc_azure_stonith_{{ sid }} stonith:fence_azure_arm \
+    params subscriptionId={{ grains['subscription_id'] }} resourceGroup={{ grains['resource_group_name'] }} tenantId={{ grains['tenant_id'] }} login={{ grains['fence_agent_app_id'] }} passwd="{{ grains['fence_agent_client_secret'] }}" pcmk_monitor_retries=4 pcmk_action_limit=3 power_timeout=240 pcmk_reboot_timeout=900 \
+    op monitor interval=3600 timeout=120 \
+    meta target-role=Started
+{%- endif %}
 
 primitive rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} azure-lb \
   params port=620{{ ascs_instance }} \
