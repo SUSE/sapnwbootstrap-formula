@@ -13,7 +13,6 @@
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
 {%- set monitoring_enabled = pillar.cluster.monitoring_enabled|default(False) %}
-{%- set native_fencing = data.native_fencing|default(True) %}
 {%- set sapmnt_path = data.sapmnt_path|default('/sapmnt') %}
 
 {%- if data.ensa_version is defined %}
@@ -24,6 +23,14 @@
 {%- set ensa_version = grains['ensa_version_'~sid_lower~'_'~ers_instance]|int %}
 {%- else %}
 {%- set ensa_version = 1 %}
+{%- endif %}
+
+{%- if cloud_provider == "amazon-web-services" %}
+{%- set native_fencing = data.native_fencing|default(True) %}
+{%- elif cloud_provider == "google-cloud-platform" %}
+{%- set native_fencing = data.native_fencing|default(True) %}
+{%- elif cloud_provider == "microsoft-azure" %}
+{%- set native_fencing = data.native_fencing|default(False) %}
 {%- endif %}
 
 # Platform dependant (stonith, virtual ip address, cib options, etc) resource
