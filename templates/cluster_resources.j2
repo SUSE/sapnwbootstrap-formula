@@ -100,7 +100,6 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
 {%- if native_fencing %}
 property $id="cib-bootstrap-options" \
     stonith-enabled="true" \
-    stonith-action="off" \
     concurrent-fencing=true
 
 primitive rsc_azure_stonith_{{ sid }} stonith:fence_azure_arm \
