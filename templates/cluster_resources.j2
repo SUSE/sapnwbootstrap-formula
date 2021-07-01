@@ -31,6 +31,8 @@
 {%- set native_fencing = data.native_fencing|default(True) %}
 {%- elif cloud_provider == "microsoft-azure" %}
 {%- set native_fencing = data.native_fencing|default(False) %}
+{%- else %}{# all other cases like openstack and libvirt #}
+{%- set native_fencing = data.native_fencing|default(False) %}
 {%- endif %}
 
 # Platform dependant (stonith, virtual ip address, cib options, etc) resource
