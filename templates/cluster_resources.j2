@@ -13,7 +13,6 @@
 {%- set ascs_virtual_host = data.ascs_virtual_host %}
 {%- set ers_virtual_host = data.ers_virtual_host %}
 {%- set monitoring_enabled = pillar.cluster.monitoring_enabled|default(False) %}
-{%- set native_fencing = data.native_fencing|default(True) %}
 {%- set sapmnt_path = data.sapmnt_path|default('/sapmnt') %}
 
 {%- if data.ensa_version is defined %}
@@ -24,6 +23,16 @@
 {%- set ensa_version = grains['ensa_version_'~sid_lower~'_'~ers_instance]|int %}
 {%- else %}
 {%- set ensa_version = 1 %}
+{%- endif %}
+
+{%- if cloud_provider == "amazon-web-services" %}
+{%- set native_fencing = data.native_fencing|default(True) %}
+{%- elif cloud_provider == "google-cloud-platform" %}
+{%- set native_fencing = data.native_fencing|default(True) %}
+{%- elif cloud_provider == "microsoft-azure" %}
+{%- set native_fencing = data.native_fencing|default(False) %}
+{%- else %}{# all other cases like openstack and libvirt #}
+{%- set native_fencing = data.native_fencing|default(False) %}
 {%- endif %}
 
 # Platform dependant (stonith, virtual ip address, cib options, etc) resource
@@ -90,6 +99,16 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
 {%- else %}
 
 {%- if cloud_provider == "microsoft-azure" %}
+{%- if native_fencing %}
+property $id="cib-bootstrap-options" \
+    stonith-enabled="true" \
+    concurrent-fencing=true
+
+primitive rsc_azure_stonith_{{ sid }} stonith:fence_azure_arm \
+    params subscriptionId={{ data.azure_subscription_id }} resourceGroup={{ data.azure_resource_group_name }} tenantId={{ data.azure_tenant_id }} login={{ data.azure_fence_agent_app_id }} passwd="{{ data.azure_fence_agent_client_secret }}" pcmk_monitor_retries=4 pcmk_action_limit=3 power_timeout=240 pcmk_reboot_timeout=900 \
+    op monitor interval=3600 timeout=120 \
+    meta target-role=Started
+{%- endif %}
 
 primitive rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} azure-lb \
   params port=620{{ ascs_instance }} \
