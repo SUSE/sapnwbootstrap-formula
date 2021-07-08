@@ -26,21 +26,26 @@ sap_host_exporter_configuration_{{ exporter_instance }}:
     - require:
       - pkg: prometheus_sap_host_exporter_pkg
 
-# do not run ASCS and ERS exporter service in HA use case (handled by pacemaker)
-# only run PAS exporter in HA use case (if no dedicated PAS host is used)
-{% if not netweaver.ha_enabled or node.sap_instance == 'pas' %}
+# do not enable ASCS and ERS exporter service in HA use case (handled by pacemaker)
+{% if netweaver.ha_enabled and node.sap_instance in ['ascs', 'ers'] %}
+{% set service_status = "disabled" %}
+{% set service_enabled = False %}
+{% else %}
+{% set service_status = "running" %}
+{% set service_enabled = True %}
+{% endif %}
+
 sap_host_exporter_service_{{ exporter_instance }}:
-  service.running:
+  service.{{ service_status }}:
     - name: prometheus-sap_host_exporter@{{ exporter_instance }}
-    - enable: True
+    - enable: {{ service_enabled }}
     - restart: True
     - require:
-      - netweaver_install_{{ instance_name }}
       - pkg: prometheus_sap_host_exporter_pkg
       - file: sap_host_exporter_configuration_{{ exporter_instance }}
     - watch:
       - file: sap_host_exporter_configuration_{{ exporter_instance }}
-{% endif %}
 
 {% endif %}
+
 {% endfor %}
