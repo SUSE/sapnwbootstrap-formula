@@ -11,8 +11,8 @@ prometheus_sap_host_exporter_pkg:
 {% for node in netweaver.nodes if host == node.host or (netweaver.ha_enabled and node.sap_instance in ['ascs', 'ers']) and node.sap_instance != "db" %}
 
 {% set sap_instance_nr = '{:0>2}'.format(node.instance) %}
-{% set exporter_instance = '{}_{}{}'.format(node.sid, node.sap_instance.upper(), sap_instance_nr) %}
-{% set instance_name = node.sid~'_'~sap_instance_nr %}
+{% set exporter_instance = '{}_{}{}'.format(node.sid.upper(), node.sap_instance.upper(), sap_instance_nr) %}
+{% set instance_name = node.sid.upper()~'_'~sap_instance_nr %}
 
 # we bind each exporter instance to a SAP instance virtual host
 sap_host_exporter_configuration_{{ exporter_instance }}:
@@ -26,7 +26,7 @@ sap_host_exporter_configuration_{{ exporter_instance }}:
 # on HA use case deploy ASCS|ERS on ERS|ASCS
 {% if netweaver.ha_enabled and node.sap_instance in ["ascs", "ers"] %}
     - onlyif:
-      - test -d /usr/sap/{{ node.sid }}/ASCS* || test -d /usr/sap/{{ node.sid }}/ERS*
+      - test -d /usr/sap/{{ node.sid.upper() }}/ASCS* || test -d /usr/sap/{{ node.sid.upper() }}/ERS*
 {% endif %}
 
 # do not enable ASCS and ERS exporter service in HA use case (handled by pacemaker)
@@ -49,7 +49,7 @@ sap_host_exporter_service_{{ exporter_instance }}:
 # on HA use case deploy ASCS|ERS on ERS|ASCS
 {% if netweaver.ha_enabled and node.sap_instance in ["ascs", "ers"] %}
     - onlyif:
-      - test -d /usr/sap/{{ node.sid }}/ASCS* || test -d /usr/sap/{{ node.sid }}/ERS*
+      - test -d /usr/sap/{{ node.sid.upper() }}/ASCS* || test -d /usr/sap/{{ node.sid.upper() }}/ERS*
 # on non-HA use case watch file for changes (not possible for disabled service)
 {% else %}
     - watch:
