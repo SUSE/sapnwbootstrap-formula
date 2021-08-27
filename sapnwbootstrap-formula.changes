@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 27 08:19:27 UTC 2021 - Eike Waldt <waldt@b1-systems.de>
+
+- Version bump 0.6.7
+  * fix non-existing procedure file when running NW import on
+    a HANA scale-out system
+
+-------------------------------------------------------------------
 Thu Jul  7 13:32:06 UTC 2021 - Eike Waldt <waldt@b1-systems.de>
 
 - Version bump 0.6.6
