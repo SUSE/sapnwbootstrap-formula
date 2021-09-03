@@ -181,7 +181,8 @@ NW_readProfileDir.profileDir = {{ sapmnt_path }}/{{ sid.upper() }}/profile/
 archives.downloadBasket = {{ download_basket }}
 
 # Specify whether a Landscape Reorg Check Procedures file 'HdbLandscapeReorgCheckProcedure.SQL' is to be used. Possible values are 'USEFILE', 'DONOTUSEFILE','DONOTRUN'. Default value is 'USEFILE'.
-# hanadb.landscape.reorg.useCheckProcedureFile = USEFILE
+# On HANA scale-out deployments sapinst will throw an error message about a missing 'HdbLandscapeReorgCheckProcedure.SQL' file, therefore we set this to DONOTUSEFILE.
+hanadb.landscape.reorg.useCheckProcedureFile = DONOTUSEFILE
 
 # Specify whether a Table Placement Parameters file 'HdbTablePlacementParameters.SQL' is to be used. Possible values are 'USEFILE', 'DONOTUSEFILE'. Default value is 'USEFILE'.
 hanadb.landscape.reorg.useParameterFile = DONOTUSEFILE
