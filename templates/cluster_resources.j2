@@ -29,6 +29,7 @@
 {%- set native_fencing = data.native_fencing|default(True) %}
 {%- elif cloud_provider == "google-cloud-platform" %}
 {%- set native_fencing = data.native_fencing|default(True) %}
+{%- set vip_mechanism = data.virtual_ip_mechanism|default("load-balancer") %}
 {%- elif cloud_provider == "microsoft-azure" %}
 {%- set native_fencing = data.native_fencing|default(False) %}
 {%- else %}{# all other cases like openstack and libvirt #}
@@ -84,6 +85,22 @@ primitive rsc_gcp_stonith_{{ sid }}_{{ grains['host'] }} stonith:fence_gce \
     meta target-role=Started
 {%- endif %}
 
+{%- if vip_mechanism == "load-balancer" %}
+
+primitive rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} anything \
+    params binfile="/usr/bin/socat" \
+    cmdline_options="-U TCP-LISTEN:620{{ ascs_instance }},backlog=10,fork,reuseaddr /dev/null" \
+    op monitor timeout=20s interval=10 \
+    op_params depth=0
+
+primitive rsc_socat_{{ sid }}_ERS{{ ers_instance }} anything \
+    params binfile="/usr/bin/socat" \
+    cmdline_options="-U TCP-LISTEN:621{{ ers_instance }},backlog=10,fork,reuseaddr /dev/null" \
+    op monitor timeout=20s interval=10 \
+    op_params depth=0
+
+{%- elif vip_mechanism == "route" %}
+
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} ocf:heartbeat:gcp-vpc-move-route \
     params ip={{ data.ascs_ip_address }} vpc_network={{ data.vpc_network_name }} route_name={{ data.ascs_route_name|default("nw-ascs-"~sid~"-route") }} \
     op start interval=0 timeout=180 \
@@ -96,9 +113,9 @@ primitive rsc_ip_{{ sid }}_ERS{{ ers_instance }} ocf:heartbeat:gcp-vpc-move-rout
     op stop interval=0 timeout=180 \
     op monitor interval=60 timeout=60
 
-{%- else %}
+{%- endif %}
 
-{%- if cloud_provider == "microsoft-azure" %}
+{%- elif cloud_provider == "microsoft-azure" %}
 {%- if native_fencing %}
 property $id="cib-bootstrap-options" \
     stonith-enabled="true" \
@@ -118,7 +135,7 @@ primitive rsc_socat_{{ sid }}_ERS{{ ers_instance }} azure-lb \
   params port=621{{ ers_instance }} \
   op monitor timeout=20s interval=10 depth=0
 
-{%- endif %}
+{%- else %}
 
 primitive rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} IPaddr2 \
   params ip={{ ascs_ip_address}} \
@@ -169,7 +186,9 @@ group grp_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_ip_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_fs_{{ sid }}_ASCS{{ ascs_instance }} \
   rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
-  {%- if cloud_provider == "microsoft-azure" %}
+  {%- if cloud_provider == "google-cloud-platform" and vip_mechanism == "load-balancer" %}
+  rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} \
+  {%- elif cloud_provider == "microsoft-azure" %}
   rsc_socat_{{ sid }}_ASCS{{ ascs_instance }} \
   {%- endif %}
   {%- if monitoring_enabled %}
@@ -196,11 +215,13 @@ primitive rsc_sap_{{ sid }}_ERS{{ ers_instance }} SAPInstance \
 group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_ip_{{ sid }}_ERS{{ ers_instance }} \
   rsc_fs_{{ sid }}_ERS{{ ers_instance }} \
-  rsc_sap_{{ sid }}_ERS{{ ers_instance }}
-  {%- if cloud_provider == "microsoft-azure" %} \
-  rsc_socat_{{ sid }}_ERS{{ ers_instance }}
+  rsc_sap_{{ sid }}_ERS{{ ers_instance }} \
+  {%- if cloud_provider == "google-cloud-platform" and vip_mechanism == "load-balancer" %}
+  rsc_socat_{{ sid }}_ERS{{ ers_instance }} \
+  {%- elif cloud_provider == "microsoft-azure" %}
+  rsc_socat_{{ sid }}_ERS{{ ers_instance }} \
   {%- endif %}
-  {%- if monitoring_enabled %} \
+  {%- if monitoring_enabled %}
   rsc_exporter_{{ sid }}_ERS{{ ers_instance }}
   {%- endif %}
 
