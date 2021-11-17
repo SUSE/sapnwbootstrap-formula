@@ -225,7 +225,7 @@ group grp_{{ sid }}_ERS{{ ers_instance }} \
   rsc_exporter_{{ sid }}_ERS{{ ers_instance }}
   {%- endif %}
 
-colocation col_sap_{{ sid }}_no_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
+colocation col_sap_{{ sid }}_not_both -5000: grp_{{ sid }}_ERS{{ ers_instance }} grp_{{ sid }}_ASCS{{ ascs_instance }}
 {%- if ensa_version == 1 %}
 location loc_sap_{{ sid }}_failover_to_ers rsc_sap_{{ sid }}_ASCS{{ ascs_instance }} \
   rule 2000: runs_ers_{{ sid }} eq 1
