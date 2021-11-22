@@ -1,3 +1,4 @@
+# https://documentation.suse.com/external-tree/en-us/suma/4.0/suse-manager/salt/formulas-custom.html
 netweaver:
   $name: Netweaver
   $type: group

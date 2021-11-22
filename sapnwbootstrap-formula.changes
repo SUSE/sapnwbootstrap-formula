@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Nov 17 13:52:34 UTC 2021 - Eike Waldt <waldt@b1-systems.de>
+
+- Version bump 0.7.0
+  * add option to enable load-balancer for GCP
+  * define vip_mechanism for every provider and reorder resources
+    (same schema for all SAP related formulas)
+  * change SAPInstance monitoring interval to 11s as mentioned in docs
+  * fix colocation name
+  * add link to SUSE Manager documentation
+
+-------------------------------------------------------------------
 Thu Aug 27 08:19:27 UTC 2021 - Eike Waldt <waldt@b1-systems.de>
 
 - Version bump 0.6.7
