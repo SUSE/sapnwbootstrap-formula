@@ -34,7 +34,7 @@ HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
 # HDB_Schema_Check_Dialogs.validateSchemaName = true
 
 # Use SAP HANA Media on CD, do not ask for SAR archives
-{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909', 'S4HANA2020', 'S4HANA2021'] %}
 HDB_Software_Dialogs.useMediaCD = false
 {%- else %}
 HDB_Software_Dialogs.useMediaCD = true
@@ -104,7 +104,7 @@ NW_GetMasterPassword.masterPwd = {{ master_password }}
 # NW_HDB_DB.javaSchemaPassword =
 
 # Install the SAP HANA database client in a central or local directory. Possible values are: 'SAPCPE', 'LOCAL'
-{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909', 'S4HANA2020', 'S4HANA2021'] %}
 NW_HDB_DBClient.clientPathStrategy = LOCAL
 {%- else %}
 # NW_HDB_DBClient.clientPathStrategy = LOCAL
@@ -138,7 +138,7 @@ NW_HDB_getDBInfo.systemid = {{ hana_sid.upper() }}
 # NW_HDB_getDBInfo.tenantOsUser =
 
 
-{%- if product_id_header in ['S4HANA1809', 'S4HANA1909'] %}
+{%- if product_id_header in ['S4HANA1809', 'S4HANA1909', 'S4HANA2020', 'S4HANA2021'] %}
 # S4HANA specific values
 NW_Recovery_Install_HDB.extractLocation = /usr/sap/{{ hana_sid.upper() }}/HDB{{ '{:0>2}'.format(hana_inst) }}/backup/data/DB_{{ hana_sid.upper() }}
 
