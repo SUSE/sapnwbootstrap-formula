@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 02 14:30:21 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
+
+- Version bump 0.7.2
+  * enable S/4HANA 1610
+
+-------------------------------------------------------------------
 Wed Jan 12 07:28:52 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
 
 - Version bump 0.7.1
