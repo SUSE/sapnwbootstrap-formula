@@ -218,7 +218,7 @@ netweaver:
   product_id:
     $name: SAP product ID
     $type: text
-    $help: The SAP product id used for installation. If some particular node has its own product_id that one will have the preference. The options are. NW750.HDB.ABAPHA, S4HANA1709.CORE.HDB.ABAPHA, S4HANA1809.CORE.HDB.ABAPHA, S4HANA1909.CORE.HDB.ABAPHA. Remove the 'HA' from the end for non HA environment (without ERS)
+    $help: The SAP product id used for installation. If some particular node has its own product_id that one will have the preference. The options are. NW750.HDB.ABAPHA, S4HANA1610.CORE.HDB.ABAPHA, S4HANA1709.CORE.HDB.ABAPHA, S4HANA1809.CORE.HDB.ABAPHA, S4HANA1909.CORE.HDB.ABAPHA, S4HANA2020.CORE.HDB.ABAPHA, S4HANA2021.CORE.HDB.ABAPHA. Remove the 'HA' from the end for non HA environment (without ERS)
     $optional: false
 
   monitoring_enabled:

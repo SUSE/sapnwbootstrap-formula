@@ -133,7 +133,7 @@ NW_HDB_getDBInfo.systemDbPassword = {{ hana_password }}
 # Password of user 'SYSTEM' inside the SAP HANA database server
 NW_HDB_getDBInfo.systemPassword = {{ hana_password }}
 
-{%- if product_id_header in ['S4HANA1709'] %}
+{%- if product_id_header in ['S4HANA1610', 'S4HANA1709'] %}
 # S4HANA specific values
 NW_liveCache.useLiveCache = false
 {%- endif %}
