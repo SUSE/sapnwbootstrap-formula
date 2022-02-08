@@ -1,6 +1,6 @@
 netweaver:
-  # optional: Install required packages to install SAP Netweaver (true by default)
-  # If set to false, these packages must be installed before the formula execution manually
+  # optional: Install required rpm packages to install SAP Netweaver (true by default),
+  # If set to false, these packages must be installed manually before the formula execution.
   # install_packages: true
 
   virtual_addresses:

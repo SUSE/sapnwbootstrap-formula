@@ -36,14 +36,24 @@ On openSUSE or SUSE Linux Enterprise you can just use the `zypper` system packag
 zypper install sapnwbootstrap-formula
 ```
 
-**Important!** This will install the formula in `/usr/share/salt-formulas/states/netweaver`. Make sure that `/usr/share/salt-formulas/states` entry is correctly configured in your Salt minion configuration `file_roots` entry if the formula is used in a masterless mode.
+**Important!** This will install the formula in `/usr/share/salt-formulas/states/netweaver`. In case the formula is used in a masterless mode, make sure that the `/usr/share/salt-formulas/states` entry is correctly configured in the `file_roots` entry of the Salt minion configuration.
 
-Find the latest development repositories at SUSE's Open Build Service [network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula](https://build.opensuse.org/package/show/network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula).
+Depending on the patch level of the target system and the release cycle of this project, the package in the regular repository might not be the latest one. If you want the latest features, have a look in the test development repositories at SUSE's Open Build Service [network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula](https://build.opensuse.org/package/show/network:ha-clustering:sap-deployments:devel/sapnwbootstrap-formula).
 
-### Manual clone
+### Manual Installation
+
+A manual installation can be done by cloning this repository:
 
 ```
 git clone https://github.com/SUSE/sapnwbootstrap-formula
+```
+
+**Important!** This will not install the the formula anywhere where salt can find it.  If the formula is used in a masterless mode, also make sure to copy the complete `netweaver` subdirectory to location defined in `file_roots` entry of your Salt minion configuration.
+
+I. e.:
+
+```
+cd sapnwbootstrap-formula
 cp -R netweaver /srv/salt
 ```
 
@@ -67,11 +77,11 @@ Find an example about all of the possible configurable options in the [pillar.ex
 
 ### Configuration
 
-Follow the next steps to configure the formula execution. After this, the formula can be executed using `master/minion` or `masterless` options:
+Follow the next steps to configure the formula execution. After this, the formula can be executed using `master/minion` or `masterless` options.  For further informations, please have a look to the [Salt documentation](https://docs.saltproject.io/en/latest/contents.html).
 
 1. Modify the `top.sls` file (by default stored in `/srv/salt`) including the `netweaver` entry.
 
-   Here an example to execute the Netweaver formula in all of the nodes:
+   Here is an example to execute the Netweaver formula in all of the nodes:
 
    ```
    # This file is /srv/salt/top.sls
@@ -81,6 +91,7 @@ Follow the next steps to configure the formula execution. After this, the formul
    ```
 
 2. Customize the execution pillar file. Here an example of a pillar file for this formula with all of the options: [pillar.example](https://github.com/SUSE/sapnwbootstrap-formula/blob/master/pillar.example)
+The `pillar.example` can be found either as a link to the file in the master branch or a file in the file system at `/usr/share/salt-formulas/metadata/hana/pillar.example`.
 
 3. Set the execution pillar file. For that, modify the `top.sls` of the pillars (by default stored in `/srv/pillar`) including the `netweaver` entry and copy your specific `netweaver.sls` pillar file in the same folder.
 
@@ -116,6 +127,7 @@ SaltStack GPG renderer provides a secure encryption/decryption of pillar data. T
 - [SALT GPG RENDERERS](https://docs.saltstack.com/en/latest/ref/renderers/all/salt.renderers.gpg.html)
 
 **Note:**
+
 - Only passwordless gpg keys are supported, and the already existing keys cannot be used.
 
 - If a masterless approach is used (as in the current automated deployment) the gpg private key must be imported in all the nodes. This might require the copy/paste of the keys.
