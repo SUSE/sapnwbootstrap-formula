@@ -92,4 +92,17 @@ remove_db_inifile_{{ instance_name }}:
     - require:
       - create_db_inifile_{{ instance_name }}
 
+{%- if netweaver.hana.sr_enabled|default(false) is sameas true %}
+backup_db_{{ netweaver.hana.host }}_{{ netweaver.hana.sid }}_{{ hana_instance }}:
+  module.run:
+    - hana.query:
+      - host: {{ netweaver.hana.host }}
+      - port: 3{{ hana_instance }}13
+      - user: SYSTEM
+      - password: {{ netweaver.hana.password }}
+      - query: "BACKUP DATA FOR FULL SYSTEM USING FILE ('post_db_import')"
+    - require:
+      - netweaver_install_{{ instance_name }}
+{%- endif %}
+
 {% endfor %}

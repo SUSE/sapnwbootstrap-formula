@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 03 15:17:42 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
+
+- Version bump 0.7.3
+  * backup HANA after initial DB import if SR is enabled
+
+-------------------------------------------------------------------
 Tue Feb 02 14:30:21 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
 
 - Version bump 0.7.2
