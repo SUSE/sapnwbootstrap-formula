@@ -92,7 +92,7 @@ remove_db_inifile_{{ instance_name }}:
     - require:
       - create_db_inifile_{{ instance_name }}
 
-{%- if netweaver.hana.ha_enabled|default(false) is sameas true %}
+{%- if netweaver.hana.sr_enabled|default(false) is sameas true %}
 backup_db_{{ netweaver.hana.host }}_{{ netweaver.hana.sid }}_{{ hana_instance }}:
   module.run:
     - hana.query:
