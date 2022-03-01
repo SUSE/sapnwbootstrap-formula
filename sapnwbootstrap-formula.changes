@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 01 14:43:27 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
+
+- Version bump 0.7.4
+  * use hana_host pillar/grain for hdbuserstore (fixes connection after failover)
+
+-------------------------------------------------------------------
 Thu Feb 03 15:17:42 UTC 2022 - Eike Waldt <waldt@b1-systems.de>
 
 - Version bump 0.7.3
