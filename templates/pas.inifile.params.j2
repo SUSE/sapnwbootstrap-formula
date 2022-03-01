@@ -28,8 +28,8 @@ HDB_Schema_Check_Dialogs.schemaPassword = {{ schema_password }}
 # Specify whether Software Provisioning Manager is to validate the schema name. The schema name must only contain numbers and capital letters. It  must not start with '_' . It cannot be 'SYS' or 'SYSTEM'.
 # HDB_Schema_Check_Dialogs.validateSchemaName = true
 
-# Database hostnames that will be set directly in hdbuserstore without resolving them in HANA. Comma separated. Example (host1,host2)
-# HDB_Userstore.doNotResolveHostnames =
+# Database hostnames that will be set directly in hdbuserstore without resolving them in HANA. Comma separated. Example (host1,host2). Has to be virtual IP for HA HANA deployments.
+HDB_Userstore.doNotResolveHostnames = {{ hana_host }}
 
 # Alternative port for SystemDB to be used in hdbuserstore
 # HDB_Userstore.systemDBPort =
