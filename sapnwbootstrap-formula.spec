@@ -38,7 +38,6 @@ Requires:       salt-formulas-configuration
 
 %define fname netweaver
 %define fdir  %{_datadir}/salt-formulas
-%define ftemplates templates
 
 %description
 SAP Netweaver deployment salt formula. This formula is capable to install
@@ -59,7 +58,6 @@ module, which can be added running the `SUSEConnect -p sle-module-adv-systems-ma
 mkdir -p %{buildroot}%{fdir}/states/%{fname}
 mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
 cp -R %{fname} %{buildroot}%{fdir}/states
-cp -R %{ftemplates} %{buildroot}%{fdir}/states/%{fname}
 cp pillar.example %{buildroot}%{fdir}/states/%{fname}
 cp -R form.yml %{buildroot}%{fdir}/metadata/%{fname}
 if [ -f metadata.yml ]
@@ -82,7 +80,6 @@ fi
 %dir %attr(0755, root, salt) %{fdir}/metadata
 
 %attr(0755, root, salt) %{fdir}/states/%{fname}
-%attr(0755, root, salt) %{fdir}/states/%{fname}/%{ftemplates}
 %attr(0755, root, salt) %{fdir}/metadata/%{fname}
 
 %changelog
